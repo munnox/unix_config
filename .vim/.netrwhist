@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/Users/robert/Dropbox/Bulk File Renaming.app'
+let g:netrw_dirhist_2='/Users/robert/Dropbox'
+let g:netrw_dirhist_3='/Users/robert/Dropbox/Apps'
+let g:netrw_dirhist_4='/Users/robert/Dropbox/Apps/Texpad'
+let g:netrw_dirhist_5='/Users/robert/Dropbox/Apps/Texpad/ConceptMapAPI'
