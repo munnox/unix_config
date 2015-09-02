@@ -6,6 +6,8 @@ export PATH="/usr/local/mysql/bin/:/Users/robert/anaconda/bin:$PATH"
 alias ll='ls -lah'
 alias ls='ls -aGL'
 
+alias gitshow='git log --decorate=short'
+
 # Colours
 txtblk='\[\e[0;30m\]' # Black - Regular
 txtred='\[\e[0;31m\]' # Red
