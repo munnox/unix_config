@@ -32,6 +32,7 @@ filetype plugin on
 
 " Folder parameters
 set foldmethod=indent
+set foldcolumn=2
 set foldlevel=99
 
 " Showline numbers and length
