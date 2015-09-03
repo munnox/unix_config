@@ -2,7 +2,11 @@
 
 # aliases
 alias ll='ls -lah'
+# if [ '$DESKTOP_SESSION' = 'ubuntu']; then 
+alias ls='ls -al --color'
+# else
 alias ls='ls -aGL'
+# fi
 
 alias gitshow='git log --decorate=short'
 
