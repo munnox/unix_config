@@ -1,6 +1,4 @@
 
-# added by Anaconda 2.1.0 installer
-export PATH="/usr/local/mysql/bin/:/Users/robert/anaconda/bin:$PATH"
 
 # aliases
 alias ll='ls -lah'
@@ -53,3 +51,6 @@ PS1=$txtcyn"\h ["$txtpur"\W"$txtcyn"]"$txtrst'$(BRANCH=`git rev-parse --abbrev-r
 if [ -f ~/dotfiles/.git-completion.bash ]; then
   . ~/dotfiles/.git-completion.bash
 fi
+
+# added by Anaconda 2.3.0 installer
+export PATH="/usr/local/mysql/bin:$HOME/anaconda/bin:$PATH"
