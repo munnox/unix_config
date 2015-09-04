@@ -4,4 +4,4 @@ cp .bash_profile ~/
 cp .vimrc ~/
 cp .gitconfig ~/
 cp -r .vim ~/
-
+source ~/.bash_profile
