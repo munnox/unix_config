@@ -1,0 +1,18 @@
+[core]
+	editor = /usr/bin/vim
+[user]
+	name = Robert Munnoch
+	email = munnox@hotmail.com
+[push]
+        default = simple
+[alias]
+        remotes = remote -v
+        branches = branch -a
+        tags = tag -l
+
+        currentbranch = rev-parse --abbrev-ref HEAD
+        id = rev-parse --short HEAD
+        lg = log --color --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
+        st = status -sb
+        co = checkout
