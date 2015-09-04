@@ -2,8 +2,9 @@
 
 # aliases
 alias ll='ls -lah'
-alias ls='ls -aGL'
+alias ls='ls -AlGHh'
 
+alias gitshow='git log --decorate=short'
 alias gitshow='git log --decorate=short'
 
 # Colours
