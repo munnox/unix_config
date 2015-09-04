@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cp .bash_profile ~/
-cp .vimrc ~/
-cp .gitconfig ~/
-cp -r .vim ~/
+cp homedotfile/.bash_profile ~/
+cp homedotfile/.vimrc ~/
+cp homedotfile/.gitconfig ~/
+cp -r homedotfile/.vim ~/
 source ~/.bash_profile
