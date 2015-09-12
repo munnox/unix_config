@@ -9,7 +9,17 @@ set mouse=a " on osx press alt and click
 set bs=2	" make backspace behave like a normal agian
 
 " Rebind <leader> key
-let mapleader = "," " is a key that vim will wait till 
+let mapleader = "`" " is a key that vim will wait till 
+
+" Course Highlighting section
+" set cursorline
+
+hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
+
+noremap   <leader>k      :s,^\(\s*\)[^# \t]\@=,\1#,e<CR>:nohls<CR>zvj
+noremap   <leader>K  :s,^\(\s*\)#\s\@!,\1,e<CR>:nohls<CR>zvj
 
 " Bind nohl
 " Removes highlight  of your last search
@@ -73,6 +83,24 @@ call pathogen#infect()
 
 colorscheme murphy
 
+" Buffer shortcuts
+" To open a new empty buffer
+" " This replaces :tabnew which I used to bind to this mapping
+nmap <leader>T :enew<cr>
+"
+" " Move to the next buffer
+nmap <leader>bl :bnext<CR>
+"
+" " Move to the previous buffer
+nmap <leader>bh :bprevious<CR>
+"
+" " Close the current buffer and move to the previous one
+" " This replicates the idea of closing a tab
+nmap <leader>bq :bp <BAR> bd #<CR>
+"
+" " Show all open buffers and their status
+nmap <leader>bs :ls<CR>
+
 " =======================================================================
 " Python IDE setup
 " ========================================================================
@@ -82,11 +110,17 @@ colorscheme murphy
 " git clone git://github.com/Lokaltob/vim-powerline.git
 set laststatus=2
 
+" Settings for vim-airline
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+" " Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
+
 " Settings for ctrlp
 " cd ~/.vim/bundle
 " git clone https://github.com/kien/ctrlp.vim.git
-" let g:ctrlp_max_height = 30
-" set wildignore+=*.pyc
+let g:ctrlp_max_height = 30
+set wildignore+=*.pyc
 " set wildignore+=*_build/*
 " set wildignore+=*/coverage/*
 
@@ -98,10 +132,10 @@ let g:jedi#use_splits_not_buffers = "left"
 " let g:jedi#popup_select_first = 0 " this disables the selection of the first
 " line of the completion
 
-" let g:jedi#goto_assignments_command = "<leader>g"
-" let g:jedi#goto_definitions_command = "<leader>d"
-" let g:jedi#documentation_command = "K"
-" let g:jedi#usages_command = "<leader>n"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = "<leader>d"
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
 " let g:jedi#completions_command = "<C-Space>"
 " let g:jedi#rename_command = "<leader>r"
 " let g:jedi#show_call_signatures = "1"
