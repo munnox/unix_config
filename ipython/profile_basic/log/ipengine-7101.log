@@ -1,0 +1,8 @@
+2015-05-24 20:17:55.646 [IPEngineApp] Loading url_file u'/Users/robert/.ipython/profile_basic/security/ipcontroller-engine.json'
+2015-05-24 20:17:55.648 [IPEngineApp] Registering with controller at tcp://127.0.0.1:56736
+2015-05-24 20:17:55.705 [IPEngineApp] Starting to monitor the heartbeat signal from the hub every 3010 ms.
+2015-05-24 20:17:55.707 [IPEngineApp] Using existing profile dir: u'/Users/robert/.ipython/profile_basic'
+2015-05-24 20:17:55.708 [IPEngineApp] Completed registration with id 3
+2015-05-26 06:18:00.368 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-26 09:41:19.895 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-26 11:08:22.289 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).

@@ -1,0 +1,24 @@
+2015-05-11 17:33:25.619 [IPControllerApp] Hub listening on tcp://127.0.0.1:52343 for registration.
+2015-05-11 17:33:25.621 [IPControllerApp] Hub using DB backend: 'NoDB'
+2015-05-11 17:33:25.878 [IPControllerApp] hub::created hub
+2015-05-11 17:33:25.878 [IPControllerApp] writing connection info to /Users/robert/.ipython/profile_basic/security/ipcontroller-client.json
+2015-05-11 17:33:25.879 [IPControllerApp] writing connection info to /Users/robert/.ipython/profile_basic/security/ipcontroller-engine.json
+2015-05-11 17:33:25.880 [IPControllerApp] task::using Python leastload Task scheduler
+2015-05-11 17:33:25.880 [IPControllerApp] Heartmonitor started
+2015-05-11 17:33:25.887 [IPControllerApp] Creating pid file: /Users/robert/.ipython/profile_basic/pid/ipcontroller.pid
+2015-05-11 17:33:25.903 [IPControllerApp] client::client '\x00\x80\x00A\xa7' requested u'connection_request'
+2015-05-11 17:33:25.903 [IPControllerApp] client::client ['\x00\x80\x00A\xa7'] connected
+2015-05-11 17:33:26.395 [IPControllerApp] client::client 'a3652035-6ce7-4863-ba29-03ee27c80f06' requested u'registration_request'
+2015-05-11 17:33:26.536 [IPControllerApp] client::client 'd567155f-4920-41ce-ac89-69eab1bd6637' requested u'registration_request'
+2015-05-11 17:33:26.658 [IPControllerApp] client::client '2b38226f-ce7d-4ca3-8308-1a4334dab065' requested u'registration_request'
+2015-05-11 17:33:26.734 [IPControllerApp] client::client '4f3a670a-42af-4671-923b-7995868026fa' requested u'registration_request'
+2015-05-11 17:33:31.885 [IPControllerApp] registration::finished registering engine 3:4f3a670a-42af-4671-923b-7995868026fa
+2015-05-11 17:33:31.886 [IPControllerApp] engine::Engine Connected: 3
+2015-05-11 17:33:31.886 [IPControllerApp] registration::finished registering engine 1:d567155f-4920-41ce-ac89-69eab1bd6637
+2015-05-11 17:33:31.887 [IPControllerApp] engine::Engine Connected: 1
+2015-05-11 17:33:31.887 [IPControllerApp] registration::finished registering engine 2:2b38226f-ce7d-4ca3-8308-1a4334dab065
+2015-05-11 17:33:31.888 [IPControllerApp] engine::Engine Connected: 2
+2015-05-11 17:33:31.888 [IPControllerApp] registration::finished registering engine 0:a3652035-6ce7-4863-ba29-03ee27c80f06
+2015-05-11 17:33:31.889 [IPControllerApp] engine::Engine Connected: 0
+2015-05-11 17:33:33.983 [IPControllerApp] CRITICAL | Received signal 2, shutting down
+2015-05-11 17:33:33.983 [IPControllerApp] CRITICAL | terminating children...

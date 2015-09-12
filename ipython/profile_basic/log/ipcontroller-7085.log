@@ -1,0 +1,122 @@
+2015-05-24 20:17:54.428 [IPControllerApp] Hub listening on tcp://127.0.0.1:56736 for registration.
+2015-05-24 20:17:54.430 [IPControllerApp] Hub using DB backend: 'NoDB'
+2015-05-24 20:17:54.688 [IPControllerApp] hub::created hub
+2015-05-24 20:17:54.688 [IPControllerApp] writing connection info to /Users/robert/.ipython/profile_basic/security/ipcontroller-client.json
+2015-05-24 20:17:54.688 [IPControllerApp] writing connection info to /Users/robert/.ipython/profile_basic/security/ipcontroller-engine.json
+2015-05-24 20:17:54.689 [IPControllerApp] task::using Python leastload Task scheduler
+2015-05-24 20:17:54.690 [IPControllerApp] Heartmonitor started
+2015-05-24 20:17:54.700 [IPControllerApp] Creating pid file: /Users/robert/.ipython/profile_basic/pid/ipcontroller.pid
+2015-05-24 20:17:54.710 [IPControllerApp] client::client '\x00\x80\x00A\xa7' requested u'connection_request'
+2015-05-24 20:17:54.710 [IPControllerApp] client::client ['\x00\x80\x00A\xa7'] connected
+2015-05-24 20:17:55.268 [IPControllerApp] client::client '256420e0-f4cc-4b23-b9db-1070f6604f99' requested u'registration_request'
+2015-05-24 20:17:55.450 [IPControllerApp] client::client 'df3b90eb-f29c-42d1-9be7-f8b2cb6f3684' requested u'registration_request'
+2015-05-24 20:17:55.556 [IPControllerApp] client::client 'fb0d5775-cd8a-48a6-99c2-08c55caf4cf5' requested u'registration_request'
+2015-05-24 20:17:55.650 [IPControllerApp] client::client 'c445e6f7-ad74-4cbd-a7cd-e4db47b8b3b6' requested u'registration_request'
+2015-05-24 20:18:00.016 [IPControllerApp] client::client '\x00\x80\x00A\xa8' requested u'connection_request'
+2015-05-24 20:18:00.016 [IPControllerApp] client::client ['\x00\x80\x00A\xa8'] connected
+2015-05-24 20:18:00.690 [IPControllerApp] registration::finished registering engine 2:fb0d5775-cd8a-48a6-99c2-08c55caf4cf5
+2015-05-24 20:18:00.691 [IPControllerApp] engine::Engine Connected: 2
+2015-05-24 20:18:00.691 [IPControllerApp] registration::finished registering engine 0:256420e0-f4cc-4b23-b9db-1070f6604f99
+2015-05-24 20:18:00.692 [IPControllerApp] engine::Engine Connected: 0
+2015-05-24 20:18:00.692 [IPControllerApp] registration::finished registering engine 3:c445e6f7-ad74-4cbd-a7cd-e4db47b8b3b6
+2015-05-24 20:18:00.693 [IPControllerApp] engine::Engine Connected: 3
+2015-05-24 20:18:00.693 [IPControllerApp] registration::finished registering engine 1:df3b90eb-f29c-42d1-9be7-f8b2cb6f3684
+2015-05-24 20:18:00.693 [IPControllerApp] engine::Engine Connected: 1
+2015-05-24 20:18:01.295 [IPControllerApp] client::client '\x00\x80\x00A\xa9' requested u'connection_request'
+2015-05-24 20:18:01.295 [IPControllerApp] client::client ['\x00\x80\x00A\xa9'] connected
+2015-05-24 20:18:01.302 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'1652738d-7491-4824-94e2-3d8bce3f0bae' to 0
+2015-05-24 20:18:01.303 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'9d331cac-ce82-43f6-993a-0c3fb1f1544b' to 1
+2015-05-24 20:18:01.303 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'd668aa4e-2a55-4afa-8001-2bb0c38845c1' to 2
+2015-05-24 20:18:01.304 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'7195f409-23b5-41fb-ba9c-03fdc8053190' to 3
+2015-05-24 20:18:01.306 [IPControllerApp] queue::request u'1652738d-7491-4824-94e2-3d8bce3f0bae' completed on 0
+2015-05-24 20:18:01.309 [IPControllerApp] queue::request u'7195f409-23b5-41fb-ba9c-03fdc8053190' completed on 3
+2015-05-24 20:18:01.314 [IPControllerApp] queue::request u'd668aa4e-2a55-4afa-8001-2bb0c38845c1' completed on 2
+2015-05-24 20:18:01.314 [IPControllerApp] queue::request u'9d331cac-ce82-43f6-993a-0c3fb1f1544b' completed on 1
+2015-05-24 20:18:01.324 [IPControllerApp] task::task u'30a6abd2-9d8b-4502-9263-a24800284821' arrived on 1
+2015-05-24 20:18:01.343 [IPControllerApp] task::task u'ba538795-a812-4268-9f26-e44bf085c41b' arrived on 3
+2015-05-24 20:18:01.345 [IPControllerApp] task::task u'a893debf-7047-4a5e-b3f2-cc157942a054' arrived on 0
+2015-05-24 20:18:01.346 [IPControllerApp] task::task u'8cdddc9b-a1c1-4e92-a2aa-dbbb2c17bf26' arrived on 2
+2015-05-24 20:18:01.466 [IPControllerApp] task::task u'72bd2b07-58a1-4e93-950d-8fb675320cf9' arrived on 0
+2015-05-24 20:18:01.467 [IPControllerApp] task::task u'a893debf-7047-4a5e-b3f2-cc157942a054' finished on 0
+2015-05-24 20:18:01.469 [IPControllerApp] task::task u'3f4c0bc9-fc08-4058-a62d-e452e98433df' arrived on 2
+2015-05-24 20:18:01.469 [IPControllerApp] task::task u'8cdddc9b-a1c1-4e92-a2aa-dbbb2c17bf26' finished on 2
+2015-05-24 20:18:01.472 [IPControllerApp] task::task u'e698a5f0-7368-46d5-a8a1-ef1d788849aa' arrived on 0
+2015-05-24 20:18:01.473 [IPControllerApp] task::task u'72bd2b07-58a1-4e93-950d-8fb675320cf9' finished on 0
+2015-05-24 20:18:01.474 [IPControllerApp] task::task u'61e936b4-751e-4425-888c-40055a9ea5db' arrived on 2
+2015-05-24 20:18:01.475 [IPControllerApp] task::task u'3f4c0bc9-fc08-4058-a62d-e452e98433df' finished on 2
+2015-05-24 20:18:01.478 [IPControllerApp] task::task u'2c48ce73-eece-44f8-a594-8ca17eb7c685' arrived on 0
+2015-05-24 20:18:01.479 [IPControllerApp] task::task u'e698a5f0-7368-46d5-a8a1-ef1d788849aa' finished on 0
+2015-05-24 20:18:01.482 [IPControllerApp] task::task u'f86ca84f-345a-44d6-bf95-48ff1f772b84' arrived on 2
+2015-05-24 20:18:01.484 [IPControllerApp] task::task u'61e936b4-751e-4425-888c-40055a9ea5db' finished on 2
+2015-05-24 20:18:01.485 [IPControllerApp] task::task u'5e635b5a-4b4d-4326-a0a6-3fccfdd812b7' arrived on 0
+2015-05-24 20:18:01.485 [IPControllerApp] task::task u'2c48ce73-eece-44f8-a594-8ca17eb7c685' finished on 0
+2015-05-24 20:18:01.489 [IPControllerApp] task::task u'1d1ab505-3f0f-418c-8a03-f2573aa5cdfb' arrived on 0
+2015-05-24 20:18:01.491 [IPControllerApp] task::task u'5e635b5a-4b4d-4326-a0a6-3fccfdd812b7' finished on 0
+2015-05-24 20:18:01.492 [IPControllerApp] task::task u'e7784369-1508-491a-8958-4a10ef598cce' arrived on 1
+2015-05-24 20:18:01.493 [IPControllerApp] task::task u'30a6abd2-9d8b-4502-9263-a24800284821' finished on 1
+2015-05-24 20:18:01.493 [IPControllerApp] task::task u'1dda3532-bf82-4bb0-b170-35880b4fa2b9' arrived on 2
+2015-05-24 20:18:01.494 [IPControllerApp] task::task u'f86ca84f-345a-44d6-bf95-48ff1f772b84' finished on 2
+2015-05-24 20:18:01.496 [IPControllerApp] task::task u'26df6765-ee96-40ba-9e98-887ba0183ed1' arrived on 0
+2015-05-24 20:18:01.498 [IPControllerApp] task::task u'1d1ab505-3f0f-418c-8a03-f2573aa5cdfb' finished on 0
+2015-05-24 20:18:01.498 [IPControllerApp] task::task u'fab706aa-92c4-4c20-bea1-a610ec347077' arrived on 3
+2015-05-24 20:18:01.499 [IPControllerApp] task::task u'ba538795-a812-4268-9f26-e44bf085c41b' finished on 3
+2015-05-24 20:18:01.502 [IPControllerApp] task::task u'20f41dcd-dfef-4409-87c4-3214c83fe5a8' arrived on 0
+2015-05-24 20:18:01.504 [IPControllerApp] task::task u'26df6765-ee96-40ba-9e98-887ba0183ed1' finished on 0
+2015-05-24 20:18:01.505 [IPControllerApp] task::task u'3df384f3-96e9-4430-8cc1-c19e95cf47a1' arrived on 2
+2015-05-24 20:18:01.507 [IPControllerApp] task::task u'1dda3532-bf82-4bb0-b170-35880b4fa2b9' finished on 2
+2015-05-24 20:18:01.508 [IPControllerApp] task::task u'515bb432-fb5d-4238-83b0-1a4fd1b6b479' arrived on 1
+2015-05-24 20:18:01.508 [IPControllerApp] task::task u'e7784369-1508-491a-8958-4a10ef598cce' finished on 1
+2015-05-24 20:18:01.509 [IPControllerApp] task::task u'4d9a2ef8-7cfb-4263-ba5d-c23b9d2bab28' arrived on 3
+2015-05-24 20:18:01.510 [IPControllerApp] task::task u'fab706aa-92c4-4c20-bea1-a610ec347077' finished on 3
+2015-05-24 20:18:01.511 [IPControllerApp] task::task u'0abc17af-951e-43b1-b191-e11a0e55f01e' arrived on 0
+2015-05-24 20:18:01.511 [IPControllerApp] task::task u'20f41dcd-dfef-4409-87c4-3214c83fe5a8' finished on 0
+2015-05-24 20:18:01.515 [IPControllerApp] task::task u'295e08f6-c63e-41ff-963a-bad6f5e99fdd' arrived on 1
+2015-05-24 20:18:01.516 [IPControllerApp] task::task u'515bb432-fb5d-4238-83b0-1a4fd1b6b479' finished on 1
+2015-05-24 20:18:01.517 [IPControllerApp] task::task u'cef8e3f1-0f04-4949-b60a-096b3818fd43' arrived on 0
+2015-05-24 20:18:01.518 [IPControllerApp] task::task u'0abc17af-951e-43b1-b191-e11a0e55f01e' finished on 0
+2015-05-24 20:18:01.519 [IPControllerApp] task::task u'bd0af638-eeea-43e3-97a2-c7c7befe1827' arrived on 2
+2015-05-24 20:18:01.519 [IPControllerApp] task::task u'3df384f3-96e9-4430-8cc1-c19e95cf47a1' finished on 2
+2015-05-24 20:18:01.523 [IPControllerApp] task::task u'41ca9ad8-48a2-4150-a8b4-135ca8e7bf87' arrived on 0
+2015-05-24 20:18:01.523 [IPControllerApp] task::task u'cef8e3f1-0f04-4949-b60a-096b3818fd43' finished on 0
+2015-05-24 20:18:01.525 [IPControllerApp] task::task u'1e6db66a-e4b2-4567-a8b3-7150768c1e56' arrived on 1
+2015-05-24 20:18:01.526 [IPControllerApp] task::task u'295e08f6-c63e-41ff-963a-bad6f5e99fdd' finished on 1
+2015-05-24 20:18:01.527 [IPControllerApp] task::task u'06741ad9-bef8-466d-91db-67e4cf16312b' arrived on 2
+2015-05-24 20:18:01.528 [IPControllerApp] task::task u'bd0af638-eeea-43e3-97a2-c7c7befe1827' finished on 2
+2015-05-24 20:18:01.529 [IPControllerApp] task::task u'a4f59075-c357-48c0-b235-610473c38c4d' arrived on 0
+2015-05-24 20:18:01.530 [IPControllerApp] task::task u'41ca9ad8-48a2-4150-a8b4-135ca8e7bf87' finished on 0
+2015-05-24 20:18:01.533 [IPControllerApp] task::task u'303a25a5-f7f3-45e6-90ba-5d2074b5c895' arrived on 0
+2015-05-24 20:18:01.535 [IPControllerApp] task::task u'a4f59075-c357-48c0-b235-610473c38c4d' finished on 0
+2015-05-24 20:18:01.536 [IPControllerApp] task::task u'8f875c95-867d-46c6-b885-bd606be6822a' arrived on 2
+2015-05-24 20:18:01.537 [IPControllerApp] task::task u'06741ad9-bef8-466d-91db-67e4cf16312b' finished on 2
+2015-05-24 20:18:01.538 [IPControllerApp] task::task u'1ceaf871-565e-4cd2-82ae-825208a4b863' arrived on 3
+2015-05-24 20:18:01.539 [IPControllerApp] task::task u'4d9a2ef8-7cfb-4263-ba5d-c23b9d2bab28' finished on 3
+2015-05-24 20:18:01.539 [IPControllerApp] task::task u'edbd405a-6e4f-45d4-bd29-8d65017146e1' arrived on 1
+2015-05-24 20:18:01.540 [IPControllerApp] task::task u'1e6db66a-e4b2-4567-a8b3-7150768c1e56' finished on 1
+2015-05-24 20:18:01.541 [IPControllerApp] task::task u'303a25a5-f7f3-45e6-90ba-5d2074b5c895' finished on 0
+2015-05-24 20:18:01.544 [IPControllerApp] task::task u'edbd405a-6e4f-45d4-bd29-8d65017146e1' finished on 1
+2015-05-24 20:18:01.545 [IPControllerApp] task::task u'8f875c95-867d-46c6-b885-bd606be6822a' finished on 2
+2015-05-24 20:18:01.547 [IPControllerApp] task::task u'1ceaf871-565e-4cd2-82ae-825208a4b863' finished on 3
+2015-05-24 20:18:01.549 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'3ad52a5c-9439-4516-9265-2cc99591a87a' to 0
+2015-05-24 20:18:01.550 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'9e7bb67f-8e67-457b-b300-99fc9041e7e1' to 1
+2015-05-24 20:18:01.550 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'bcd24aa9-568b-46eb-8f6a-f307e02dbf04' to 2
+2015-05-24 20:18:01.551 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'10954669-d7a0-47c9-bebd-5c0ceaea69af' to 3
+2015-05-24 20:18:01.552 [IPControllerApp] queue::request u'3ad52a5c-9439-4516-9265-2cc99591a87a' completed on 0
+2015-05-24 20:18:01.554 [IPControllerApp] queue::request u'bcd24aa9-568b-46eb-8f6a-f307e02dbf04' completed on 2
+2015-05-24 20:18:01.554 [IPControllerApp] queue::request u'9e7bb67f-8e67-457b-b300-99fc9041e7e1' completed on 1
+2015-05-24 20:18:01.556 [IPControllerApp] queue::request u'10954669-d7a0-47c9-bebd-5c0ceaea69af' completed on 3
+2015-05-24 20:18:01.557 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'8d66f0a5-3f09-49b2-8863-a85a77505eb0' to 0
+2015-05-24 20:18:01.558 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'f829e5a7-f33d-4a5c-bc05-68ca1dd4dc27' to 1
+2015-05-24 20:18:01.559 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'ba506ae2-d0e3-454d-923f-262f6cdb855b' to 2
+2015-05-24 20:18:01.560 [IPControllerApp] queue::request u'8d66f0a5-3f09-49b2-8863-a85a77505eb0' completed on 0
+2015-05-24 20:18:01.561 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'59a59e09-f6fd-4c4e-93f3-1009c597a6ff' to 3
+2015-05-24 20:18:01.563 [IPControllerApp] queue::request u'ba506ae2-d0e3-454d-923f-262f6cdb855b' completed on 2
+2015-05-24 20:18:01.563 [IPControllerApp] queue::request u'f829e5a7-f33d-4a5c-bc05-68ca1dd4dc27' completed on 1
+2015-05-24 20:18:01.565 [IPControllerApp] queue::request u'59a59e09-f6fd-4c4e-93f3-1009c597a6ff' completed on 3
+2015-05-24 20:18:01.568 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'81b5bdeb-7582-4e77-9a4c-d849c1cbf352' to 0
+2015-05-24 20:18:01.570 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'647f09be-aaca-44c6-8011-776cf0fc4c42' to 1
+2015-05-24 20:18:01.571 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'a98aa1ec-db1d-4c7d-954d-4b0b71b99070' to 2
+2015-05-24 20:18:01.572 [IPControllerApp] queue::request u'81b5bdeb-7582-4e77-9a4c-d849c1cbf352' completed on 0
+2015-05-24 20:18:01.573 [IPControllerApp] queue::client '\x00\x06\x05\x8e\xd9' submitted request u'02ffb956-fd6c-4205-bbd5-c46e8197eb62' to 3
+2015-05-24 20:18:01.575 [IPControllerApp] queue::request u'647f09be-aaca-44c6-8011-776cf0fc4c42' completed on 1
+2015-05-24 20:18:01.577 [IPControllerApp] queue::request u'a98aa1ec-db1d-4c7d-954d-4b0b71b99070' completed on 2
+2015-05-24 20:18:01.578 [IPControllerApp] queue::request u'02ffb956-fd6c-4205-bbd5-c46e8197eb62' completed on 3

@@ -1,0 +1,113 @@
+2015-05-11 17:33:41.620 [IPEngineApp] Loading url_file u'/Users/robert/.ipython/profile_basic/security/ipcontroller-engine.json'
+2015-05-11 17:33:41.624 [IPEngineApp] Registering with controller at tcp://127.0.0.1:52463
+2015-05-11 17:33:41.741 [IPEngineApp] Starting to monitor the heartbeat signal from the hub every 3010 ms.
+2015-05-11 17:33:41.749 [IPEngineApp] Using existing profile dir: u'/Users/robert/.ipython/profile_basic'
+2015-05-11 17:33:41.751 [IPEngineApp] Completed registration with id 0
+2015-05-11 17:42:55.586 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 17:53:00.591 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 18:56:13.195 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 19:19:20.805 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 20:40:21.952 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 20:53:12.512 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 21:13:06.773 [IPEngineApp] Exception in apply request:
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+[0;32m<string>[0m in [0;36m<module>[0;34m()[0m
+
+[0;32m<ipython-input-177-8b68d4630a3e>[0m in [0;36mdo_test[0;34m(test)[0m
+
+[0;32m/Users/robert/anaconda/lib/python2.7/site-packages/sklearn/svm/classes.pyc[0m in [0;36mfit[0;34m(self, X, y, sample_weight, **params)[0m
+[1;32m    963[0m [0;34m[0m[0m
+[1;32m    964[0m         """
+[1;32m    965[0m         super(OneClassSVM, self).fit(X, [], sample_weight=sample_weight,
+[0;32m--> 966[0;31m                                      **params)
+[0m[1;32m    967[0m         [0;32mreturn[0m [0mself[0m[0;34m[0m[0m
+
+[0;32m/Users/robert/anaconda/lib/python2.7/site-packages/sklearn/svm/base.pyc[0m in [0;36mfit[0;34m(self, X, y, sample_weight)[0m
+[1;32m    137[0m         [0mself[0m[0;34m.[0m[0m_sparse[0m [0;34m=[0m [0msparse[0m [0;32mand[0m [0;32mnot[0m [0mcallable[0m[0;34m([0m[0mself[0m[0;34m.[0m[0mkernel[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    138[0m [0;34m[0m[0m
+[0;32m--> 139[0;31m         [0mX[0m [0;34m=[0m [0mcheck_array[0m[0;34m([0m[0mX[0m[0;34m,[0m [0maccept_sparse[0m[0;34m=[0m[0;34m'csr'[0m[0;34m,[0m [0mdtype[0m[0;34m=[0m[0mnp[0m[0;34m.[0m[0mfloat64[0m[0;34m,[0m [0morder[0m[0;34m=[0m[0;34m'C'[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    140[0m         [0my[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0m_validate_targets[0m[0;34m([0m[0my[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    141[0m [0;34m[0m[0m
+
+[0;32m/Users/robert/anaconda/lib/python2.7/site-packages/sklearn/utils/validation.pyc[0m in [0;36mcheck_array[0;34m(array, accept_sparse, dtype, order, copy, force_all_finite, ensure_2d, allow_nd, ensure_min_samples, ensure_min_features)[0m
+[1;32m    342[0m             [0;32melse[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m    343[0m                 [0mdtype[0m [0;34m=[0m [0mNone[0m[0;34m[0m[0m
+[0;32m--> 344[0;31m         [0marray[0m [0;34m=[0m [0mnp[0m[0;34m.[0m[0marray[0m[0;34m([0m[0marray[0m[0;34m,[0m [0mdtype[0m[0;34m=[0m[0mdtype[0m[0;34m,[0m [0morder[0m[0;34m=[0m[0morder[0m[0;34m,[0m [0mcopy[0m[0;34m=[0m[0mcopy[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    345[0m         [0;31m# make sure we actually converted to numeric:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    346[0m         [0;32mif[0m [0mdtype_numeric[0m [0;32mand[0m [0marray[0m[0;34m.[0m[0mdtype[0m[0;34m.[0m[0mkind[0m [0;34m==[0m [0;34m"O"[0m[0;34m:[0m[0;34m[0m[0m
+
+[0;31mTypeError[0m: float() argument must be a string or a number
+2015-05-11 21:13:07.484 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 21:13:37.598 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 21:13:40.594 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (2 time(s) in a row).
+2015-05-11 21:13:43.602 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (3 time(s) in a row).
+2015-05-11 21:13:46.611 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (4 time(s) in a row).
+2015-05-11 21:14:34.786 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 21:14:37.783 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (2 time(s) in a row).
+2015-05-11 21:14:40.793 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (3 time(s) in a row).
+2015-05-11 21:14:43.804 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (4 time(s) in a row).
+2015-05-11 21:14:46.819 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (5 time(s) in a row).
+2015-05-11 21:15:47.040 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 21:15:50.029 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (2 time(s) in a row).
+2015-05-11 21:15:53.035 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (3 time(s) in a row).
+2015-05-11 21:17:32.452 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 21:17:35.375 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (2 time(s) in a row).
+2015-05-11 21:18:13.484 [IPEngineApp] Exception in apply request:
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+[0;32m<string>[0m in [0;36m<module>[0;34m()[0m
+
+[0;32m<ipython-input-177-8b68d4630a3e>[0m in [0;36mdo_test[0;34m(test)[0m
+
+[0;32m/Users/robert/anaconda/lib/python2.7/site-packages/sklearn/svm/classes.pyc[0m in [0;36mfit[0;34m(self, X, y, sample_weight, **params)[0m
+[1;32m    963[0m [0;34m[0m[0m
+[1;32m    964[0m         """
+[1;32m    965[0m         super(OneClassSVM, self).fit(X, [], sample_weight=sample_weight,
+[0;32m--> 966[0;31m                                      **params)
+[0m[1;32m    967[0m         [0;32mreturn[0m [0mself[0m[0;34m[0m[0m
+
+[0;32m/Users/robert/anaconda/lib/python2.7/site-packages/sklearn/svm/base.pyc[0m in [0;36mfit[0;34m(self, X, y, sample_weight)[0m
+[1;32m    137[0m         [0mself[0m[0;34m.[0m[0m_sparse[0m [0;34m=[0m [0msparse[0m [0;32mand[0m [0;32mnot[0m [0mcallable[0m[0;34m([0m[0mself[0m[0;34m.[0m[0mkernel[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    138[0m [0;34m[0m[0m
+[0;32m--> 139[0;31m         [0mX[0m [0;34m=[0m [0mcheck_array[0m[0;34m([0m[0mX[0m[0;34m,[0m [0maccept_sparse[0m[0;34m=[0m[0;34m'csr'[0m[0;34m,[0m [0mdtype[0m[0;34m=[0m[0mnp[0m[0;34m.[0m[0mfloat64[0m[0;34m,[0m [0morder[0m[0;34m=[0m[0;34m'C'[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    140[0m         [0my[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0m_validate_targets[0m[0;34m([0m[0my[0m[0;34m)[0m[0;34m[0m[0m
+[1;32m    141[0m [0;34m[0m[0m
+
+[0;32m/Users/robert/anaconda/lib/python2.7/site-packages/sklearn/utils/validation.pyc[0m in [0;36mcheck_array[0;34m(array, accept_sparse, dtype, order, copy, force_all_finite, ensure_2d, allow_nd, ensure_min_samples, ensure_min_features)[0m
+[1;32m    342[0m             [0;32melse[0m[0;34m:[0m[0;34m[0m[0m
+[1;32m    343[0m                 [0mdtype[0m [0;34m=[0m [0mNone[0m[0;34m[0m[0m
+[0;32m--> 344[0;31m         [0marray[0m [0;34m=[0m [0mnp[0m[0;34m.[0m[0marray[0m[0;34m([0m[0marray[0m[0;34m,[0m [0mdtype[0m[0;34m=[0m[0mdtype[0m[0;34m,[0m [0morder[0m[0;34m=[0m[0morder[0m[0;34m,[0m [0mcopy[0m[0;34m=[0m[0mcopy[0m[0;34m)[0m[0;34m[0m[0m
+[0m[1;32m    345[0m         [0;31m# make sure we actually converted to numeric:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    346[0m         [0;32mif[0m [0mdtype_numeric[0m [0;32mand[0m [0marray[0m[0;34m.[0m[0mdtype[0m[0;34m.[0m[0mkind[0m [0;34m==[0m [0;34m"O"[0m[0;34m:[0m[0;34m[0m[0m
+
+[0;31mTypeError[0m: float() argument must be a string or a number
+2015-05-11 21:19:17.719 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 21:19:20.721 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (2 time(s) in a row).
+2015-05-11 21:19:23.735 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (3 time(s) in a row).
+2015-05-11 21:19:26.742 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (4 time(s) in a row).
+2015-05-11 21:19:29.758 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (5 time(s) in a row).
+2015-05-11 21:20:39.018 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 21:20:41.995 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (2 time(s) in a row).
+2015-05-11 21:20:45.005 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (3 time(s) in a row).
+2015-05-11 21:20:48.014 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (4 time(s) in a row).
+2015-05-11 21:20:51.025 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (5 time(s) in a row).
+2015-05-11 21:21:48.213 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-11 21:21:51.221 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (2 time(s) in a row).
+2015-05-11 21:21:54.233 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (3 time(s) in a row).
+2015-05-11 21:28:22.527 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-12 00:17:14.261 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-12 00:17:44.529 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-12 00:17:59.178 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-13 11:13:33.052 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-13 13:21:49.631 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-13 16:33:51.908 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-14 02:52:37.247 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-14 15:51:51.579 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-14 17:17:38.675 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-14 17:52:03.530 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-15 01:55:18.861 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-15 03:34:13.450 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-15 15:25:15.314 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-16 07:16:18.338 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
+2015-05-16 10:16:27.805 [IPEngineApp] WARNING | No heartbeat in the last 3010 ms (1 time(s) in a row).
