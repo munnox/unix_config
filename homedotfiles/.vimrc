@@ -80,7 +80,7 @@ colorscheme murphy
 " Settings for vim-powerline
 " cd ~.vim/bundle
 " git clone git://github.com/Lokaltob/vim-powerline.git
-" set laststatus=2
+set laststatus=2
 
 " Settings for ctrlp
 " cd ~/.vim/bundle
