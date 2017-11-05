@@ -1,5 +1,10 @@
 [core]
 	editor = /usr/bin/vim
+        # editor = code --wait
+[diff]
+    	tool = default-difftool
+[difftool "default-difftool"]
+    	cmd = code --wait --diff $LOCAL $REMOTE
 [user]
 	name = Robert Munnoch
 	email = munnox@hotmail.com
@@ -13,6 +18,21 @@
         currentbranch = rev-parse --abbrev-ref HEAD
         id = rev-parse --short HEAD
         lg = log --color --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-
-        st = status -sb
+        ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+        diff = diff --word-diff
+        dc = diff --cached
+        l = log --decorate --oneline --graph --all
+        st = status # -sb
         co = checkout
+
+        sl = stash list
+        sa = stash apply
+        ss = stash save
+
+        r = reset
+        r1 = reset HEAD^
+        r2 = reset HEAD^^
+        rh = reset --hard
+        rh1 = reset HEAD^ --hard
+        rh2 = reset HEAD^^ --hard
