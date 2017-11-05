@@ -6,7 +6,7 @@ alias ll='ls -lah'
 # if [ '$DESKTOP_SESSION' = 'ubuntu']; then 
 # alias ls='ls -alHh --color'
 # else
-alias ls='ls -alGHh'
+alias lsn='ls -alGHh'
 # fi
 
 alias gitshow='git log --decorate=short'
@@ -73,3 +73,8 @@ fi
 
 # added by Anaconda 2.3.0 installer
 export PATH="/usr/local/mysql/bin:$HOME/anaconda/bin:$PATH"
+
+# test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
+# added by Anaconda2 4.3.1 installer
+export PATH="/Users/robert/anaconda/bin:$PATH"
