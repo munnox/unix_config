@@ -1,5 +1,6 @@
 [core]
 	editor = /usr/bin/vim
+    # editor = sublime -n -w
 [user]
 	name = Robert Munnoch
 	email = munnox@hotmail.com
@@ -16,3 +17,6 @@
 
         st = status -sb
         co = checkout
+        wdiff = diff --color-words
+        addcw = -c interactive.diffFilter="git diff --color-words"
+        fullhistory = log --all --decorate --oneline --graph
