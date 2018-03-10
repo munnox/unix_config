@@ -1,10 +1,12 @@
 [core]
 	editor = /usr/bin/vim
         # editor = code --wait
+        # editor = sublime -n -w
 [diff]
     	tool = default-difftool
 [difftool "default-difftool"]
     	cmd = code --wait --diff $LOCAL $REMOTE
+    
 [user]
 	name = Robert Munnoch
 	email = munnox@hotmail.com
@@ -25,6 +27,7 @@
         l = log --decorate --oneline --graph --all
         st = status # -sb
         co = checkout
+<<<<<<< HEAD
 
         sl = stash list
         sa = stash apply
@@ -36,3 +39,8 @@
         rh = reset --hard
         rh1 = reset HEAD^ --hard
         rh2 = reset HEAD^^ --hard
+=======
+        wdiff = diff --color-words
+        addcw = -c interactive.diffFilter="git diff --color-words"
+        fullhistory = log --all --decorate --oneline --graph
+>>>>>>> 0f3363abd4ad2784be25ecd241a4464f0dfdb870
