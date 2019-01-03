@@ -1,89 +1,64 @@
 " vimRc file by Robert Munnoch
+
+set nocompatible              " required
+filetype off                  " required
+
 autocmd! bufwritepost .vimrc source %
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 
-set pastetoggle=<F2>
-set clipboard=unnamed
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-" Mouse and keyboard settings to keep it inline with other devices
-set mouse=a " on osx press alt and click
-set bs=2	" make backspace behave like a normal agian
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
 
-" Rebind <leader> key
-let mapleader = "`" " is a key that vim will wait till 
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
 
-" Course Highlighting section
-" set cursorline
+" add all your plugins here (note older versions of Vundle
+" used Bundle instead of Plugin)
 
-hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
-hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
-nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
+Plugin 'tmhedberg/SimpylFold'
+Plugin 'vim-scripts/indentpython.vim'
+" Ctrl-p
+Plugin 'kien/ctrlp.vim'
+" You Complete Me 
+Bundle 'Valloric/YouCompleteMe'
+Plugin 'scrooloose/nerdtree'
 
-noremap   <leader>k      :s,^\(\s*\)[^# \t]\@=,\1#,e<CR>:nohls<CR>zvj
-noremap   <leader>K  :s,^\(\s*\)#\s\@!,\1,e<CR>:nohls<CR>zvj
 
-" Bind nohl
-" Removes highlight  of your last search
-"noremap <C-n> :nohl<CR>
-"vnoremap <C-n> :nohl<CR>
-"inoremap <C-n> :nohl<CR>
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
 
-" Quicksave command
-"noremap <C-Z> :update<CR>
-"vnoremap <C-Z> :update<CR>
-"inoremap <C-z> :update<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""
+" Custom Keybindings
+"""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader=","       " leader is comma
 
-" Enable Syntax Highlighting
-" You need to reload this file for the change to apply
-filetype off
-filetype plugin indent on
-syntax on 
-" From the python wiki to turn on the python autocomplete
-filetype plugin on
+" turn off search highlight with ,-<space>
+nnoremap <leader><space> :nohlsearch<CR>
 
-" Folder parameters
-set foldmethod=indent
-set foldcolumn=2
-set foldlevel=99
+" Invoke Ctrl-p with c-p
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
 
-" Showline numbers and length
-set number " show line number
-set tw=79 " width of document (used by gd)
-set nowrap " don't automatically wrap on load
-set fo-=t " don't automatically wrap text when typing
-set colorcolumn=80
-highlight ColorColumn ctermbg=233
+""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin Configuration
+""""""""""""""""""""""""""""""""""""""""""""""""
 
-" easier formatting of paragraphs
-vmap Q gq
-nmap Q gqap
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
-" Useful settings
-set history =700
-set undolevels=700
+" let g:ycm_autoclose_preview_window_after_completion=1
+" map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-" Real programmers don't use spaces
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set shiftround
-set expandtab
+map <C-n> :NERDTreeToggle<CR>
 
-" Disable stupid backup and swap files - they trigger to many events
-" for file system watchers
-set nobackup
-set nowritebackup
-set noswapfile
 
-" Setup Pathogen to manage your plugins
-" mkdir -p ~/.vim/autoload ~/.vim/bundle
-" curl -so ~/.vim/autoload/pathogen.vim
-" 
-" " Now you can install any plugin into a .vim/bundle/plugin-name/ folder
-call pathogen#infect()
-
-colorscheme murphy
-
+""""""""""""""""""""""""""""""""""""""""""""""""
 " Buffer shortcuts
+""""""""""""""""""""""""""""""""""""""""""""""""
 " To open a new empty buffer
 " " This replaces :tabnew which I used to bind to this mapping
 nmap <leader>T :enew<cr>
@@ -100,6 +75,55 @@ nmap <leader>bq :bp <BAR> bd #<CR>
 "
 " " Show all open buffers and their status
 nmap <leader>bs :ls<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""
+" General Configuration
+""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Mouse
+set mouse=a
+
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Automatically update a file if it is changed externally
+set autoread
+
+" Height of the command bar
+set cmdheight=2
+
+set hlsearch	    " highlight search matches
+set incsearch	    " search while characters are entered
+
+" search is case-insensitive by default
+set ignorecase
+
+" Show linenumbers
+set number
+
+set showcmd	" show last command in the bottom right
+
+set ruler	" always show current position
+
+" Line wrap (number of cols)
+set wrap	    " wrap lines only visually
+set linebreak	    " wrap only at valid characters
+set textwidth=0	    " prevent vim from inserting linebreaks
+set wrapmargin=0    "   in newly entered text
+
+" Disable stupid backup and swap files - they trigger to many events
+" for file system watchers
+set nobackup
+set nowritebackup
+set noswapfile
+
+
+" show matching braces
+set showmatch
 
 " =======================================================================
 " Python IDE setup
