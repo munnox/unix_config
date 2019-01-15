@@ -2,6 +2,8 @@
 
 # aliases
 alias ll='ls -lah'
+alias la='ls -A'
+alias l='ls -CF'
 
 # if [ '$DESKTOP_SESSION' = 'ubuntu']; then
 # alias ls='ls -alHh --color'
@@ -68,7 +70,14 @@ PS1=$txtcyn"\h ["$txtpur"\W"$txtcyn"]"$txtrst'$(BRANCH=`git rev-parse --abbrev-r
 
 export VISUAL=code
 export EDITOR=vim
+export MYVIMRC="~/.vimrc"
+
+alias gitshow='git log --decorate=short'
 # # git branch autocompletion
 # if [ -f ~/dotfiles/.git-completion.bash ]; then
 #   . ~/dotfiles/.git-completion.bash
 # fi
+
+# disable the ctrl-s
+stty -ixon
+
