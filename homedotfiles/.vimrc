@@ -3,58 +3,91 @@
 set nocompatible              " required
 filetype off                  " required
 
+let mapleader=","       " leader is comma
+
 autocmd! bufwritepost .vimrc source %
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>vr :source $MYVIMRC<cr>
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+call plug#begin('~/.vim/plugged')
+" Plug 'junegunn/seoul256.vim'
+" Plug 'junegunn/goyo.vim'
+" Plug 'junegunn/limelight.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
 
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+Plug 'scrooloose/nerdtree'
 
-" add all your plugins here (note older versions of Vundle
-" used Bundle instead of Plugin)
+Plug 'itchyny/lightline.vim'
 
-Plugin 'tmhedberg/SimpylFold'
-Plugin 'vim-scripts/indentpython.vim'
+Plug 'tmhedberg/SimpylFold'
+
+" use C-n to select and edit duplicates
+Plug 'terryma/vim-multiple-cursors'
+Plug 'tpope/vim-surround'
+
+Plug 'flazz/vim-colorschemes'
+
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+call plug#end()
+
+" Plugin 'tmhedberg/SimpylFold'
+" Plugin 'vim-scripts/indentpython.vim'
 " Ctrl-p
-Plugin 'kien/ctrlp.vim'
+" Plugin 'kien/ctrlp.vim'
 " You Complete Me 
-Bundle 'Valloric/YouCompleteMe'
-Plugin 'scrooloose/nerdtree'
+" Bundle 'Valloric/YouCompleteMe'
 
 
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
 filetype plugin indent on    " required
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Custom Keybindings
 """""""""""""""""""""""""""""""""""""""""""""""""
-let mapleader=","       " leader is comma
-
+"
 " turn off search highlight with ,-<space>
 nnoremap <leader><space> :nohlsearch<CR>
-
+"
 " Invoke Ctrl-p with c-p
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+" let g:ctrlp_map = '<c-p>'
+" let g:ctrlp_cmd = 'CtrlP'
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Plugin Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""
+"
+" fzf
+map ; :Files<CR>
 
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+" au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 " let g:ycm_autoclose_preview_window_after_completion=1
 " map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
+" NERD Tree setup
 map <C-n> :NERDTreeToggle<CR>
 
+" Lightline
+let g:lightline = {
+  \     'active': {
+  \         'left': [['mode', 'paste' ], ['readonly', 'filename', 'modified']],
+  \         'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]
+  \     }
+  \ }
+
+set laststatus=2
+
+" Color Schemes
+colorscheme molokai
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Buffer shortcuts
@@ -76,7 +109,6 @@ nmap <leader>bq :bp <BAR> bd #<CR>
 " " Show all open buffers and their status
 nmap <leader>bs :ls<CR>
 
-
 """"""""""""""""""""""""""""""""""""""""""""""""
 " General Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""
@@ -90,8 +122,13 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+
 " Automatically update a file if it is changed externally
 set autoread
+
+set tabstop=4
+set shiftwidth=4
+set expandtab
 
 " Height of the command bar
 set cmdheight=2
@@ -104,10 +141,9 @@ set ignorecase
 
 " Show linenumbers
 set number
-
-set showcmd	" show last command in the bottom right
-
-set ruler	" always show current position
+" Turning on and off relative numbers
+nmap <leader>rn :set relativenumber<CR>
+nmap <leader>nrn :set norelativenumber<CR>
 
 " Line wrap (number of cols)
 set wrap	    " wrap lines only visually
@@ -121,10 +157,10 @@ set nobackup
 set nowritebackup
 set noswapfile
 
-
 " show matching braces
 set showmatch
 
+set foldmethod=indent
 " =======================================================================
 " Python IDE setup
 " ========================================================================
@@ -132,34 +168,33 @@ set showmatch
 " Settings for vim-powerline
 " cd ~.vim/bundle
 " git clone git://github.com/Lokaltob/vim-powerline.git
-set laststatus=2
 
 " Settings for vim-airline
 " Enable the list of buffers
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
 " " Show just the filename
-let g:airline#extensions#tabline#fnamemod = ':t'
+" let g:airline#extensions#tabline#fnamemod = ':t'
 
 " Settings for ctrlp
 " cd ~/.vim/bundle
 " git clone https://github.com/kien/ctrlp.vim.git
-let g:ctrlp_max_height = 30
-set wildignore+=*.pyc
+" let g:ctrlp_max_height = 30
+" set wildignore+=*.pyc
 " set wildignore+=*_build/*
 " set wildignore+=*/coverage/*
 
 " Settings for jedi-vim
 " cd ~/.vim/bundle/ && git clone --recursive
 " https://github.com/davidhalter/jedi-vim.git
-let g:jedi#use_splits_not_buffers = "left"
+" let g:jedi#use_splits_not_buffers = "left"
 " let g:jedi#popup_on_dot = 0 " this disable the autocompleation on a dot
 " let g:jedi#popup_select_first = 0 " this disables the selection of the first
 " line of the completion
 
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
+" let g:jedi#goto_assignments_command = "<leader>g"
+" let g:jedi#goto_definitions_command = "<leader>d"
+" let g:jedi#documentation_command = "K"
+" let g:jedi#usages_command = "<leader>n"
 " let g:jedi#completions_command = "<C-Space>"
 " let g:jedi#rename_command = "<leader>r"
 " let g:jedi#show_call_signatures = "1"
@@ -195,14 +230,14 @@ let g:jedi#usages_command = "<leader>n"
 "endfunction
 
 
-inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
-inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
+" inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
+" inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 
 
 " python folding
 " mkdir -p ~/.vim/ftplugin
 " wget -0 ~/.vim/ftplugin/python_editing.vim http://www.vim.org/script
-set nofoldenable
+" set nofoldenable
 
 " Setup soft linebreak will not list the line number and should not change the
 " text but keep the test on screen
