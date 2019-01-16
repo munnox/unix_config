@@ -1,7 +1,8 @@
 #!/bin/bash
 
-cp -v homedotfiles/.bash_profile ~/
-cp -v homedotfiles/.vimrc ~/
-cp -v homedotfiles/.gitconfig ~/
-cp -vr homedotfiles/.vim ~/
-source ~/.bash_profile
+# cp -v dotfiles/.bash_profile ~/
+cp -v dotfiles/vimrc ~/.vimrc
+cp -v dotfiles/tmux.conf ~/.tmux.conf
+# cp -v dotfiles/.gitconfig ~/
+# cp -vr dotfiles/.vim ~/
+source ~/.bashrc
