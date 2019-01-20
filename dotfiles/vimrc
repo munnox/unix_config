@@ -70,7 +70,7 @@ map ; :Files<CR>
 " map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " NERD Tree setup
-nmap <C-n> :NERDTreeToggle<CR>
+nmap <leader>n :NERDTreeToggle<CR>
 
 " Lightline
 let g:lightline = {
