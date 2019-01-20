@@ -21,21 +21,17 @@ call plug#begin('~/.vim/plugged')
 " Plug 'junegunn/limelight.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
-
 Plug 'scrooloose/nerdtree'
-
 Plug 'itchyny/lightline.vim'
-
 Plug 'tmhedberg/SimpylFold'
 
 " use C-n to select and edit duplicates
 Plug 'terryma/vim-multiple-cursors'
-Plug 'tpope/vim-surround'
-
+" Plug 'tpope/vim-surround'
 Plug 'flazz/vim-colorschemes'
-
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+" Plug 'davidhalter/jedi-vim'
 
 call plug#end()
 
@@ -74,7 +70,7 @@ map ; :Files<CR>
 " map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " NERD Tree setup
-map <C-n> :NERDTreeToggle<CR>
+nmap <C-n> :NERDTreeToggle<CR>
 
 " Lightline
 let g:lightline = {
@@ -88,6 +84,10 @@ set laststatus=2
 
 " Color Schemes
 colorscheme molokai
+
+" Fugitive
+nnoremap <space>ga :Git add %:p<CR><CR>
+nnoremap <space>gs :Gstatus<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Buffer shortcuts
@@ -107,7 +107,14 @@ nmap <leader>bh :bprevious<CR>
 nmap <leader>bq :bp <BAR> bd #<CR>
 "
 " " Show all open buffers and their status
-nmap <leader>bs :ls<CR>
+vmap <leader>bs :ls<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""
+" Tab shortcuts
+""""""""""""""""""""""""""""""""""""""""""""""""
+
+map <C-W>> :tabnext<CR>
+map <C-W>< :tabprevious<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " General Configuration

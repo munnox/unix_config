@@ -1,8 +1,14 @@
 #!/bin/bash
 
-# cp -v dotfiles/.bash_profile ~/
+# Copy the setting form the dotfile 
+# diroectory where they need to go
+
+cp -v dotfiles/.bash_profile ~/
 cp -v dotfiles/vimrc ~/.vimrc
 cp -v dotfiles/tmux.conf ~/.tmux.conf
+cp -v dotfiles/.config ~/
 # cp -v dotfiles/.gitconfig ~/
 # cp -vr dotfiles/.vim ~/
+
+# Source the main bash rc file
 source ~/.bashrc
