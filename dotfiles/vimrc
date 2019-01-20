@@ -62,7 +62,7 @@ nnoremap <leader><space> :nohlsearch<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""
 "
 " fzf
-map ; :Files<CR>
+map <leader>f :Files<CR>
 
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
