@@ -34,7 +34,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'tmhedberg/SimpylFold'
 
 " use C-n to select and edit duplicates
-Plug 'terryma/vim-multiple-cursors'
+" Plug 'terryma/vim-multiple-cursors'
 " Plug 'tpope/vim-surround'
 Plug 'flazz/vim-colorschemes'
 Plug 'tpope/vim-fugitive'
@@ -83,9 +83,15 @@ nmap <leader>n :NERDTreeToggle<CR>
 " Lightline
 let g:lightline = {
   \     'active': {
-  \         'left': [['mode', 'paste' ], ['readonly', 'filename', 'modified']],
+  \         'left': [['mode', 'paste' ], ['gitbranch', 'readonly', 'filename', 'fullfilename', 'modified']],
   \         'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]
-  \     }
+  \     },
+  \     'component': {
+  \         'fullfilename': '@%F'
+  \     },
+  \ 'component_function': {
+  \   'gitbranch': 'fugitive#head'
+  \ },
   \ }
 
 set laststatus=2
@@ -124,7 +130,6 @@ vmap <leader>bs :ls<CR>
 map <C-W>t> :tabnext<CR>
 map <C-W>t< :tabprevious<CR>
 
-
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Windows shortcuts
 """"""""""""""""""""""""""""""""""""""""""""""""
@@ -143,6 +148,8 @@ set mouse=a
 
 " Automatically update a file if it is changed externally
 set autoread
+
+inoremap jj <Esc>
 
 set tabstop=4
 set shiftwidth=4
