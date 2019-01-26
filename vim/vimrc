@@ -97,7 +97,8 @@ let g:lightline = {
 set laststatus=2
 
 " Color Schemes
-colorscheme molokai
+" colorscheme molokai
+exec "source " . expand('<sfile>:p:h') . "/colors/dim.vim"
 
 " Fugitive
 nnoremap <space>ga :Git add %:p<CR><CR>
