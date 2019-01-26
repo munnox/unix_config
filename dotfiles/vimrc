@@ -9,10 +9,18 @@ autocmd! bufwritepost .vimrc source %
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>vr :source $MYVIMRC<cr>
 
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+if has('nvim')
+    if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+      silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+else
+    if empty(glob('~/.vim/autoload/plug.vim'))
+      silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
 endif
 
 call plug#begin('~/.vim/plugged')
@@ -113,8 +121,18 @@ vmap <leader>bs :ls<CR>
 " Tab shortcuts
 """"""""""""""""""""""""""""""""""""""""""""""""
 
-map <C-W>> :tabnext<CR>
-map <C-W>< :tabprevious<CR>
+map <C-W>t> :tabnext<CR>
+map <C-W>t< :tabprevious<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""
+" Windows shortcuts
+""""""""""""""""""""""""""""""""""""""""""""""""
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " General Configuration
@@ -123,13 +141,6 @@ map <C-W>< :tabprevious<CR>
 " Mouse
 set mouse=a
 
-"split navigations
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-
 " Automatically update a file if it is changed externally
 set autoread
 
@@ -137,8 +148,11 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+nmap <leader>t :setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4<CR>
+nmap <leader>m :setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
+
 " Height of the command bar
-set cmdheight=2
+set cmdheight=1
 
 set hlsearch	    " highlight search matches
 set incsearch	    " search while characters are entered
@@ -168,6 +182,10 @@ set noswapfile
 set showmatch
 
 set foldmethod=indent
+"
+" Setup soft linebreak will not list the line number and should not change the
+" text but keep the test on screen
+set wrap linebreak nolist
 " =======================================================================
 " Python IDE setup
 " ========================================================================
@@ -246,8 +264,6 @@ set foldmethod=indent
 " wget -0 ~/.vim/ftplugin/python_editing.vim http://www.vim.org/script
 " set nofoldenable
 
-" Setup soft linebreak will not list the line number and should not change the
-" text but keep the test on screen
-set wrap linebreak nolist
+
 
 
