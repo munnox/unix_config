@@ -1,15 +1,15 @@
 [core]
-	editor = /usr/bin/vim
+        editor = /usr/bin/vim
         # editor = code --wait
         # editor = sublime -n -w
 [diff]
     	tool = default-difftool
 [difftool "default-difftool"]
-    	cmd = code --wait --diff $LOCAL $REMOTE
-    
+    	# cmd = code --wait --diff $LOCAL $REMOTE
+    	cmd = vimdiff $LOCAL $REMOTE
 [user]
-	name = Robert Munnoch
-	email = munnox@hotmail.com
+        name = Robert Munnoch
+        email = munnox@hotmail.com
 [push]
         default = simple
 [alias]
@@ -18,13 +18,13 @@
         tags = tag -l
 
         currentbranch = rev-parse --abbrev-ref HEAD
+        l = log --decorate --oneline --graph --all
         id = rev-parse --short HEAD
         lg = log --color --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
         ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
         ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
         diff = diff --word-diff
         dc = diff --cached
-        l = log --decorate --oneline --graph --all
         st = status # -sb
         co = checkout
 
@@ -41,3 +41,4 @@
         wdiff = diff --color-words
         addcw = -c interactive.diffFilter="git diff --color-words"
         fullhistory = log --all --decorate --oneline --graph
+        graphviz = !"f() { echo 'digraph git {' ; git log --pretty='format: %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
