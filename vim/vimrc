@@ -188,7 +188,10 @@ set noswapfile
 set showmatch
 
 set foldmethod=indent
-"
+
+set splitright
+set splitbelow
+
 " Setup soft linebreak will not list the line number and should not change the
 " text but keep the test on screen
 set wrap linebreak nolist
