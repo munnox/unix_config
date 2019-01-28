@@ -98,6 +98,8 @@ set laststatus=2
 " colorscheme molokai
 exec "source " . expand('<sfile>:p:h') . "/colors/dim.vim"
 
+highlight MatchParen cterm=bold ctermbg=none ctermfg=red
+
 " Fugitive
 nnoremap <space>ga :Git add %:p<CR><CR>
 nnoremap <space>gs :Gstatus<CR>
