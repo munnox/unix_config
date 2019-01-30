@@ -1,0 +1,13 @@
+[core]
+  editor = /usr/bin/vim
+  # editor = code --wait
+  # editor = sublime -n -w
+[user]
+  name = Robert Munnoch
+  email = munnox@hotmail.com
+[include]
+  path = git_diff.ini
+[push]
+  default = simple
+[include] # Valid since git version 1.7.10.2
+  path = git_alias.ini
