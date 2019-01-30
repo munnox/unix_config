@@ -129,8 +129,8 @@ vmap <leader>bs :ls<CR>
 " Tab shortcuts
 """"""""""""""""""""""""""""""""""""""""""""""""
 
-map <C-W>t> :tabnext<CR>
-map <C-W>t< :tabprevious<CR>
+map <leader>> :tabnext<CR>
+map <leader>< :tabprevious<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Windows shortcuts
