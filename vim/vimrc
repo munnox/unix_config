@@ -7,6 +7,7 @@ let mapleader=","       " leader is comma
 
 exec "source " . expand('<sfile>:p:h') . "/config_editor.vim"
 
+" Get vim-plug package manager on boot
 if has('nvim')
     if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
       silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
@@ -58,6 +59,11 @@ filetype plugin indent on    " required
 "
 " turn off search highlight with ,-<space>
 nnoremap <leader><space> :nohlsearch<CR>
+
+" Neovim terminal remap
+if has("nvim")
+    tnoremap <C-[> <C-\><C-n>
+endif
 "
 " Invoke Ctrl-p with c-p
 " let g:ctrlp_map = '<c-p>'
