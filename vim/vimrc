@@ -63,6 +63,10 @@ nnoremap <leader><space> :nohlsearch<CR>
 " Neovim terminal remap
 if has("nvim")
     tnoremap <C-[> <C-\><C-n>
+    tnoremap <leader>h <C-\><C-n><C-w>h
+    tnoremap <leader>j <C-\><C-n><C-w>j
+    tnoremap <leader>k <C-\><C-n><C-w>k
+    tnoremap <leader>l <C-\><C-n><C-w>l
 endif
 "
 " Invoke Ctrl-p with c-p
