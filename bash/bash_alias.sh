@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# aliases
+# ls aliases
 alias ll='ls -lah'
 alias la='ls -A'
 alias l='ls -CF'
+
+# tmux aliases
+alias tls='tmux ls'
+alias tns='tmux new -s'
+alias ta='tmux a -t'
 
 # if [ '$DESKTOP_SESSION' = 'ubuntu']; then
 # alias ls='ls -alHh --color'
