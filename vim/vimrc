@@ -23,21 +23,29 @@ else
 endif
 
 call plug#begin('~/.vim/plugged')
+
+Plug 'flazz/vim-colorschemes'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
 " Plug 'junegunn/seoul256.vim'
 " Plug 'junegunn/goyo.vim'
 " Plug 'junegunn/limelight.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
 Plug 'itchyny/lightline.vim'
 Plug 'tmhedberg/SimpylFold'
 
 " use C-n to select and edit duplicates
 " Plug 'terryma/vim-multiple-cursors'
 " Plug 'tpope/vim-surround'
-Plug 'flazz/vim-colorschemes'
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+
+" vim syntax highighting of vue
+Plug 'posva/vim-vue'
+
+" Python helpers and info
 " Plug 'davidhalter/jedi-vim'
 
 call plug#end()
@@ -114,6 +122,16 @@ highlight Visual ctermbg=gray ctermfg=black
 " Fugitive
 nnoremap <space>ga :Git add %:p<CR><CR>
 nnoremap <space>gs :Gstatus<CR>
+
+" NerdCommenter
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Buffer shortcuts
