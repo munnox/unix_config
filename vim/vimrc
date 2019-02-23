@@ -66,15 +66,16 @@ filetype plugin indent on    " required
 """""""""""""""""""""""""""""""""""""""""""""""""
 "
 " turn off search highlight with ,-<space>
-nnoremap <leader><space> :nohlsearch<CR>
+" nnoremap <leader><space> :nohlsearch<CR>
 
 " Neovim terminal remap
 if has("nvim")
     tnoremap <C-[> <C-\><C-n>
-    tnoremap <leader>h <C-\><C-n><C-w>h
-    tnoremap <leader>j <C-\><C-n><C-w>j
-    tnoremap <leader>k <C-\><C-n><C-w>k
-    tnoremap <leader>l <C-\><C-n><C-w>l
+    tnoremap <C-h> <C-\><C-n><C-w>h
+    tnoremap <C-j> <C-\><C-n><C-w>j
+    tnoremap <C-k> <C-\><C-n><C-w>k
+    tnoremap <C-l> <C-\><C-n><C-w>l
+    nnoremap <leader>st :vsplit <BAR> terminal<CR>
 endif
 "
 " Invoke Ctrl-p with c-p
@@ -120,8 +121,8 @@ highlight MatchParen cterm=bold ctermbg=none ctermfg=red
 highlight Visual ctermbg=gray ctermfg=black
 
 " Fugitive
-nnoremap <space>ga :Git add %:p<CR><CR>
-nnoremap <space>gs :Gstatus<CR>
+nnoremap <leader>ga :Git add %:p<CR><CR>
+nnoremap <leader>gs :Gstatus<CR>
 
 " NerdCommenter
 " Add spaces after comment delimiters by default
@@ -149,6 +150,7 @@ nmap <leader>bh :bprevious<CR>
 " " Close the current buffer and move to the previous one
 " " This replicates the idea of closing a tab
 nmap <leader>bq :bp <BAR> bd #<CR>
+nmap <leader>bq! :bp <BAR> bd! #<CR>
 "
 " " Show all open buffers and their status
 vmap <leader>bs :ls<CR>
