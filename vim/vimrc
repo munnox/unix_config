@@ -245,10 +245,10 @@ set visualbell
 " Use <F11> to toggle between 'paste' and 'nopaste'
 set pastetoggle=<F11>
 
-" Set the verticle column
+" Set the vertical column guide
 set colorcolumn=80
 
-let &colorcolumn="80,".join(range(120,999),",")
+let &colorcolumn="80,".join(range(120,999, 5),",")
 
 " Setup soft linebreak will not list the line number and should not change the
 " text but keep the test on screen
