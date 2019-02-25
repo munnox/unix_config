@@ -184,6 +184,18 @@ set mouse=a
 " Automatically update a file if it is changed externally
 set autoread
 
+" Hidden allow buffers to be hidden and windows to be reused
+set hidden
+
+" Better command-line completion
+set wildmenu
+ 
+" Show partial commands in the last line of the screen
+set showcmd
+
+set ruler
+
+" Simple way of quiting insert mode
 inoremap jj <Esc>
 
 set tabstop=4
@@ -227,6 +239,16 @@ set foldmethod=indent
 
 set splitright
 set splitbelow
+
+set visualbell
+
+" Use <F11> to toggle between 'paste' and 'nopaste'
+set pastetoggle=<F11>
+
+" Set the verticle column
+set colorcolumn=80
+
+let &colorcolumn="80,".join(range(120,999),",")
 
 " Setup soft linebreak will not list the line number and should not change the
 " text but keep the test on screen
