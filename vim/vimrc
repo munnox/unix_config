@@ -153,14 +153,17 @@ nmap <leader>bq :bp <BAR> bd #<CR>
 nmap <leader>bq! :bp <BAR> bd! #<CR>
 "
 " " Show all open buffers and their status
-vmap <leader>bs :ls<CR>
+nmap <leader>bs :ls<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Tab shortcuts
 """"""""""""""""""""""""""""""""""""""""""""""""
-
-map <leader>> :tabnext<CR>
-map <leader>< :tabprevious<CR>
+"
+" " Move to the next tab
+map <leader>tl :tabnext<CR>
+"
+" " Move to the previous tab
+map <leader>th :tabprevious<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Windows shortcuts
