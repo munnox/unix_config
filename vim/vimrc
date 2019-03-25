@@ -120,6 +120,9 @@ colorscheme molokai
 highlight MatchParen cterm=bold ctermbg=none ctermfg=red
 highlight Visual ctermbg=gray ctermfg=black
 
+noremap <F12> <Esc>:syntax sync fromstart<CR>
+inoremap <F12> <C-o>:syntax sync fromstart<CR>
+
 " Fugitive
 nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gs :Gstatus<CR>
@@ -154,6 +157,8 @@ nmap <leader>bq! :bp <BAR> bd! #<CR>
 "
 " " Show all open buffers and their status
 nmap <leader>bs :ls<CR>
+
+nmap <leader>c :close<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Tab shortcuts
