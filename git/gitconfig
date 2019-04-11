@@ -1,3 +1,27 @@
+# A git config file
+# an example of its use is find the local .gitconfig file
+# and add
+# [include]
+#     path = ~/unix_config/git/gitconfig
+#
+# This has worked on windows cmder out of the box an path
+# variant seem to work ok on linux too. Windows just seem
+# to be more picky aobut the path
+# 
+# A way of testing the config is
+#
+# $ git config --show-origin -l
+#
+# This only seems to use the main install config
+# $ git config --system --show-origin -l
+#
+# This only seems to use the user config
+# $ git config --global --show-origin -l
+#
+# This only seems to use the config in the current git repo
+# $ git config --local --show-origin -l
+#
+
 [core]
   editor = /usr/bin/vim
   # editor = code --wait
