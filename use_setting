@@ -10,6 +10,7 @@ DIR="$DIR"
 
 LOCAL_REPO="$DIR"
 SOURCE_BASH="source $LOCAL_REPO/bash/bashrc"
+SOURCE_VIM="source $LOCAL_REPO/vim/vimrc"
 
 echo $DIR $LOCAL_REPO
 
@@ -29,7 +30,22 @@ else
 fi
 
 # Add vim init scripts
-cp -v $LOCAL_REPO/vim/vimrc ~/.vimrc
+# cp -v $LOCAL_REPO/vim/vimrc ~/.vimrc
+# Added file for neovim
+echo "source ~/.vimrc" > ~/.config/nvim/init.vim
+# Test and add vimrc file on home dir for both neovim (above) and vim
+if grep -Fxq "$SOURCE_VIM" ~/.vimrc
+then
+    echo "Vimrc Already modified"
+else
+    # Add vim scripts
+    # echo "" >> ~/.vimrc 
+    echo $SOURCE_VIM > ~/.vimrc 
+    # Source the main vim rc file
+    source ~/.vimrc
+
+    echo "vimrc modified"
+fi
 
 # Add the config for Tmux
 cp -v $LOCAL_REPO/tmux/tmux.conf ~/.tmux.conf
