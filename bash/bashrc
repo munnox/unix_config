@@ -13,7 +13,7 @@ LOCALSCRIPTS=(
 )
 
 for p in ${LOCALSCRIPTS[@]}; do
-    echo "sourcing --> $p"
+    # echo "sourcing --> $p"
     source "$DIR/$p"
 done
 
