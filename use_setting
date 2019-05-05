@@ -3,12 +3,38 @@
 # Copy the setting form the dotfile 
 # diroectory where they need to go
 
-cp -v dotfiles/.bash_profile ~/
-cp -v dotfiles/vimrc ~/.vimrc
-cp -v dotfiles/tmux.conf ~/.tmux.conf
-cp -v dotfiles/.config ~/
-# cp -v dotfiles/.gitconfig ~/
-# cp -vr dotfiles/.vim ~/
+# cp -v dotfiles/.bash_profile ~/
 
-# Source the main bash rc file
-source ~/.bashrc
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$DIR"
+
+LOCAL_REPO="$DIR"
+SOURCE_BASH="source $LOCAL_REPO/bash/bashrc"
+
+echo $DIR $LOCAL_REPO
+
+# test bash rc
+# grep -F fixed string -x exactly match the line -q do it quietly
+if grep -Fxq "$SOURCE_BASH" ~/.bashrc
+then
+    echo "Bashrc Already modified"
+else
+    # Add bash scripts
+    echo "" >> ~/.bashrc 
+    echo $SOURCE_BASH >> ~/.bashrc 
+    # Source the main bash rc file
+    source ~/.bashrc
+
+    echo "Bashrc modified"
+fi
+
+# Add vim init scripts
+cp -v $LOCAL_REPO/vim/vimrc ~/.vimrc
+
+# Add the config for Tmux
+cp -v $LOCAL_REPO/tmux/tmux.conf ~/.tmux.conf
+
+
+# cp -v dotfiles/.config ~/
+# cp -v dotfiles/.gitconfig ~/
+

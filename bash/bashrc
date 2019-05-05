@@ -1,12 +1,27 @@
 #!/bin/bash
 
+# Gets the current path of this source file
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-DIR="$DIR/"
+DIR="$DIR"
+
+# Array of localscripts
+LOCALSCRIPTS=(
+../bash/bash_alias.sh 
+../bash/bash_display.sh
+../bash/bash_terminal.sh
+../bash/bash_env.sh
+)
+
+for p in ${LOCALSCRIPTS[@]}; do
+    echo "sourcing --> $p"
+    source "$DIR/$p"
+done
+
 # echo $DIR
-source $DIR/../bash/bash_alias.sh
-source $DIR/../bash/bash_display.sh
-source $DIR/../bash/bash_terminal.sh
-source $DIR/../bash/bash_env.sh
+# source $DIR/../bash/bash_alias.sh
+# source $DIR/../bash/bash_display.sh
+# source $DIR/../bash/bash_terminal.sh
+# source $DIR/../bash/bash_env.sh
 
 # # git branch autocompletion
 # if [ -f ~/dotfiles/.git-completion.bash ]; then
