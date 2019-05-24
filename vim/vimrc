@@ -32,7 +32,7 @@ Plug 'airblade/vim-gitgutter'
 " Plug 'junegunn/goyo.vim'
 " Plug 'junegunn/limelight.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'itchyny/lightline.vim'
@@ -46,7 +46,11 @@ Plug 'tmhedberg/SimpylFold'
 Plug 'posva/vim-vue'
 
 " Python helpers and info
-" Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim'
+
+" Rust helpers
+Plug 'rust-lang/rust.vim'
+
 
 call plug#end()
 
