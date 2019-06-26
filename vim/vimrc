@@ -51,6 +51,8 @@ Plug 'davidhalter/jedi-vim'
 " Rust helpers
 Plug 'rust-lang/rust.vim'
 
+" Code completion
+Plug 'Valloric/YouCompleteMe'
 
 call plug#end()
 
