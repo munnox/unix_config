@@ -3,7 +3,7 @@
 set nocompatible              " required
 filetype off                  " required
 
-let mapleader=","       " leader is comma
+let mapleader="\\"       " leader is the default backslash
 
 exec "source " . expand('<sfile>:p:h') . "/config_editor.vim"
 
@@ -51,18 +51,10 @@ Plug 'davidhalter/jedi-vim'
 " Rust helpers
 Plug 'rust-lang/rust.vim'
 
-" Code completion
-Plug 'Valloric/YouCompleteMe'
+" " Code completion
+" Plug 'Valloric/YouCompleteMe'
 
 call plug#end()
-
-" Plugin 'tmhedberg/SimpylFold'
-" Plugin 'vim-scripts/indentpython.vim'
-" Ctrl-p
-" Plugin 'kien/ctrlp.vim'
-" You Complete Me 
-" Bundle 'Valloric/YouCompleteMe'
-
 
 " All of your Plugins must be added before the following line
 filetype plugin indent on    " required
@@ -81,7 +73,13 @@ if has("nvim")
     tnoremap <C-j> <C-\><C-n><C-w>j
     tnoremap <C-k> <C-\><C-n><C-w>k
     tnoremap <C-l> <C-\><C-n><C-w>l
-    nnoremap <leader>st :vsplit <BAR> terminal<CR>
+    nnoremap <leader>ts :vsplit <BAR> terminal<CR>
+    " Move to the terminal on the right side move to the last cmd and run then
+    " move back
+    nmap <leader>tr :w<CR><C-w>li<UP><CR><C-\><C-n><C-w>h
+    nmap <leader>tpae :w<CR><C-w>lisource pyvenv/bin/activate<CR><C-\><C-n><C-w>h
+    nmap <leader>tpde :w<CR><C-w>lideactivate<CR><C-\><C-n><C-w>h
+
 endif
 "
 " Invoke Ctrl-p with c-p
@@ -91,7 +89,7 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Plugin Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""
-"
+
 " fzf
 map <leader>f :Files<CR>
 
@@ -119,20 +117,6 @@ let g:lightline = {
 
 set laststatus=2
 
-" Color Schemes
-colorscheme molokai
-" exec "source " . expand('<sfile>:p:h') . "/colors/dim.vim"
-
-highlight MatchParen cterm=bold ctermbg=none ctermfg=red
-highlight Visual ctermbg=gray ctermfg=black
-
-noremap <F12> <Esc>:syntax sync fromstart<CR>
-inoremap <F12> <C-o>:syntax sync fromstart<CR>
-
-" Fugitive
-nnoremap <leader>ga :Git add %:p<CR><CR>
-nnoremap <leader>gs :Gstatus<CR>
-
 " NerdCommenter
 " Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
@@ -142,6 +126,25 @@ let g:NERDDefaultAlign = 'left'
 
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
+
+" GitFugitive
+nnoremap <leader>ga :Git add %:p<CR><CR>
+nnoremap <leader>gs :Gstatus<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""
+" Color Schemes
+""""""""""""""""""""""""""""""""""""""""""""""""
+colorscheme molokai
+" exec "source " . expand('<sfile>:p:h') . "/colors/dim.vim"
+
+highlight MatchParen cterm=bold ctermbg=none ctermfg=red
+highlight Visual ctermbg=gray ctermfg=black
+
+""""""""""""""""""""""""""""""""""""""""""""""""
+" Refresh Syntax highlighting
+""""""""""""""""""""""""""""""""""""""""""""""""
+noremap <F12> <Esc>:syntax sync fromstart<CR>
+inoremap <F12> <C-o>:syntax sync fromstart<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Buffer shortcuts
@@ -189,6 +192,14 @@ nnoremap <C-H> <C-W><C-H>
 " General Configuration
 """"""""""""""""""""""""""""""""""""""""""""""""
 
+" Move the to window with the buffer rather than swap out the
+" window
+set switchbuf+=useopen
+
+" Add a mapping since :b doesn't work for this
+nmap <leader>bb :sb 
+nmap <leader>bls :ls<CR>
+
 " Mouse
 set mouse=a
 
@@ -209,12 +220,22 @@ set ruler
 " Simple way of quiting insert mode
 inoremap jj <Esc>
 
+if has("autocmd")
+    " Use filetype detection and file-based automatic indenting.
+    filetype plugin indent on
+
+    " Use actual tab chars in Makefiles.
+    autocmd FileType python set tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab
+    autocmd FileType javascript set tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab
+endif
+
 set tabstop=4
 set shiftwidth=4
 set expandtab
 
-nmap <leader>t :setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4<CR>
-nmap <leader>m :setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
+" tab size
+nmap <leader>4 :setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4<CR>
+nmap <leader>2 :setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
 
 " Height of the command bar
 set cmdheight=1
@@ -227,6 +248,7 @@ set ignorecase
 
 " Show linenumbers
 set number
+
 " Turning on and off relative numbers
 nmap <leader>rn :set relativenumber<CR>
 nmap <leader>nrn :set norelativenumber<CR>
@@ -258,7 +280,7 @@ set pastetoggle=<F11>
 
 " Set the vertical column guide
 set colorcolumn=80
-
+" Set guides at 80 then 120 then every 5 characters
 let &colorcolumn="80,".join(range(120,999, 5),",")
 
 " Setup soft linebreak will not list the line number and should not change the
