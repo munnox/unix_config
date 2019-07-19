@@ -24,18 +24,31 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+" Better and more varied styles
 Plug 'flazz/vim-colorschemes'
+
+" Git plugin to make git rather nice in vim
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
 " Plug 'junegunn/seoul256.vim'
 " Plug 'junegunn/goyo.vim'
 " Plug 'junegunn/limelight.vim'
+
+" File buffer searching using fuzzy search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-" Plug 'junegunn/fzf.vim'
+
+" Nice file browser
 Plug 'scrooloose/nerdtree'
+
+" a nice commenter system
+" Allows <leader?cc to comment or <leader>cu to uncomment
 Plug 'scrooloose/nerdcommenter'
+
+" nicer base line
 Plug 'itchyny/lightline.vim'
+
+" Python code folding
 " Plug 'tmhedberg/SimpylFold'
 
 " use C-n to select and edit duplicates
