@@ -32,11 +32,11 @@ Plug 'airblade/vim-gitgutter'
 " Plug 'junegunn/goyo.vim'
 " Plug 'junegunn/limelight.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'itchyny/lightline.vim'
-Plug 'tmhedberg/SimpylFold'
+" Plug 'tmhedberg/SimpylFold'
 
 " use C-n to select and edit duplicates
 " Plug 'terryma/vim-multiple-cursors'
@@ -91,7 +91,9 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""
 
 " fzf
-map <leader>f :Files<CR>
+map <leader>f :GitFiles<CR>
+map <leader>F :Files<CR>
+map <leader>B :Buffers<CR>
 
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
@@ -197,7 +199,7 @@ nnoremap <C-H> <C-W><C-H>
 set switchbuf+=useopen
 
 " Add a mapping since :b doesn't work for this
-nmap <leader>bb :sb 
+nmap <leader>bb :sb<space>
 nmap <leader>bls :ls<CR>
 
 " Mouse
@@ -220,18 +222,19 @@ set ruler
 " Simple way of quiting insert mode
 inoremap jj <Esc>
 
+" set tabstop=4
+" set shiftwidth=4
+set expandtab
+
 if has("autocmd")
     " Use filetype detection and file-based automatic indenting.
     filetype plugin indent on
 
     " Use actual tab chars in Makefiles.
-    autocmd FileType python set tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab
-    autocmd FileType javascript set tabstop=2 shiftwidth=2 softtabstop=2 noexpandtab
-endif
 
-set tabstop=4
-set shiftwidth=4
-set expandtab
+    autocmd FileType python set tabstop=4 shiftwidth=4 softtabstop=4
+    autocmd FileType javascript set tabstop=2 shiftwidth=2 softtabstop=2
+endif
 
 " tab size
 nmap <leader>4 :setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4<CR>
