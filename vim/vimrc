@@ -37,6 +37,7 @@ Plug 'airblade/vim-gitgutter'
 
 " File buffer searching using fuzzy search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
 
 " Nice file browser
 Plug 'scrooloose/nerdtree'
@@ -49,7 +50,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'itchyny/lightline.vim'
 
 " Python code folding
-" Plug 'tmhedberg/SimpylFold'
+Plug 'tmhedberg/SimpylFold'
 
 " use C-n to select and edit duplicates
 " Plug 'terryma/vim-multiple-cursors'
@@ -57,6 +58,10 @@ Plug 'itchyny/lightline.vim'
 
 " vim syntax highighting of vue
 Plug 'posva/vim-vue'
+
+" Vim syntax plugin
+" Plug 'hiphish/jinja.vim'
+Plug 'mitsuhiko/vim-jinja'
 
 " Python helpers and info
 Plug 'davidhalter/jedi-vim'
@@ -72,7 +77,7 @@ call plug#end()
 " All of your Plugins must be added before the following line
 filetype plugin indent on    " required
 
-"""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom Keybindings
 """""""""""""""""""""""""""""""""""""""""""""""""
 "
@@ -118,17 +123,24 @@ nmap <leader>n :NERDTreeToggle<CR>
 
 " Lightline
 let g:lightline = {
-  \     'active': {
-  \         'left': [['mode', 'paste' ], ['gitbranch', 'readonly', 'filename', 'fullfilename', 'modified']],
-  \         'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]
-  \     },
-  \     'component': {
-  \         'fullfilename': '@%F'
-  \     },
-  \ 'component_function': {
-  \   'gitbranch': 'fugitive#head'
-  \ },
-  \ }
+\  'active': {
+\    'left': [
+\      ['mode', 'paste' ],
+\      ['gitbranch', 'readonly', 'filename', 'fullfilename', 'modified']
+\    ],
+\    'right': [
+\      ['lineinfo'],
+\      ['percent'],
+\      ['fileformat', 'fileencoding', 'filetype']
+\    ]
+\  },
+\  'component': {
+\    'fullfilename': '@%F'
+\  },
+\  'component_function': {
+\    'gitbranch': 'fugitive#head'
+\  },
+\}
 
 set laststatus=2
 
@@ -245,8 +257,10 @@ if has("autocmd")
 
     " Use actual tab chars in Makefiles.
 
+    autocmd Bufread,BufNewFile *.j2 set filetype=jinja
+    autocmd Bufread,BufNewFile *.html.j2 set filetype=htmljinja
     autocmd FileType python set tabstop=4 shiftwidth=4 softtabstop=4
-    autocmd FileType javascript set tabstop=2 shiftwidth=2 softtabstop=2
+    autocmd FileType javascript,htmljinja,jinja set tabstop=2 shiftwidth=2 softtabstop=2
 endif
 
 " tab size
