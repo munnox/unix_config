@@ -109,9 +109,26 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""
 
 " fzf
-map <leader>f :GitFiles<CR>
-map <leader>F :Files<CR>
-map <leader>B :Buffers<CR>
+let g:fzf_command_prefix = 'Fzf'
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+
+" [Tags] Command to generate tags file
+let g:fzf_tags_command = 'ctags -R'
+
+map <leader>f :FzfGitFiles<CR>
+map <leader>F :FzfFiles<CR>
+map <leader>B :FzfBuffers<CR>
+
+" This is the default extra key bindings
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
 
 " au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
