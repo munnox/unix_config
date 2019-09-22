@@ -13,6 +13,23 @@ using:
 * packetbeat
 * metricbeat
 
+## GROK
+
+Pattens <https://github.com/logstash-plugins/logstash-patterns-core/tree/master/patterns>
+Logstash fiter <https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html>
+
+example
+
+```
+[48580.013699] audit: type=1131 audit(1569156451.288:2012): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=NetworkManager-dispatcher comm="systemd" exe="/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+```
+
+parsed by 
+
+```
+\[%{NUMBER:timespan}\] audit: type=%{NUMBER:type:int} audit(%{GREEDYDATA:audit}): pid=%{NUMBER:pid:int} uid=%{NUMBER:uid:int} auid=%{NUMBER:auid} ses=%{NUMBER:ses} msg='%{GREEDYDATA:msg}'
+```
+
 ## Systemlogs (filebeat)
 
 Source <https://www.elastic.co/guide/en/beats/filebeat/current/index.html>
@@ -235,3 +252,6 @@ sudo systemctl enable packetbeat.service
 sudo systemctl start packetbeat.service
 ```
 
+## administrating services
+
+sudo systemctl status auditbeat.service metricbeat.service filebeat.service
