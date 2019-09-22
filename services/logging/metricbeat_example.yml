@@ -66,8 +66,8 @@ setup.kibana:
   # IPv6 addresses should always be defined as: https://[2001:db8::1]:5601
   host: "https://<server_name>:5601"
   ssl.certificate_authorities: ["mainCA.crt"]
-  ssl.certificate: "client.crt"
-  ssl.key: "client.key"
+  # ssl.certificate: "client.crt"
+  # ssl.key: "client.key"
 
   # Kibana Space ID
   # ID of the Kibana Space into which the dashboards should be loaded. By default,
@@ -102,8 +102,8 @@ output.elasticsearch:
   password: "PleaseChangeMe"
 
   ssl.certificate_authorities: ["mainCA.crt"]
-  ssl.certificate: "client.crt"
-  ssl.key: "client.key"
+  # ssl.certificate: "client.crt"
+  # ssl.key: "client.key"
 
 #----------------------------- Logstash output --------------------------------
 #output.logstash:

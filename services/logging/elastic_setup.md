@@ -1,5 +1,6 @@
 # Setting up Elastic Search
 
+
 The main servces are build in docker-compose from `https://github.com/munnox/docker-elk.git`
 
 Instuctions and info for setting up Elastics search, Log stash, Kibana.
@@ -29,6 +30,67 @@ parsed by
 ```
 \[%{NUMBER:timespan}\] audit: type=%{NUMBER:type:int} audit(%{GREEDYDATA:audit}): pid=%{NUMBER:pid:int} uid=%{NUMBER:uid:int} auid=%{NUMBER:auid} ses=%{NUMBER:ses} msg='%{GREEDYDATA:msg}'
 ```
+
+## winlogbeat
+
+for event logging on windows
+
+Source <https://www.elastic.co/guide/en/beats/winlogbeat/current/index.html>
+
+### Install
+
+Need to get and setup Sysmon from sysinternals to aid with the logging
+
+Documentation <https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon>
+
+Download [sysmon](https://download.sysinternals.com/files/Sysmon.zip)
+
+need to set this up for netowrking for example with:
+
+```
+sysmon -accepteula –i –h md5,sha256 –n
+```
+
+Remove it with 
+
+```
+sysmon –u
+```
+
+Download from <https://www.elastic.co/downloads/beats/winlogbeat>
+
+
+### Configure
+
+Setup in `C:\winlogbeat\winlogbeat.yml`
+
+```
+output.elasticsearch:
+  hosts: ["https://<server_name>:9200"]
+  username: "elastic"
+  password: "PleaseChangeMe"
+  ssl.certificate_authorities: ["mainCA.crt"]
+
+setup.kibana:
+  host: "https://<server_name>:5601"
+  ssl.certificate_authorities: ["mainCA.crt"]
+```
+
+Example here [winlogbeat.yml](./winlogbeat_example.yml)
+
+### Start the Service
+
+```
+PS C:\Users\Administrator> cd 'C:\Program Files\Winlogbeat'
+PS C:\Program Files\Winlogbeat> .\install-service-winlogbeat.ps1
+```
+
+if the script cannot be run use:
+
+```
+PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.ps1
+```
+
 
 ## Systemlogs (filebeat)
 
@@ -63,6 +125,8 @@ setup.kibana:
   ssl.certificate: "client.crt"
   ssl.key: "client.key"
 ```
+
+Example here [filebeat.yml](./filebeat_example.yml)
 
 Setup service
 
@@ -117,6 +181,8 @@ setup.kibana:
   ssl.certificate: "client.crt"
   ssl.key: "client.key"
 ```
+
+Example here [metricbeat.yml](./metricbeat_example.yml)
 
 Setup service
 
@@ -175,6 +241,8 @@ setup.kibana:
   ssl.certificate: "client.crt"
   ssl.key: "client.key"
 ```
+
+Example here [auditbeat.yml](./auditbeat_example.yml)
 
 Setup service
 
@@ -235,6 +303,8 @@ setup.kibana:
   ssl.key: "client.key"
 ```
 
+Example here [packetbeat.yml](./packetbeat_example.yml)
+
 Store the example dashboards in kibana:
 
 ```
@@ -254,4 +324,6 @@ sudo systemctl start packetbeat.service
 
 ## administrating services
 
+```
 sudo systemctl status auditbeat.service metricbeat.service filebeat.service
+```
