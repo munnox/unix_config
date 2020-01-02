@@ -1,4 +1,7 @@
-# To use `openssl req -out sslcert.csr -newkey rsa:2048 -nodes -keyout private.key -config subject_alt_names.cnf`
+# To use to make request
+# `openssl req -out sslcert.csr -newkey rsa:2048 -nodes -keyout private.key -config subject_alt_names.cnf`
+# To use to make certificate
+# `openssl req -out sslcert.crt -x509 -newkey rsa:2048 -nodes -keyout private.key -config subject_alt_names.cnf`
 
 [ req ]
 default_bits       = 2048
