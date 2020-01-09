@@ -1,0 +1,22 @@
+web:
+  image: 'gitlab/gitlab-ce:latest'
+  restart: always
+  hostname: 'gitlab.example.com'
+  environment:
+    GITLAB_OMNIBUS_CONFIG: |
+      # Add any other gitlab.rb configuration here, each on its own line
+      external_url 'https://gitlab.example.com'
+      # external_url 'http://gitlab.example.com:8929'
+      # gitlab_rails['gitlab_shell_ssh_port'] = 2224
+  ports:
+    - '80:80'
+    - '443:443'
+    - '22:22'
+  volumes:
+    - './dcgitlab/config:/etc/gitlab'
+    - './dcgitlab/logs:/var/log/gitlab'
+    - './dcgitlab/data:/var/opt/gitlab'
+    # - '/srv/gitlab/config:/etc/gitlab'
+    # - '/srv/gitlab/logs:/var/log/gitlab'
+    # - '/srv/gitlab/data:/var/opt/gitlab'
+
