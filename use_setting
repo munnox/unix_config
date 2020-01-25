@@ -24,10 +24,10 @@ else
     # Add bash scripts
     echo "" >> ~/.bashrc 
     echo $SOURCE_BASH >> ~/.bashrc 
-    # Source the main bash rc file
-    source ~/.bashrc
-
     echo "Bashrc modified"
+    # Source the main bash rc file
+    echo "Reload .bashrc"
+    source ~/.bashrc
 fi
 
 # Add vim init scripts
@@ -45,9 +45,6 @@ else
     # Add vim scripts
     # echo "" >> ~/.vimrc 
     echo $SOURCE_VIM > ~/.vimrc 
-    # Source the main vim rc file
-    source ~/.vimrc
-
     echo "vimrc modified"
 fi
 
