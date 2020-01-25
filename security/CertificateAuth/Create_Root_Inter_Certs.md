@@ -84,7 +84,7 @@ echo 1000 > serial
 
 Move config file:
 
-`cp intermediate_ca_openssl.cnf /root/ca/openssl.cnf`
+`cp intermediate_ca_openssl.cnf /root/ca/intermediate/openssl.cnf`
 
 Further info on web or [here](./security/CertificateAuth/Further_info_on_config.md)
 
