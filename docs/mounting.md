@@ -55,6 +55,21 @@ It just said "Operation not permitted" rather cryptic.
 //10.20.30.20/home  /mnt/cifs/home  cifs  uid=1000,gid=1000,rw,credentials=/home/robert/.smbcredentials,iocharset=utf8,vers=3.0  0  0
 ```
 
+## VMware Share
+
+Source https://docs.vmware.com/en/VMware-Workstation-Player-for-Windows/12.0/com.vmware.player.win.using.doc/GUID-AB5C80FE-9B8A-4899-8186-3DB8201B1758.html
+
+```
+mount -t vmhgfs .host:/ /home/ubuntu/shares
+mount -t vmhgfs .host:/foo /tmp/foo
+```
+
+or add the following to the fstab file
+
+```
+.host:/ /mnt/hgfs vmhgfs defaults 0 0
+```
+
 
 ## Reference
 
