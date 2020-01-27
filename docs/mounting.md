@@ -58,16 +58,26 @@ It just said "Operation not permitted" rather cryptic.
 ## VMware Share
 
 Source https://docs.vmware.com/en/VMware-Workstation-Player-for-Windows/12.0/com.vmware.player.win.using.doc/GUID-AB5C80FE-9B8A-4899-8186-3DB8201B1758.html
+Source https://kb.vmware.com/s/article/60262
 
 ```
 mount -t vmhgfs .host:/ /home/ubuntu/shares
 mount -t vmhgfs .host:/foo /tmp/foo
 ```
 
+```
+/usr/bin/vmhgfs-fuse .host:/mysharedfolder /mnt/hgfs -o subtype=vmhgfs-fuse,allow_other
+```
+
 or add the following to the fstab file
 
 ```
 .host:/ /mnt/hgfs vmhgfs defaults 0 0
+```
+
+```
+vmhgfs-fuse    /mnt/hgfs    fuse    defaults,allow_other    0    0
+.host:/    /mnt/hgfs        fuse.vmhgfs-fuse    defaults,allow_other    0    0
 ```
 
 
