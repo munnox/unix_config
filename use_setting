@@ -9,21 +9,22 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DIR="$DIR"
 
 LOCAL_REPO="$DIR"
-SOURCE_BASH="source $LOCAL_REPO/bash/bashrc"
-SOURCE_VIM="source $LOCAL_REPO/vim/vimrc"
-SOURCE_GIT="$LOCAL_REPO/git/gitconfig"
+SOURCE_BASH_PATTERN="source $LOCAL_REPO/bash/bashrc"
+SOURCE_VIM_PATTERN="source $LOCAL_REPO/vim/vimrc"
+SOURCE_PATH_GIT="$LOCAL_REPO/git/gitconfig"
+SOURCE_PATH_I3="$LOCAL_REPO/i3/config"
 
 echo $DIR $LOCAL_REPO
 
 # test bash rc
 # grep -F fixed string -x exactly match the line -q do it quietly
-if grep -Fxq "$SOURCE_BASH" ~/.bashrc
+if grep -Fxq "$SOURCE_BASH_PATTERN" ~/.bashrc
 then
     echo "Bashrc Already modified"
 else
     # Add bash scripts
     echo "" >> ~/.bashrc 
-    echo $SOURCE_BASH >> ~/.bashrc 
+    echo $SOURCE_BASH_PATTERN >> ~/.bashrc 
     echo "Bashrc modified"
     # Source the main bash rc file
     echo "Reload .bashrc"
@@ -38,23 +39,26 @@ fi;
 # Added file for neovim
 echo "source ~/.vimrc" > ~/.config/nvim/init.vim
 # Test and add vimrc file on home dir for both neovim (above) and vim
-if grep -Fxq "$SOURCE_VIM" ~/.vimrc
+if grep -Fxq "$SOURCE_VIM_PATTERN" ~/.vimrc
 then
     echo "Vimrc Already modified"
 else
     # Add vim scripts
     # echo "" >> ~/.vimrc 
-    echo $SOURCE_VIM > ~/.vimrc 
+    echo $SOURCE_VIM_PATTERN > ~/.vimrc 
     echo "vimrc modified"
 fi
 
 # Add the config for Tmux
 cp -v $LOCAL_REPO/tmux/tmux.conf ~/.tmux.conf
 
-# Add .gitconfig
+# Add the config for i3
+cp -v $SOURCE_PATH_I3 ~/.config/i3/config
 
+
+# Add .gitconfig
 echo "[include]
-    path = $SOURCE_GIT"  >> ~/.gitconfig
+    path = $SOURCE_PATH_GIT"  >> ~/.gitconfig
 
 # cp -v dotfiles/.config ~/
 # cp -v dotfiles/.gitconfig ~/
