@@ -8,3 +8,8 @@ function install_ansible() {
     sudo apt-add-repository --yes --update ppa:ansible/ansible
     sudo apt install ansible
 }
+
+function install_python_ansible() {
+   sudo apt install python3 python3-pip
+   sudo pip3 install ansible
+}
