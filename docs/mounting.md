@@ -51,8 +51,12 @@ I had issues with the mounting of this device. Turns out that the version of the
 synology was max SMB 2.0 turning this to vers=3.0 and it worked ok.
 It just said "Operation not permitted" rather cryptic.
 
+Both of these work... looks liek the 
+
 ```
 //10.20.30.20/home  /mnt/cifs/home  cifs  uid=1000,gid=1000,rw,credentials=/home/robert/.smbcredentials,iocharset=utf8,vers=3.0  0  0
+
+//10.20.30.20/bulk /mnt/fs00 cifs vers=3.0,rw,credentials=/root/.smbcredentials,iocharset=utf8 0 0
 ```
 
 ## VMware Share
