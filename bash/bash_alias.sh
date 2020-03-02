@@ -16,4 +16,4 @@ alias ta='tmux a -t'
 alias lsn='ls -alGHh'
 # fi
 
-alias gitshow='git log --decorate=short'
+alias gitshow='git log --decorate=short --oneline --graph'
