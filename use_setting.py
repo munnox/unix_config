@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# The Above allow this script to be run on the bash line with
+# ./use_setting.py
+# requires `chmod +x foo` to enable execute
 
 # Use config setting python
 
