@@ -71,12 +71,19 @@ if os.path.exists(CONFIG_PATH_VIM):
         with open(CONFIG_PATH_VIM, "a") as fa:
             fa.write("\n{0}".format(VIM_PATTERN))
         print(f"'{CONFIG_PATH_VIM}' redirect to repo added")
+else:
+    with open(CONFIG_FILE_VIM, "w") as f:
+        f.write(VIM_PATTERN)
+    print(f"'{CONFIG_PATH_VIM}' file created and redirect to repo set")
 
 # Test and copy Tmux config
 print("TMUX Config")
 CONFIG_FILE_TMUX=f"{HOME}/.tmux.conf"
 PATH_TMUX=f"{LOCAL_REPO}/configs/tmux/tmux.conf"
-shutil.copy(PATH_TMUX, CONFIG_FILE_TMUX)
+try:
+    shutil.copy(PATH_TMUX, CONFIG_FILE_TMUX)
+except Exception as error:
+    print("Tmux config.\nError: ", error)
 
 # Test and copy i3 config
 print("I3 Config")
@@ -84,8 +91,8 @@ CONFIG_FILE_I3=f"{HOME}/.config/i3/config"
 PATH_I3=f"{LOCAL_REPO}/configs/i3/config"
 try:
     shutil.copy(PATH_I3, CONFIG_FILE_I3)
-except:
-    print("I3 potentisally not installed")
+except Exception as error:
+    print("I3 potentisally not installed.\nError: ", error)
 
 # Test and copy git config
 print("GIT Config")
