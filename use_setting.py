@@ -31,7 +31,7 @@ def run_process(*args):
     sp.communicate()
 
 # Test and copy BASH config
-print("BASH Config")
+print("========== BASH Config ==========")
 BASH_PATTERN=f"source {LOCAL_REPO}/bash/bashrc"
 CONFIG_PATH_BASH=f"{HOME}/.bashrc"
 
@@ -45,9 +45,9 @@ if os.path.exists(CONFIG_PATH_BASH):
         print(f"'{CONFIG_PATH_BASH}' redirect added")
         
 # Test and copy NEOVIM
-print("NEOVIM Config")
+print("========== NEOVIM Config ==========")
 VIM_PATTERN=f"source {LOCAL_REPO}/configs/vim/vimrc"
-CONFIG_PATH_VIM=f"{HOME}/.vimrc"
+CONFIG_FILE_VIM=f"{HOME}/.vimrc"
 CONFIG_PATH_NEOVIM=f"{HOME}/.config/nvim/"
 CONFIG_FILE_NEOVIM=f"{HOME}/.config/nvim/vimrc"
 
@@ -61,41 +61,43 @@ with open(CONFIG_FILE_NEOVIM, "w") as f:
     f.write("source ~/.vimrc")
 
 # Test and copy vimrc
-print("VIM Config")
+print("========== VIM Config ==========")
 # Redirect the home vim config to the repo set
-if os.path.exists(CONFIG_PATH_VIM):
-    print(f"'{CONFIG_PATH_VIM}' exists looking to append")
-    if find_in_file(CONFIG_PATH_VIM, VIM_PATTERN):
-        print(f"'{CONFIG_PATH_VIM}' redirect to repo exists continuing")
+if os.path.exists(CONFIG_FILE_VIM):
+    print(f"'{CONFIG_FILE_VIM}' exists looking to append")
+    if find_in_file(CONFIG_FILE_VIM, VIM_PATTERN):
+        print(f"'{CONFIG_FILE_VIM}' redirect to repo exists continuing")
     else:
-        with open(CONFIG_PATH_VIM, "a") as fa:
+        with open(CONFIG_FILE_VIM, "a") as fa:
             fa.write("\n{0}".format(VIM_PATTERN))
-        print(f"'{CONFIG_PATH_VIM}' redirect to repo added")
+        print(f"'{CONFIG_FILE_VIM}' redirect to repo added")
 else:
     with open(CONFIG_FILE_VIM, "w") as f:
         f.write(VIM_PATTERN)
-    print(f"'{CONFIG_PATH_VIM}' file created and redirect to repo set")
+    print(f"'{CONFIG_FILE_VIM}' file created and redirect to repo set")
 
 # Test and copy Tmux config
-print("TMUX Config")
+print("========== TMUX Config ==========")
 CONFIG_FILE_TMUX=f"{HOME}/.tmux.conf"
 PATH_TMUX=f"{LOCAL_REPO}/configs/tmux/tmux.conf"
 try:
     shutil.copy(PATH_TMUX, CONFIG_FILE_TMUX)
+    print(f"Copying Tmux config as cannot link to repo to:\n{PATH_TMUX}")
 except Exception as error:
-    print("Tmux config.\nError: ", error)
+    print("Tmux config.\nError:\n", error)
 
 # Test and copy i3 config
-print("I3 Config")
+print("========== I3 Config ==========")
 CONFIG_FILE_I3=f"{HOME}/.config/i3/config"
 PATH_I3=f"{LOCAL_REPO}/configs/i3/config"
 try:
     shutil.copy(PATH_I3, CONFIG_FILE_I3)
+    print(f"Copying I3 config as cannot link to repo to:\n{PATH_I3}")
 except Exception as error:
-    print("I3 potentisally not installed.\nError: ", error)
+    print("I3 potentially not installed.\nError:\n", error)
 
 # Test and copy git config
-print("GIT Config")
+print("========== GIT Config ==========")
 CONFIG_FILE_GIT=f"{HOME}/.gitconfig"
 PATH_GIT=f"{LOCAL_REPO}/configs/git/gitconfig"
 PATTERN_GIT= f"\n[include]\npath = {PATH_GIT}"
