@@ -10,6 +10,7 @@ LOCALSCRIPTS=(
 ../bash/bash_display.sh
 ../bash/bash_terminal.sh
 ../bash/bash_env.sh
+../bash/bash_prompt.sh
 )
 
 for p in ${LOCALSCRIPTS[@]}; do
