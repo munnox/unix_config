@@ -1,0 +1,8 @@
+version: '2.0'
+services:
+  lab:
+    image: jupyter/base-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - "$PWD:/home/jovyan/work"
