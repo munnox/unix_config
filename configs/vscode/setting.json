@@ -1,0 +1,78 @@
+{
+    "telemetry.enableCrashReporter": false,
+    "telemetry.enableTelemetry": false,
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\bash.exe",
+    "python.disablePromptForFeatures": [
+        "pylint"
+    ],
+    "files.eol": "\n",
+    "python.pythonPath": "${workspaceFolder}/pyvenv/bin/python",
+    "python.envFile": "${workspaceFolder}/.env.sh",
+    "gitlens.keymap": "alternate",
+    "gitlens.advanced.messages": {
+        "suppressShowKeyBindingsNotice": true
+    },
+    "remote.SSH.remotePlatform": {
+        "main-dev": "linux"
+    },
+    "window.zoomLevel": 0,
+    "git.path": "C:\\Program Files (x86)\\Git\\bin\\git.exe",
+    "files.associations": {
+        "**/defaults/**/*": "ansible",
+        "**/tasks/**/*.yml" : "ansible",
+        "**/handler/*.yml" : "ansible",
+        "**/*_vars/**/*.yml" : "ansible",
+        "**/roles/**/*.yml" : "ansible",
+        "**/playbooks/**/*.yml" : "ansible",
+        "**/*ansible*/**/*.yml" : "ansible",
+        "**/vars/**/*.yml": "ansible",
+        "**/inventory/*/*": "ansible"
+    },
+    "vim.normalModeKeyBindings": [
+        // {
+        //     "before": ["h"],
+        //     "after": ["g","h"]
+        // },
+        {
+            "before": ["j"],
+            "after": ["g","j"]
+        },
+        {
+            "before": ["k"],
+            "after": ["g","k"]
+        },
+        // {
+        //     "before": ["l"],
+        //     "after": ["g","l"]
+        // },
+        {
+            "before": ["<leader>", "c", "u"],
+            "commands": [
+                "expandLineSelection",
+                "editor.action.removeCommentLine",
+            ]
+        },
+        {
+            "before": ["<leader>", "c", "c"],
+            "commands": [
+                "expandLineSelection",
+                "editor.action.addCommentLine",
+            ]
+        }
+        
+    ],
+    "vim.visualModeKeyBindings": [
+        {
+            "before": ["<leader>", "c", "u"],
+            "commands": [
+                "editor.action.removeCommentLine",
+            ]
+        },
+        {
+            "before": ["<leader>", "c", "c"],
+            "commands": [
+                "editor.action.addCommentLine",
+            ]
+        }
+    ]
+}

@@ -10,6 +10,6 @@ function install_ansible() {
 }
 
 function install_python_ansible() {
-   sudo apt install python3 python3-pip
+   sudo apt install python3 python-venv python3-pip
    sudo pip3 install ansible
 }
