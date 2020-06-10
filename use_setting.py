@@ -32,7 +32,7 @@ def run_process(*args):
 
 # Test and copy BASH config
 print("========== BASH Config ==========")
-BASH_PATTERN=f"source {LOCAL_REPO}/bash/bashrc"
+BASH_PATTERN=f"source {LOCAL_REPO}/configs/bash/bashrc"
 CONFIG_PATH_BASH=f"{HOME}/.bashrc"
 
 if os.path.exists(CONFIG_PATH_BASH):
@@ -92,7 +92,7 @@ CONFIG_FILE_I3=f"{HOME}/.config/i3/config"
 PATH_I3=f"{LOCAL_REPO}/configs/i3/config"
 try:
     shutil.copy(PATH_I3, CONFIG_FILE_I3)
-    print(f"Copying I3 config as cannot link to repo to:\n{PATH_I3}")
+    print(f"Copying I3 config as cannot link to repo to:\n{CONFIG_FILE_I3}")
 except Exception as error:
     print("I3 potentially not installed.\nError:\n", error)
 

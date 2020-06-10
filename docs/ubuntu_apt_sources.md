@@ -1,3 +1,12 @@
+# Ubtunu upgrade
+
+To upgrade main version
+
+```
+lsb-release --release --codename
+do-release-upgrade --check
+```
+
 # Ubuntu Apt source repos
 
 Adding universe repo
