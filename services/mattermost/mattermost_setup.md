@@ -5,6 +5,41 @@ Source https://mattermost.com/download/
 ## Prototype Install
 
 `docker run --name mattermost-preview -d --publish 8065:8065 mattermost/mattermost-preview`
+`docker run --name mattermost-persistant -d -v datafiles:/mm/mattermost-data --publish 8064:8065 mattermost/mattermost-preview`
+
+### Backup / Restore
+
+Import Export for mattermost
+
+* https://docs.mattermost.com/administration/bulk-export.html
+
+```
+#!/bin/bash
+
+docker exec -it mattermost-preview mattermost export bulk /var/bulk_data.json --all-teams
+docker cp mattermost-preview:/var/bulk_data.json ./matter_bulkchat.json
+docker exec -it mattermost-preview tar cvf /var/bulkfiles.tar /mm/mattermost-data/
+docker cp mattermost-preview:/var/bulkfiles.tar ./matter_bulkfiles.tar
+```
+
+* https://docs.mattermost.com/deployment/bulk-loading.html
+
+```
+#!/bin/bash
+
+# Restore bulk files
+docker cp ./matter_bulkfiles.tar mattermost-persistant:/var/bulkfiles.tar
+docker exec -it mattermost-persistant mkdir /mm/mattermost-data
+docker exec -it mattermost-persistant bash -c "cd / && tar -xvf /var/bulkfiles.tar"
+
+# Restore chat
+docker cp ./matter_bulkchat.json mattermost-persistant:/var/bulk_data.json
+# Validate json
+docker exec -it mattermost-persistant mattermost import bulk /var/bulk_data.json --validate
+# Import data
+docker exec -it mattermost-persistant mattermost import bulk /var/bulk_data.json --apply
+
+```
 
 ## Production Install (Ubuntu 18.04)
 
@@ -18,7 +53,7 @@ chown -R 2000:2000 ./volumes/app/mattermost/
 docker-compose up -d
 ```
 
-## SSL
+### SSL
 
 > Install with SSL certificate
 
@@ -27,23 +62,30 @@ docker-compose up -d
 
 ## Backup / Restore
 
-Import Export for mattermost
+Import Export for mattermost production
 
 * https://docs.mattermost.com/administration/bulk-export.html
 
 ```
-docker exec -it mattermost-preview mattermost export bulk /var/bulk_data.json --all-teams
-docker cp mattermost-preview:/var/bulk_data.json ./matter_bulk.json
+docker exec -it mattermost-docker_app_1 mattermost export bulk /var/bulk_data.json --all-teams
+docker cp mattermost-docker_app_1:/var/bulk_data.json ./matter_bulkchat.json
+docker exec -it mattermost-docker_app_1 tar cvf /var/bulkfiles.tar /mm/mattermost-data/
+docker cp mattermost-docker_app_1:/var/bulkfiles.tar ./matter_bulkfiles.tar
 ```
 
 * https://docs.mattermost.com/deployment/bulk-loading.html
 
 ```
-docker cp ./matter_bulk.json mattermost-preview:/var/bulk_data.json
+# Restore chat
+docker cp ./matter_bulk.json mattermost-docker_app_1:/var/bulk_data.json
 # Validate json
-docker exec -it mattermost import bulk data.jsonl --validate
+docker exec -it mattermost-docker_app_1 import bulk data.json --validate
 # Import data
-docker exec -it mattermost import bulk data.jsonl --apply
+docker exec -it mattermost-docker_app_1 import bulk data.json --apply
+
+# Restore bulk files
+docker cp ./matter_bulkfiles.json mattermost-docker_app_1:/var/bulkfiles.tar
+docker exec -it mattermost-docker_app_1 tar -xvf /var/bulkfiles.tar /mm/mattermost-data
 ```
 
 ## Configuration
