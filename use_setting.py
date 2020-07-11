@@ -48,8 +48,8 @@ if os.path.exists(CONFIG_PATH_BASH):
 print("========== NEOVIM Config ==========")
 VIM_PATTERN=f"source {LOCAL_REPO}/configs/vim/vimrc"
 CONFIG_FILE_VIM=f"{HOME}/.vimrc"
-CONFIG_PATH_NEOVIM=f"{HOME}/.config/nvim/"
-CONFIG_FILE_NEOVIM=f"{HOME}/.config/nvim/vimrc"
+CONFIG_PATH_NEOVIM=f"{HOME}/.config/nvim"
+CONFIG_FILE_NEOVIM=f"{CONFIG_PATH_NEOVIM}/init.vim"
 
 if os.path.exists(CONFIG_PATH_NEOVIM):
     print(f"'{CONFIG_PATH_NEOVIM}' folder exists")
