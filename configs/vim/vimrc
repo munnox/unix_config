@@ -69,6 +69,9 @@ Plug 'davidhalter/jedi-vim'
 " Rust helpers
 Plug 'rust-lang/rust.vim'
 
+" vim-syntastic/syntastic.git
+Plug 'vim-syntastic/syntastic'
+
 " " Code completion
 " Plug 'Valloric/YouCompleteMe'
 "
@@ -192,6 +195,20 @@ let g:NERDTrimTrailingWhitespace = 1
 " GitFugitive
 nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gs :Gstatus<CR>
+
+" Rust Lang
+let g:rustfmt_autosave = 1
+
+" vim-syntastic/syntastic.git
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_checkers = ['pylint']
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Color Schemes
