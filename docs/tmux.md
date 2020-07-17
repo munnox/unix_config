@@ -16,3 +16,11 @@ tmux new -s bar -t foo
 ```
 
 
+Tip and shortcuts:
+
+default binding is `ctrl-b` and `ctrl_b ?` can be used to get a list of other shortcuts
+
+ctrl-s+{h,j,k,l} to move windows.
+ctrl+d to disconnect
+
+
