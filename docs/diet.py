@@ -3,7 +3,7 @@ Simple diet technique
 
 To try to lose weight keep to a calorie rate per hour
 
-Target 1800 with a 24 hour period. This translates to a 75 calorie per hour rate.
+Target 1560 with a 24 hour period. This translates to a 65 calorie per hour rate.
 
 The trick is to set a target as to when one can eat agian on the load of calories that was consumed
 
@@ -12,7 +12,7 @@ Author Robert Munnoch
 
 import datetime
 
-target_daily_calories = 1800.0
+target_daily_calories = 1560.0
 rate = target_daily_calories/24.0
 
 calories = input("How many calories comsumed?\n")
