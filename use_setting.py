@@ -103,32 +103,35 @@ def fix_tmux():
 
 
 def fix_i3():
-    """Install i3 window env config file"""
-    # Test and copy i3 config
+    """Install i3 config and i3 status env config file
+
+    Further info https://i3wm.org/i3status/manpage.html#_external_scripts_programs_with_i3status
+    """
     print("========== I3 Config ==========")
+    program_found = False
+    if os.path.exists("/usr/bin/i3"):
+        print("Found I3 binary")
+        program_found = True
+    else:
+        print("Not found I3 binary")
+    # Test and copy i3 config
+    if not program_found:
+        return
     config_file_i3 = f"{HOME}/.config/i3/config"
     path_i3 = f"{LOCAL_REPO}/configs/i3/config"
     try:
         shutil.copy(path_i3, config_file_i3)
         print(f"Copying I3 config as cannot link to repo to:\n{path_i3}")
-        fix_i3status()
     except Exception as error:  # pylint: disable=broad-except
         print(f"I3 potentially not installed.\nError type: ({type(error)}):\n{error}")
 
-def fix_i3status():
-    """Install i3 status env config file
-
-    Further info https://i3wm.org/i3status/manpage.html#_external_scripts_programs_with_i3status
-    """
-    # Test and copy i3 config
-    print("========== I3 Config ==========")
     config_path_i3 = f"{HOME}/.config/i3status"
-    config_file_i3 = f"{HOME}/config"
+    config_file_i3 = f"{config_path_i3}/config"
     file_i3 = f"{LOCAL_REPO}/configs/i3/i3status.conf"
     try:
         os.mkdir(config_path_i3)
         shutil.copy(file_i3, config_file_i3)
-        print(f"Copying I3 config as cannot link to repo to:\n{file_i3}")
+        print(f"Copying I3 status config as cannot link to repo to:\n{file_i3}")
     except Exception as error:  # pylint: disable=broad-except
         print(f"I3 potentially not installed.\nError type: ({type(error)}):\n{error}")
 
