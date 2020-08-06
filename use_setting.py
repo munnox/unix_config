@@ -111,6 +111,24 @@ def fix_i3():
     try:
         shutil.copy(path_i3, config_file_i3)
         print(f"Copying I3 config as cannot link to repo to:\n{path_i3}")
+        fix_i3status()
+    except Exception as error:  # pylint: disable=broad-except
+        print(f"I3 potentially not installed.\nError type: ({type(error)}):\n{error}")
+
+def fix_i3status():
+    """Install i3 status env config file
+
+    Further info https://i3wm.org/i3status/manpage.html#_external_scripts_programs_with_i3status
+    """
+    # Test and copy i3 config
+    print("========== I3 Config ==========")
+    config_path_i3 = f"{HOME}/.config/i3status"
+    config_file_i3 = f"{HOME}/config"
+    file_i3 = f"{LOCAL_REPO}/configs/i3/i3status.conf"
+    try:
+        os.mkdir(config_path_i3)
+        shutil.copy(file_i3, config_file_i3)
+        print(f"Copying I3 config as cannot link to repo to:\n{file_i3}")
     except Exception as error:  # pylint: disable=broad-except
         print(f"I3 potentially not installed.\nError type: ({type(error)}):\n{error}")
 

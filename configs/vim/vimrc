@@ -3,7 +3,10 @@
 set nocompatible              " required
 filetype off                  " required
 
-let mapleader="\\"       " leader is the default backslash
+" Set the leader key to its default
+" leader is the default backslash
+let mapleader="\\"
+" let mapleader="<Space>"
 
 exec "source " . expand('<sfile>:p:h') . "/config_editor.vim"
 
