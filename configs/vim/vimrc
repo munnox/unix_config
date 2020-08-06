@@ -40,7 +40,8 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
 " Nice file browser
-" Plug 'scrooloose/nerdtree'
+" Example help run :help NERDTree
+Plug 'scrooloose/nerdtree'
 
 " a nice commenter system
 " Allows <leader?cc to comment or <leader>cu to uncomment
