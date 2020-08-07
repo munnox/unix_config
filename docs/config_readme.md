@@ -15,6 +15,18 @@ ctrl+s c - New window
 ctrl+s | - Split window vertically for side-by-side
 ctrl+s - - Split window horizontally for above-and-below
 
+## VIM
+
+leader `\`
+
+`\ts` - open terminal in neovim
+`\gs` - git status
+`\F` - FZF file search
+`\B` - Search open buffer names
+`\n` - Nerdtree browser
+`\gs` - git status
+`cc` - while in git status to commit
+
 
 ## i3 wm
 
