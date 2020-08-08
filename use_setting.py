@@ -105,7 +105,7 @@ def fix_tmux():
 def fix_i3():
     """Install i3 config and i3 status env config file
 
-    Further info https://i3wm.org/i3status/manpage.html#_external_scripts_programs_with_i3status
+    Further info https://i3wm.org/i3status/manpage.html
     """
     print("========== I3 Config ==========")
     program_found = False
@@ -129,7 +129,8 @@ def fix_i3():
     config_file_i3 = f"{config_path_i3}/config"
     file_i3 = f"{LOCAL_REPO}/configs/i3/i3status.conf"
     try:
-        os.mkdir(config_path_i3)
+        if not os.path.exists(config_path_i3):
+            os.mkdir(config_path_i3)
         shutil.copy(file_i3, config_file_i3)
         print(f"Copying I3 status config as cannot link to repo to:\n{file_i3}")
     except Exception as error:  # pylint: disable=broad-except
