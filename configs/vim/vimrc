@@ -5,8 +5,8 @@ filetype off                  " required
 
 " Set the leader key to its default
 " leader is the default backslash
-let mapleader="\\"
-" let mapleader="<Space>"
+" let mapleader="\\"
+let mapleader="\<Space>"
 
 exec "source " . expand('<sfile>:p:h') . "/config_editor.vim"
 
@@ -39,6 +39,7 @@ Plug 'airblade/vim-gitgutter'
 " Plug 'junegunn/limelight.vim'
 
 " File buffer searching using fuzzy search
+Plug 'airblade/vim-rooter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
@@ -70,14 +71,21 @@ Plug 'mitsuhiko/vim-jinja'
 " Python helpers and info
 Plug 'davidhalter/jedi-vim'
 
-" Rust helpers
-Plug 'rust-lang/rust.vim'
-
 " vim-syntastic/syntastic.git
 Plug 'vim-syntastic/syntastic'
+" Toml help for toml for syntasic
+Plug 'cespare/vim-toml'
+" Yaml helper for yaml for syntasic
+Plug 'stephpy/vim-yaml'
+" Rust helpers with syntastic
+Plug 'rust-lang/rust.vim'
 
 " " Code completion
 " Plug 'Valloric/YouCompleteMe'
+
+" Semantic language support
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 "
 " " Muliline editing
 " https://github.com/terryma/vim-multiple-cursors
@@ -115,6 +123,13 @@ if has("nvim")
     nmap <leader>tpde :w<CR><C-w>lideactivate<CR><C-\><C-n><C-w>h
 
 endif
+
+" A cursor improvemnt from https://github.com/jonhoo/configs
+if has('nvim')
+    set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+    set inccommand=nosplit
+    noremap <C-q> :confirm qall<CR>
+end
 "
 " Invoke Ctrl-p with c-p
 " let g:ctrlp_map = '<c-p>'
@@ -197,11 +212,18 @@ let g:NERDDefaultAlign = 'left'
 let g:NERDTrimTrailingWhitespace = 1
 
 " GitFugitive
-nnoremap <leader>ga :Git add %:p<CR><CR>
+" nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gs :Gstatus<CR>
 
 " Rust Lang
 let g:rustfmt_autosave = 1
+" racer + rust
+" https://github.com/rust-lang/rust.vim/issues/192
+let g:rustfmt_emit_files = 1
+let g:rustfmt_fail_silently = 0
+let g:rust_clip_command = 'xclip -selection clipboard'
+let $RUST_SRC_PATH = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/rust/src"
+
 
 " vim-syntastic/syntastic.git
 set statusline+=%#warningmsg#
@@ -213,6 +235,40 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ['pylint']
+
+" COC completion
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+        
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Color Schemes
@@ -232,6 +288,17 @@ inoremap <F12> <C-o>:syntax sync fromstart<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Buffer shortcuts
 """"""""""""""""""""""""""""""""""""""""""""""""
+
+" Jump to start and end of line using the home row keys
+map H ^
+map L $
+
+" Neat X clipboard integration
+" ,p will paste clipboard into buffer
+" ,c will copy entire buffer into clipboard
+noremap <leader>p :read !xsel --clipboard --output<cr>
+noremap <leader>c :w !xsel -ib<cr><cr>
+
 " To open a new empty buffer
 " " This replaces :tabnew which I used to bind to this mapping
 nmap <leader>T :enew<cr>
@@ -270,6 +337,14 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+
+" No arrow keys --- force yourself to use the home row
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " General Configuration
