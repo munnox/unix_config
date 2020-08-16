@@ -133,10 +133,10 @@ if has("nvim")
     function! OpenTerminal()
             vsplit term://bash
             " resize 20
-            vertical 70
+            vertical resize 80
     endfunction
-    nnoremap <c-n> :call OpenTerminal()<CR>
-    nnoremap <leader>ts :vsplit <BAR> terminal<CR>
+    nnoremap <leader>ts :call OpenTerminal()<CR>
+    nnoremap <leader>termss :vsplit <BAR> terminal<CR>
 
 endif
 
