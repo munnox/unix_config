@@ -5,6 +5,7 @@ Simple commands reference
 ```
 tmux new -s foo
 tmux a -t foo
+tmux list-sessions
 ```
 
 for pair programing found <https://www.hamvocke.com/blog/remote-pair-programming-with-tmux/>

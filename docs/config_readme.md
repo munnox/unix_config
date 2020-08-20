@@ -2,6 +2,37 @@
 
 This is the main readme for the config files and the setup shortcuts and systems.
 
+Config sources and references:
+
+* https://github.com/jonhoo/configs
+
+## VIM
+
+leader `<Space>`
+
+`<leader>F` - FZF file search
+`<leader>B` - Search open buffer names
+`<leader>n` - Nerdtree browser
+
+### Neovim
+
+`<leader>ts` - open terminal in neovim
+
+### Git plugins
+
+`<leader>gs` - git status
+`cc` - while in git status to commit
+
+`K` - CoC Get documentation 
+
+## i3 wm
+
+* `alt` used.
+* `alt+{h,j,k,l}` used to move windows.
+* `atl+r` to reize a window.
+* `alt+shift+{h,j,k,l} to move a window.
+* `alt+{1..9}` to move desktops.
+
 ## tmux
 
 Binding on `ctrl+s`
@@ -246,24 +277,3 @@ bind-key    -T root         WheelUpPane       if-shell -F -t = "#{mouse_any_flag
 bind-key    -T root         WheelUpStatus     previous-window
 bind-key    -T root         WheelDownStatus   next-window
 
-
-## VIM
-
-leader `\`
-
-`\ts` - open terminal in neovim
-`\gs` - git status
-`\F` - FZF file search
-`\B` - Search open buffer names
-`\n` - Nerdtree browser
-`\gs` - git status
-`cc` - while in git status to commit
-
-
-## i3 wm
-
-* `alt` used.
-* `alt+{h,j,k,l}` used to move windows.
-* `atl+r` to reize a window.
-* `alt+shift+{h,j,k,l} to move a window.
-* `alt+{1..9}` to move desktops.
