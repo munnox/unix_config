@@ -10,7 +10,7 @@ Use config settings in python
 """
 
 import os
-import shutil
+#  import shutil
 import subprocess
 
 HOME = os.getenv("HOME", None)
@@ -96,8 +96,12 @@ def fix_tmux():
     config_file_tmux = f"{HOME}/.tmux.conf"
     path_tmux = f"{LOCAL_REPO}/configs/tmux/tmux.conf"
     try:
-        shutil.copy(path_tmux, config_file_tmux)
+        os.symlink(path_tmux, config_file_tmux)
+        #  shutil.copy(path_tmux, config_file_tmux)
         print(f"Copying Tmux config as cannot link to repo to:\n{path_tmux}")
+    except FileExistsError as error:  # pylint: disable=broad-except
+        print(f"Already linked")
+
     except Exception as error:  # pylint: disable=broad-except
         print(f"Tmux config.\nError type: ({type(error)}):\n{error}")
 
@@ -120,8 +124,12 @@ def fix_i3():
     config_file_i3 = f"{HOME}/.config/i3/config"
     path_i3 = f"{LOCAL_REPO}/configs/i3/config"
     try:
-        shutil.copy(path_i3, config_file_i3)
+        os.symlink(path_i3, config_file_i3)
+        #  shutil.copy(path_i3, config_file_i3)
         print(f"Copying I3 config as cannot link to repo to:\n{path_i3}")
+    except FileExistsError as error:  # pylint: disable=broad-except
+        print(f"Already linked")
+
     except Exception as error:  # pylint: disable=broad-except
         print(f"I3 potentially not installed.\nError type: ({type(error)}):\n{error}")
 
@@ -131,8 +139,12 @@ def fix_i3():
     try:
         if not os.path.exists(config_path_i3):
             os.mkdir(config_path_i3)
-        shutil.copy(file_i3, config_file_i3)
+        os.symlink(file_i3, config_file_i3)
+        #  shutil.copy(file_i3, config_file_i3)
         print(f"Copying I3 status config as cannot link to repo to:\n{file_i3}")
+    except FileExistsError as error:  # pylint: disable=broad-except
+        print(f"Already linked")
+
     except Exception as error:  # pylint: disable=broad-except
         print(f"I3 potentially not installed.\nError type: ({type(error)}):\n{error}")
 
