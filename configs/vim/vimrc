@@ -140,6 +140,14 @@ if has("nvim")
 
 endif
 
+function! ClearAllRegisters()
+    let regs=split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/-"', '\zs')
+    for r in regs
+      call setreg(r, [])
+    endfor
+    " :let @a = ''
+endfunction
+
 " A cursor improvemnt from https://github.com/jonhoo/configs
 if has('nvim')
     set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
