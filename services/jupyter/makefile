@@ -19,3 +19,7 @@ restart:
 	docker-compose restart lab
 # setup the jupyter lab by setting the password and restarting the service using the targets above
 setup: pass restart
+
+# show container info
+ps:
+	docker-compose ps -a
