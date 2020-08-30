@@ -1,3 +1,10 @@
+# Author Robert Munnoch
+# Start a jupyter lab using
+# make lab
+# then set the access password by using
+# make setup
+
+
 # Start a simple jupyter lab
 lab:
 	docker-compose up -d
@@ -10,3 +17,5 @@ pass:
 # Restart the container system
 restart:
 	docker-compose restart lab
+# setup the jupyter lab by setting the password and restarting the service using the targets above
+setup: pass restart
