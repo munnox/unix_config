@@ -13,7 +13,7 @@ host dev
     hostname example.com
     user ubuntu
     # IdentityFile ~/.ssh/id_rsa
-    ForwardX11 yes
+    ForwardX11 no
     # Setup a sock v4/v5 proxy set this up in firefox
     # and this then forward all web traffic to the remote server while connected
     # DynamicForward 8080
