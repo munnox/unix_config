@@ -9,7 +9,10 @@
 # alias bright9="xrandr --output eDP-1 --brightness 0.9"
 
 function brightness {
+        echo "typical low 5000 10000"
+        echo "Max brightness $(cat /sys/class/backlight/intel_backlight/max_brightness)"
         echo $1 | sudo tee /sys/class/backlight/intel_backlight/brightness
+
 }
 
 function brightness_xrandr {
