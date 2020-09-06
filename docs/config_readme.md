@@ -10,6 +10,13 @@ Config sources and references:
 
 leader `<Space>`
 
+### Tags
+
+`C-T` - backto tag
+`C-]` - goto tag
+
+## FZF
+
 `<leader>F` - FZF file search
 `<leader>B` - Search open buffer names
 `<leader>n` - Nerdtree browser
@@ -22,6 +29,11 @@ leader `<Space>`
 
 `<leader>gs` - git status
 `cc` - while in git status to commit
+`[c` - prev hunk to stage
+`]c` - next hunk to stage
+`<leader>hp`- preview hunk
+`<leader>hu`- undo hunk
+`<leader>hs`- stage hunk
 
 `K` - CoC Get documentation 
 
