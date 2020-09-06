@@ -15,17 +15,30 @@ leader `<Space>`
 `C-T` - backto tag
 `C-]` - goto tag
 
-## FZF
+### numbering
+
+`<leader>rn` - relative numbering
+`<leader>nrn` - no relative numbering
+
+### Plugins
+
+#### FZF
 
 `<leader>F` - FZF file search
 `<leader>B` - Search open buffer names
 `<leader>n` - Nerdtree browser
 
-### Neovim
+#### Neovim
 
 `<leader>ts` - open terminal in neovim
 
-### Git plugins
+#### Git plugins
+
+```
+" Git plugin to make git rather nice in vim
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+```
 
 `<leader>gs` - git status
 `cc` - while in git status to commit
