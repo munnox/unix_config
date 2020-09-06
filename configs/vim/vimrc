@@ -178,7 +178,7 @@ let g:fzf_tags_command = 'ctags -R'
 
 map <leader>f :FzfGitFiles<CR>
 map <leader>F :FzfFiles<CR>
-map <leader>bb :FzfBuffers<CR>
+map <leader>b<Space> :FzfBuffers<CR>
 
 " This is the default extra key bindings
 let g:fzf_action = {
@@ -393,6 +393,10 @@ nmap <leader>bq! :bp <BAR> bd! #<CR>
 " " Show all open buffers and their status
 nmap <leader>bs :ls<CR>
 
+" Add a mapping since :b doesn't work for this
+nmap <leader>bs :sb<Space>
+nmap <leader>bls :ls<CR>
+
 nmap <leader>c :close<CR>
 
 
@@ -445,10 +449,6 @@ inoremap <right> <nop>
 " Move the to window with the buffer rather than swap out the
 " window
 set switchbuf+=useopen
-
-" Add a mapping since :b doesn't work for this
-nmap <leader>bb :sb<space>
-nmap <leader>bls :ls<CR>
 
 " Mouse
 set mouse=a
