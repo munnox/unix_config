@@ -49,7 +49,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 
 " a nice commenter system
-" Allows <leader?cc to comment or <leader>cu to uncomment
+" Allows <leader>cc to comment or <leader>cu to uncomment
 Plug 'scrooloose/nerdcommenter'
 
 " nicer base line
