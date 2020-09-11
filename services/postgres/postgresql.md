@@ -32,7 +32,7 @@ services:
 
   db:
     image: postgres:12
-    restart: always
+    restart: unless-stopped
     ports:
       - 5432:5432
     environment:
@@ -40,8 +40,8 @@ services:
       POSTGRES_PASSWORD: example
 
   pgadmin:
-    image: dpage/pgadmin4:4.14
-    restart: always
+    image: dpage/pgadmin4:4.25
+    restart: unless-stopped
     ports:
       - 8080:80
     environment:
@@ -49,3 +49,13 @@ services:
       PGADMIN_DEFAULT_PASSWORD: example
 
 ```
+
+## Backup
+
+```
+pg_dump --host localhost --port 5432 --username postgres --format plain --ignore-version --verbose --file "<abstract_file_path>" --table public.tablename dbname
+```
+
+issues with large tables 34+GB
+
+also recording this `nohup ./postages_dumpdb &`
