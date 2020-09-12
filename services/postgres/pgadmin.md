@@ -19,7 +19,7 @@ docker-compose
 
 ```
 
-version: "2"
+version: "3.1"
 
 networks:
   pg:
