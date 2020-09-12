@@ -122,6 +122,7 @@ if has("nvim")
     tnoremap <C-k> <C-\><C-n><C-w>k
     tnoremap <C-l> <C-\><C-n><C-w>l
 
+    tnoremap <C-v> <C-\><C-n>"0pi
     " Move to the terminal on the right side move to the last cmd and run then
     " move back
     nmap <leader>tr :w<CR><C-w>li<UP><CR><C-\><C-n><C-w>h
