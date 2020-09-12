@@ -14,5 +14,9 @@
 #
 # setup for high dpi
 # xrandr --dpi 220
-xrdb -merge ~/.Xresources
+setxkbmap gb
+
+xmodmap ~/.modmap
+
+xrdb -merge ~/.xresources
 exec i3

@@ -52,6 +52,36 @@ def fix_bash():
                 file_handle.write("\n{0}".format(bash_pattern))
             print(f"'{config_path_bash}' redirect added")
 
+def fix_xinit():
+    """Install xinit config file"""
+    # Test and copy BASH config
+    print("========== XINIT Config ==========")
+    xinit_pattern = f"{LOCAL_REPO}/xwin/.xinitrc"
+    config_path_xinit = f"{HOME}/.xinitrc"
+
+    try:
+        os.symlink(xinit_pattern, config_path_xinit)
+        print(f"Linking xinitrc config to:\n{config_path_xinit}")
+    except FileExistsError as error:  # pylint: disable=broad-except
+        print(f"Already linked")
+    xres_pattern = f"{LOCAL_REPO}/xwin/.xresources"
+    config_path_xres = f"{HOME}/.xresources"
+
+    try:
+        os.symlink(xres_pattern, config_path_xres)
+        print(f"Linking xresources config to:\n{config_path_xres}")
+    except FileExistsError as error:  # pylint: disable=broad-except
+        print(f"Already linked")
+
+    xmodmap_pattern = f"{LOCAL_REPO}/xwin/.xmodmap"
+    config_path_xmodmap = f"{HOME}/.xmodmap"
+
+    try:
+        os.symlink(xmodmap_pattern, config_path_xmodmap)
+        print(f"Linking xmodmap config to:\n{config_path_xmodmap}")
+    except FileExistsError as error:  # pylint: disable=broad-except
+        print(f"Already linked")
+
 
 def fix_neovim():
     """Install neovim config file"""
@@ -121,27 +151,27 @@ def fix_i3():
     # Test and copy i3 config
     if not program_found:
         return
-    config_file_i3 = f"{HOME}/.config/i3/config"
-    path_i3 = f"{LOCAL_REPO}/configs/i3/config"
+    config_file_i3config = f"{HOME}/.config/i3/config"
+    path_i3config = f"{LOCAL_REPO}/configs/i3/config"
     try:
-        os.symlink(path_i3, config_file_i3)
+        os.symlink(path_i3config, config_file_i3config)
         #  shutil.copy(path_i3, config_file_i3)
-        print(f"Copying I3 config as cannot link to repo to:\n{path_i3}")
+        print(f"Copying I3 config as cannot link to repo to:\n{path_i3config}")
     except FileExistsError as error:  # pylint: disable=broad-except
         print(f"Already linked")
 
     except Exception as error:  # pylint: disable=broad-except
         print(f"I3 potentially not installed.\nError type: ({type(error)}):\n{error}")
 
-    config_path_i3 = f"{HOME}/.config/i3status"
-    config_file_i3 = f"{config_path_i3}/config"
-    file_i3 = f"{LOCAL_REPO}/configs/i3/i3status.conf"
+    config_path_i3status = f"{HOME}/.config/i3status"
+    config_file_i3status = f"{config_path_i3status}/config"
+    file_i3status = f"{LOCAL_REPO}/configs/i3/i3status.conf"
     try:
-        if not os.path.exists(config_path_i3):
-            os.mkdir(config_path_i3)
-        os.symlink(file_i3, config_file_i3)
+        if not os.path.exists(config_path_i3status):
+            os.mkdir(config_path_i3status)
+        os.symlink(file_i3status, config_file_i3status)
         #  shutil.copy(file_i3, config_file_i3)
-        print(f"Copying I3 status config as cannot link to repo to:\n{file_i3}")
+        print(f"Copying I3 status config as cannot link to repo to:\n{file_i3status}")
     except FileExistsError as error:  # pylint: disable=broad-except
         print(f"Already linked")
 
@@ -170,6 +200,7 @@ def fix_git():
 if __name__ == "__main__":
 
     fix_bash()
+    fix_xinit()
     fix_neovim()
     fix_tmux()
     fix_i3()
