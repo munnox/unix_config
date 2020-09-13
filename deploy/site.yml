@@ -1,0 +1,7 @@
+---
+
+- name: config deploy
+  hosts: localhost
+  tasks:
+    - name: testing
+      ping:
