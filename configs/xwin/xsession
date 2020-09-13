@@ -16,7 +16,8 @@
 # xrandr --dpi 220
 setxkbmap gb
 
-xmodmap ~/.modmap
+xmodmap ~/.xmodmap
 
-xrdb -merge ~/.xresources
+xrdb -merge ~/.Xresources
+xrandr --dpi 200/0
 exec i3

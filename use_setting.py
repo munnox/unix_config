@@ -53,19 +53,20 @@ def fix_bash():
             print(f"'{config_path_bash}' redirect added")
 
 def fix_xinit():
-    """Install xinit config file"""
+    """Install xwin config file"""
     # Test and copy BASH config
-    print("========== XINIT Config ==========")
-    xinit_pattern = f"{LOCAL_REPO}/xwin/.xinitrc"
-    config_path_xinit = f"{HOME}/.xinitrc"
+    print("========== XWIN Config ==========")
+    xsession_pattern = f"{LOCAL_REPO}/configs/xwin/xsession"
+    config_path_xsession = f"{HOME}/.xsession"
 
     try:
-        os.symlink(xinit_pattern, config_path_xinit)
-        print(f"Linking xinitrc config to:\n{config_path_xinit}")
+        os.symlink(xsession_pattern, config_path_xsession)
+        print(f"Linking xinitrc config to:\n{config_path_xsession}")
     except FileExistsError as error:  # pylint: disable=broad-except
         print(f"Already linked")
-    xres_pattern = f"{LOCAL_REPO}/xwin/.xresources"
-    config_path_xres = f"{HOME}/.xresources"
+
+    xres_pattern = f"{LOCAL_REPO}/configs/xwin/Xresources"
+    config_path_xres = f"{HOME}/.Xresources"
 
     try:
         os.symlink(xres_pattern, config_path_xres)
@@ -73,7 +74,7 @@ def fix_xinit():
     except FileExistsError as error:  # pylint: disable=broad-except
         print(f"Already linked")
 
-    xmodmap_pattern = f"{LOCAL_REPO}/xwin/.xmodmap"
+    xmodmap_pattern = f"{LOCAL_REPO}/configs/xwin/xmodmap"
     config_path_xmodmap = f"{HOME}/.xmodmap"
 
     try:
