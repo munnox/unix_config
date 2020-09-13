@@ -12,3 +12,6 @@ docker exec -it mattermost-persistant mattermost import bulk /var/bulk_data.json
 # Import data
 docker exec -it mattermost-persistant mattermost import bulk /var/bulk_data.json --apply
 
+# Then you need to reset the password of the user to login agian
+
+docker exec -it mattermost-persistant mattermost user password robert password
