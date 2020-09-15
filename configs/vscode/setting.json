@@ -58,8 +58,31 @@
                 "expandLineSelection",
                 "editor.action.addCommentLine",
             ]
+        },
+        {
+            "before": ["ctrl+h"],
+            "commands": [
+                "workbench.action.navigateLeft"
+            ]
+        },
+        {
+            "before": ["ctrl+j"],
+            "commands": [
+                "workbench.action.navigateDown"
+            ]
+        },
+        {
+            "before": ["ctrl+k"],
+            "commands": [
+                "workbench.action.navigateUp"
+            ]
+        },
+        {
+            "before": ["ctrl+l"],
+            "commands": [
+                "workbench.action.navigateRight"
+            ]
         }
-        
     ],
     "vim.visualModeKeyBindings": [
         {
