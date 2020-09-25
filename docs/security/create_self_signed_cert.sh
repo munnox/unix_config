@@ -4,8 +4,13 @@
 
 # Create a Simple self signed certifcate valid for a year
 # openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
-
-cat << EOF > example-com.conf
+function selfcert {
+FILE=example-com.conf
+if test -f "$FILE"; then
+    echo "File already create"
+else
+    echo "Creating file $FILE"
+    cat << EOF > $FILE
 [ req ]
 default_bits       = 2048
 distinguished_name = req_distinguished_name
@@ -32,10 +37,12 @@ DNS.4       = ftp.example.com
 # IP.1        = 127.0.0.1
 # IP.2        = ::1
 EOF
-
+fi
 # openssl req -config example-com.conf -new -x509 -sha256 -newkey rsa:2048 -nodes \
 #     -keyout example-com.key.pem -days 365 -out example-com.cert.pem
 
 
 openssl req -config example-com.conf -new -x509 -sha256 -newkey rsa:2048 \
     -keyout example-com.key.pem -days 365 -out example-com.cert.pem
+
+}
