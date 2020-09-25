@@ -40,7 +40,7 @@ def fix_bash():
     """Install bash config file"""
     # Test and copy BASH config
     print("========== BASH Config ==========")
-    bash_pattern = f"source {LOCAL_REPO}/bash/bashrc"
+    bash_pattern = f"source {CONFIG_PATH}/bash/bashrc"
     config_path_bash = f"{HOME}/.bashrc"
 
     if os.path.exists(config_path_bash):
@@ -56,7 +56,7 @@ def fix_xinit():
     """Install xwin config file"""
     # Test and copy BASH config
     print("========== XWIN Config ==========")
-    xsession_pattern = f"{LOCAL_REPO}/configs/xwin/xsession"
+    xsession_pattern = f"{CONFIG_PATH}/xwin/xsession"
     config_path_xsession = f"{HOME}/.xsession"
 
     try:
@@ -65,7 +65,7 @@ def fix_xinit():
     except FileExistsError as error:  # pylint: disable=broad-except
         print(f"Already linked")
 
-    xres_pattern = f"{LOCAL_REPO}/configs/xwin/Xresources"
+    xres_pattern = f"{CONFIG_PATH}/xwin/Xresources"
     config_path_xres = f"{HOME}/.Xresources"
 
     try:
@@ -74,7 +74,7 @@ def fix_xinit():
     except FileExistsError as error:  # pylint: disable=broad-except
         print(f"Already linked")
 
-    xmodmap_pattern = f"{LOCAL_REPO}/configs/xwin/xmodmap"
+    xmodmap_pattern = f"{CONFIG_PATH}/xwin/xmodmap"
     config_path_xmodmap = f"{HOME}/.xmodmap"
 
     try:
@@ -88,7 +88,7 @@ def fix_neovim():
     """Install neovim config file"""
     # Test and copy NEOVIM
     print("========== NEOVIM Config ==========")
-    vim_pattern = f"source {LOCAL_REPO}/configs/vim/vimrc"
+    vim_pattern = f"source {CONFIG_PATH}/vim/vimrc"
     config_file_vim = f"{HOME}/.vimrc"
     config_path_neovim = f"{HOME}/.config/nvim/"
     config_file_neovim = f"{config_path_neovim}/init.vim"
@@ -125,7 +125,7 @@ def fix_tmux():
     # Test and copy Tmux config
     print("========== TMUX Config ==========")
     config_file_tmux = f"{HOME}/.tmux.conf"
-    path_tmux = f"{LOCAL_REPO}/configs/tmux/tmux.conf"
+    path_tmux = f"{CONFIG_PATH}/tmux/tmux.conf"
     try:
         os.symlink(path_tmux, config_file_tmux)
         #  shutil.copy(path_tmux, config_file_tmux)
@@ -153,7 +153,7 @@ def fix_i3():
     if not program_found:
         return
     config_file_i3config = f"{HOME}/.config/i3/config"
-    path_i3config = f"{LOCAL_REPO}/configs/i3/config"
+    path_i3config = f"{CONFIG_PATH}/i3/config"
     try:
         os.symlink(path_i3config, config_file_i3config)
         #  shutil.copy(path_i3, config_file_i3)
@@ -166,7 +166,7 @@ def fix_i3():
 
     config_path_i3status = f"{HOME}/.config/i3status"
     config_file_i3status = f"{config_path_i3status}/config"
-    file_i3status = f"{LOCAL_REPO}/configs/i3/i3status.conf"
+    file_i3status = f"{CONFIG_PATH}/i3/i3status.conf"
     try:
         if not os.path.exists(config_path_i3status):
             os.mkdir(config_path_i3status)
@@ -185,7 +185,7 @@ def fix_git():
     # Test and copy git config
     print("========== GIT Config ==========")
     config_file_git = f"{HOME}/.gitconfig"
-    path_git = f"{LOCAL_REPO}/configs/git/gitconfig"
+    path_git = f"{CONFIG_PATH}/git/gitconfig"
     pattern_git = f"\n[include]\npath = {path_git}"
     if os.path.exists(config_file_git):
         if find_in_file(config_file_git, pattern_git):
