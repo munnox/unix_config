@@ -399,8 +399,11 @@ nmap <leader>bls :ls<CR>
 nmap <leader>c :close<CR>
 
 nmap <leader>fw :write<CR>
-nmap <leader>fwq :wq<CR>
 nmap <leader>fu :update<CR>
+nmap <leader>fr :e %<CR>
+
+" REserved for me
+nmap <leader>rq :qa!<CR>
 
 
 " Permanent undo
@@ -435,6 +438,11 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+
+nnoremap <leader>rj <C-W><C-J>
+nnoremap <leader>rk <C-W><C-K>
+nnoremap <leader>rl <C-W><C-L>
+nnoremap <leader>rh <C-W><C-H>
 
 " Disable orignal arrow keys
 nnoremap <up> <nop>
