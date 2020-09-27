@@ -390,15 +390,16 @@ nmap <leader>bh :bprevious<CR>
 " " This replicates the idea of closing a tab
 nmap <leader>bq :bp <BAR> bd #<CR>
 nmap <leader>bq! :bp <BAR> bd! #<CR>
-"
-" " Show all open buffers and their status
-nmap <leader>bs :ls<CR>
 
 " Add a mapping since :b doesn't work for this
-nmap <leader>bs :sb<Space>
+" nmap <leader>bs :sb<Space>
+" " Show all open buffers and their status
 nmap <leader>bls :ls<CR>
 
 nmap <leader>c :close<CR>
+
+nmap <leader>fw :write<CR>
+nmap <leader>fu :update<CR>
 
 
 " Permanent undo
@@ -506,12 +507,17 @@ set ignorecase
 set number
 
 " Turning on and off relative numbers
-nmap <leader>rn :set relativenumber<CR>
-nmap <leader>nrn :set norelativenumber<CR>
+nmap <leader>orn :set relativenumber<CR>
+nmap <leader>onrn :set norelativenumber<CR>
 
 " Line wrap (number of cols)
 set wrap	    " wrap lines only visually
 set linebreak	    " wrap only at valid characters
+
+" Turning on and off wrapping
+nmap <leader>ow :set wrap<CR>
+nmap <leader>onw :set nowrap<CR>
+
 set textwidth=0	    " prevent vim from inserting linebreaks
 set wrapmargin=0    "   in newly entered text
 
