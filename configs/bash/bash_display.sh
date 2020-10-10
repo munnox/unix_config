@@ -10,6 +10,7 @@
 
 function brightness {
         echo "typical low 5000 10000"
+        echo "Current brightness $(cat /sys/class/backlight/intel_backlight/brightness)"
         echo "Max brightness $(cat /sys/class/backlight/intel_backlight/max_brightness)"
         echo $1 | sudo tee /sys/class/backlight/intel_backlight/brightness
 
