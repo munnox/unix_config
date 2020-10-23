@@ -13,6 +13,7 @@ function install_rust() {
 function install_alacritty {
     # Original source https://gist.github.com/Aaronmacaron/8a4e82ed0033290cb2e12d9df4e77efe
     #!/bin/bash
+    sudo snap install alacritty --edge --classic
 
     # This installs alacritty terminal on ubuntu (https://github.com/jwilm/alacritty)
     # You have to have rust/cargo installed for this to work
