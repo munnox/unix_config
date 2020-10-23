@@ -15,6 +15,8 @@ function install_kvm() {
     sudo adduser `id -un` kvm
 
     virsh list --all
+
+    sudo apt-get install virt-manager
 }
 
 
