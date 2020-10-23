@@ -18,6 +18,9 @@ for p in ${LOCALSCRIPTS[@]}; do
     source "$DIR/$p"
 done
 
+# If the cargo directry exists source it
+[ -s "~/.cargo/env" ] && \. "~/.cargo/env"  # This loads cargo for rust
+
 # source http://www.bigsoft.co.uk/blog/2008/04/11/configuring-ls_colors
 # > Below is a list of all the keys (that I know of!). Thanks to Bartman for his starter page.
 # > Key 	    | /etc/DIR_COLORS name  | 	Notes
@@ -61,5 +64,5 @@ export LS_COLORS
 # fi
 
 # disable the ctrl-s
-stty -ixon
+# stty -ixon
 
