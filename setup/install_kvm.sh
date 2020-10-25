@@ -17,6 +17,12 @@ function install_kvm() {
     virsh list --all
 
     sudo apt-get install virt-manager
+
+    # lsmod | grep 8021q
+
+    # enable nested vm's
+    echo "options kvm_intel nested=1" >> /etc/modprobe.d/kvm.conf
+
 }
 
 

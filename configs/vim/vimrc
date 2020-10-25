@@ -399,7 +399,7 @@ nmap <leader>bls :ls<CR>
 nmap <leader>c :close<CR>
 
 nmap <leader>fw :write<CR>
-nmap <leader>fwq :wq<CR>
+nmap <leader>fq :wq<CR>
 nmap <leader>fu :update<CR>
 nmap <leader>fr :e %<CR>
 
