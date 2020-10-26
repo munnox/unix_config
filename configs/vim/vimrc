@@ -48,24 +48,24 @@ Plug 'tmhedberg/SimpylFold'
 " Plug 'terryma/vim-multiple-cursors'
 " Plug 'tpope/vim-surround'
 
-" vim syntax highighting of vue
-Plug 'posva/vim-vue'
+" " vim syntax highighting of vue
+" Plug 'posva/vim-vue'
 
-" Vim syntax plugin
-" Plug 'hiphish/jinja.vim'
-Plug 'mitsuhiko/vim-jinja'
+" " Vim syntax plugin
+" " Plug 'hiphish/jinja.vim'
+" Plug 'mitsuhiko/vim-jinja'
 
-" Python helpers and info
-Plug 'davidhalter/jedi-vim'
+" " Python helpers and info
+" Plug 'davidhalter/jedi-vim'
 
-" vim-syntastic/syntastic.git
-Plug 'vim-syntastic/syntastic'
-" Toml help for toml for syntasic
-Plug 'cespare/vim-toml'
-" Yaml helper for yaml for syntasic
-Plug 'stephpy/vim-yaml'
-" Rust helpers with syntastic
-Plug 'rust-lang/rust.vim'
+" " vim-syntastic/syntastic.git
+" Plug 'vim-syntastic/syntastic'
+" " Toml help for toml for syntasic
+" Plug 'cespare/vim-toml'
+" " Yaml helper for yaml for syntasic
+" Plug 'stephpy/vim-yaml'
+" " Rust helpers with syntastic
+" Plug 'rust-lang/rust.vim'
 
 " " Code completion
 " Plug 'Valloric/YouCompleteMe'
@@ -152,8 +152,8 @@ let $RUST_SRC_PATH = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/
 " vim-syntastic/syntastic.git
 exec "source " . expand('<sfile>:p:h') . "/plugin_config_syntastic.vim"
 
-" COC completion
-exec "source " . expand('<sfile>:p:h') . "/plugin_config_coc.vim"
+" " COC completion
+" exec "source " . expand('<sfile>:p:h') . "/plugin_config_coc.vim"
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Color Schemes
@@ -214,6 +214,18 @@ nmap <leader>fr :e %<CR>
 " REserved for me
 nmap <leader>rq :qa!<CR>
 
+" Turning on and off relative numbers
+nmap <leader>orn :set relativenumber<CR>
+nmap <leader>onrn :set norelativenumber<CR>
+
+" Turning on and off wrapping
+nmap <leader>ow :set wrap<CR>
+nmap <leader>onw :set nowrap<CR>
+
+" tab size
+nmap <leader>8 :setlocal expandtab tabstop=8 shiftwidth=8 softtabstop=8<CR>
+nmap <leader>4 :setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4<CR>
+nmap <leader>2 :setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
 
 " Permanent undo
 set undodir=~/.vimdid
@@ -309,12 +321,8 @@ if has("autocmd")
     autocmd FileType javascript,htmljinja,jinja set tabstop=2 shiftwidth=2 softtabstop=2
     autocmd FileType rust set tabstop=2 shiftwidth=2 softtabstop=2
     autocmd FileType yaml set tabstop=2 shiftwidth=2 softtabstop=2
+    autocmd FileType vim set tabstop=2 shiftwidth=2 softtabstop=2
 endif
-
-" tab size
-nmap <leader>8 :setlocal expandtab tabstop=8 shiftwidth=8 softtabstop=8<CR>
-nmap <leader>4 :setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4<CR>
-nmap <leader>2 :setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
 
 " Height of the command bar
 set cmdheight=1
@@ -328,17 +336,9 @@ set ignorecase
 " Show linenumbers
 set number
 
-" Turning on and off relative numbers
-nmap <leader>orn :set relativenumber<CR>
-nmap <leader>onrn :set norelativenumber<CR>
-
 " Line wrap (number of cols)
 set wrap	    " wrap lines only visually
 set linebreak	    " wrap only at valid characters
-
-" Turning on and off wrapping
-nmap <leader>ow :set wrap<CR>
-nmap <leader>onw :set nowrap<CR>
 
 set textwidth=0	    " prevent vim from inserting linebreaks
 set wrapmargin=0    "   in newly entered text

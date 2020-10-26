@@ -1,7 +1,7 @@
 
 " NERD Tree setup
 nmap <leader>n :NERDTreeToggle<CR>
-autocmd vimenter * NERDTree
+" autocmd vimenter * NERDTree
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeShowHidden = 1
