@@ -7,4 +7,11 @@ function install_neovim() {
     # ./nvim.appimage
 }
 
+function install_python() {
+    sudo apt update
+    sudo apt upgrade
+    sudo apt install python3-dev python3-venv libffi-dev gcc libssl-dev git
+
+}
+
 
