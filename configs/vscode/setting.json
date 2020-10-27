@@ -28,6 +28,12 @@
         "**/vars/**/*.yml": "ansible",
         "**/inventory/*/*": "ansible"
     },
+    "vim.leader": "<space>",
+    "vim.useSystemClipboard": true,
+    "vim.easymotion": true,
+    "vim.hlsearch": true,
+    "vim.incsearch": true,
+    "vim.useCtrlKeys": true,
     "vim.normalModeKeyBindings": [
         // {
         //     "before": ["h"],
