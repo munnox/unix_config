@@ -149,8 +149,8 @@ let g:rust_clip_command = 'xclip -selection clipboard'
 let $RUST_SRC_PATH = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/rust/src"
 
 
-" vim-syntastic/syntastic.git
-exec "source " . expand('<sfile>:p:h') . "/plugin_config_syntastic.vim"
+" " vim-syntastic/syntastic.git
+" exec "source " . expand('<sfile>:p:h') . "/plugin_config_syntastic.vim"
 
 " " COC completion
 " exec "source " . expand('<sfile>:p:h') . "/plugin_config_coc.vim"
