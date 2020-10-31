@@ -10,6 +10,7 @@ Use config settings in python
 """
 
 import os
+
 #  import shutil
 import subprocess
 
@@ -51,6 +52,7 @@ def fix_bash():
             with open(config_path_bash, "a") as file_handle:
                 file_handle.write("\n{0}".format(bash_pattern))
             print(f"'{config_path_bash}' redirect added")
+
 
 def fix_xinit():
     """Install xwin config file"""
@@ -137,6 +139,23 @@ def fix_tmux():
         print(f"Tmux config.\nError type: ({type(error)}):\n{error}")
 
 
+def fix_alacritty():
+    """Install alacritty config file"""
+    # Test and copy Tmux config
+    print("========== ALACRITTY Config ==========")
+    config_file_alacritty = f"{HOME}/.config/alacritty/alacritty.yml"
+    path_alacritty = f"{CONFIG_PATH}/alacritty/alacritty.yml"
+    try:
+        os.symlink(path_alacritty, config_file_alacritty)
+        #  shutil.copy(path_alacritty, config_file_alacritty)
+        print(f"Copying alacritty config as cannot link to repo to:\n{path_alacritty}")
+    except FileExistsError as error:  # pylint: disable=broad-except
+        print(f"Already linked")
+
+    except Exception as error:  # pylint: disable=broad-except
+        print(f"alacritty config.\nError type: ({type(error)}):\n{error}")
+
+
 def fix_i3():
     """Install i3 config and i3 status env config file
 
@@ -204,5 +223,6 @@ if __name__ == "__main__":
     fix_xinit()
     fix_neovim()
     fix_tmux()
+    fix_alacritty()
     fix_i3()
     fix_git()

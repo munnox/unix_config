@@ -17,3 +17,6 @@ alias lsn='ls -alGHh'
 # fi
 
 alias gitshow='git log --decorate=short --oneline --graph'
+
+alias pybuildenv="python3 -m venv pyvenv"
+alias pyactivateenv="source pyvenv/bin/activate"
