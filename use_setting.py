@@ -10,14 +10,16 @@ Use config settings in python
 """
 
 import os
+import sys
 
 #  import shutil
 import subprocess
 
 HOME = os.getenv("HOME", None)
 PWD = os.path.abspath(".")
-LOCAL_REPO = f"{PWD}"
-print(LOCAL_REPO)
+#  LOCAL_REPO = f"{PWD}"
+LOCAL_REPO = os.path.dirname(os.path.abspath(sys.argv[0]))
+print(sys.argv, LOCAL_REPO)
 CONFIG_PATH = os.path.join(LOCAL_REPO, "configs")
 
 
@@ -218,6 +220,7 @@ def fix_git():
 
 
 if __name__ == "__main__":
+    print("Installing settings and config")
 
     fix_bash()
     fix_xinit()
