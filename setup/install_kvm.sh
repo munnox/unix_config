@@ -21,7 +21,8 @@ function install_kvm() {
     # lsmod | grep 8021q
 
     # enable nested vm's
-    echo "options kvm_intel nested=1" >> /etc/modprobe.d/kvm.conf
+    sudo touch /etc/modprobe.d/kvm.conf
+    echo "options kvm_intel nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
 
 }
 
