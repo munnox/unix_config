@@ -1,7 +1,9 @@
 FROM python:3.9
 
 # RUN apt-get update && apt-get install -y --no-install-recommends neovim curl git
-RUN apt-get update && apt-get install -y neovim curl git tmux
+RUN apt-get update && apt-get install -y neovim curl git tmux \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # COPY ../../ /repo/unix_config/
 RUN git clone https://github.com/munnox/unix_config /repo/unix_config
