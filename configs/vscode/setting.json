@@ -28,6 +28,11 @@
         "**/vars/**/*.yml": "ansible",
         "**/inventory/*/*": "ansible"
     },
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true
+    },
     "vim.leader": "<space>",
     "vim.useSystemClipboard": true,
     "vim.easymotion": true,
