@@ -97,16 +97,6 @@ def fix_neovim():
     config_path_neovim = f"{HOME}/.config/nvim/"
     config_file_neovim = f"{config_path_neovim}/init.vim"
 
-    if os.path.exists(config_path_neovim):
-        print(f"'{config_path_neovim}' folder exists")
-
-    else:
-        os.mkdir(config_path_neovim)
-
-    # Redirect neovim to the HOME directory vim config
-    with open(config_file_neovim, "w") as file_handle:
-        file_handle.write("source ~/.vimrc")
-
     # config_file_vim Test and copy vimrc
     print("========== VIM Config ==========")
     # Redirect the HOME vim config to the repo set
@@ -122,6 +112,20 @@ def fix_neovim():
         with open(config_file_vim, "w") as file_handle:
             file_handle.write(vim_pattern)
         print(f"'{config_file_vim}' file created and redirect to repo set")
+
+    if os.path.exists(config_path_neovim):
+        print(f"'{config_path_neovim}' folder exists")
+
+    else:
+        print(f"'{config_path_neovim}' folder does note exist and need creating")
+        # Will make all directories to ensure path is made
+        os.makedirs(config_path_neovim)
+        # os.mkdir(config_path_neovim)
+
+    # Redirect neovim to the HOME directory vim config
+    with open(config_file_neovim, "w") as file_handle:
+        file_handle.write("source ~/.vimrc")
+
 
 
 def fix_tmux():
