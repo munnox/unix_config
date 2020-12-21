@@ -138,7 +138,9 @@ exec "source " . expand('<sfile>:p:h') . "/plugin_config_nerdcommenter.vim"
 " nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gs :Gstatus<CR>
 if has("autocmd")
-  autocmd BufReadPost fugitive nnoremap <leader>gp :Git push<CR>
+  autocmd BufReadPost fugitive://* nnoremap <leader>gp :Git push<CR>
+  autocmd filetype fugitive nnoremap <leader>gp :Git push<CR>
+  autocmd BufReadPost fugitive://* set bufhidden=delete
 else
   nnoremap <leader>gp :Git push<CR>
 endif
