@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Gets the current path of this source file
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-DIR="$DIR"
+# unset RAM_ORG_PATH
+export RAM_ORG_PATH=${RAM_ORG_PATH:-$PATH}
 
 # Array of localscripts
 LOCALSCRIPTS=(
@@ -14,18 +13,29 @@ LOCALSCRIPTS=(
 ../bash/bash_lscolours.sh
 )
 
+# Gets the current path of this source file
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$DIR"
+
+# Source all file defined above
 for p in ${LOCALSCRIPTS[@]}; do
-    # echo "sourcing --> $p"
-    source "$DIR/$p"
+    if [ -s "$DIR/$p" ]; then
+        # echo "sourcing --> $p"
+        source "$DIR/$p"
+    else
+        echo "Error: $DIR/$p cannot be found"
+    fi
 done
 
 # If the cargo directry exists source it
 [ -s "~/.cargo/env" ] && \. "~/.cargo/env"  # This loads cargo for rust
 
-# NVM setup and config
+# Node NVM setup and config
 export NVM_DIR="$HOME/.ramnvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH="./:$RAM_ORG_PATH"
 
 # # git branch autocompletion
 # if [ -f ~/dotfiles/.git-completion.bash ]; then

@@ -56,7 +56,7 @@ Plug 'tmhedberg/SimpylFold'
 " Plug 'mitsuhiko/vim-jinja'
 
 " " Python helpers and info
-" Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim'
 
 " " vim-syntastic/syntastic.git
 " Plug 'vim-syntastic/syntastic'
@@ -71,7 +71,7 @@ Plug 'tmhedberg/SimpylFold'
 " Plug 'Valloric/YouCompleteMe'
 
 " " Semantic language support
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "
 " " Muliline editing
@@ -230,6 +230,10 @@ nmap <leader>2 :setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
 " Permanent undo
 set undodir=~/.vimdid
 set undofile
+
+" https://www.rockyourcode.com/vim-close-all-other-buffers/
+command Bd :up | %bd | e#
+" nnoremap <leader>bd :<c-u>up <bar> %bd <bar> e#<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Tab shortcuts
