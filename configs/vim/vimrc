@@ -136,8 +136,14 @@ exec "source " . expand('<sfile>:p:h') . "/plugin_config_nerdcommenter.vim"
 
 " GitFugitive
 " nnoremap <leader>ga :Git add %:p<CR><CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gp :Git push<CR>
+
+if has("autocmd")
+  autocmd BufReadPost fugitive nnoremap <leader>gp :Git push<CR>
+  autocmd BufReadPost fugitive nnoremap <leader>gs :Gstatus<CR>
+else
+  nnoremap <leader>gp :Git push<CR>
+  nnoremap <leader>gs :Gstatus<CR>
+endif
 
 " Rust Lang
 let g:rustfmt_autosave = 1
@@ -232,7 +238,7 @@ set undodir=~/.vimdid
 set undofile
 
 " https://www.rockyourcode.com/vim-close-all-other-buffers/
-command Bd :up | %bd | e#
+command! Bd :up | %bd | e#
 " nnoremap <leader>bd :<c-u>up <bar> %bd <bar> e#<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
