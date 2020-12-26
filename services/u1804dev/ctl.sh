@@ -10,7 +10,9 @@ case $1 in
     ;;
   run)
     docker run -it --rm \
+      -v "/etc/hosts:/etc/hosts" \
       -v "$HOME/.ssh/:/home/base/.ssh/" \
+      -v "$HOME/repo/:/home/base/repo/" \
       --name $CONTAINER_NAME \
       --hostname $CONTAINER_NAME \
       $IMAGE_NAME bash
