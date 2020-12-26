@@ -1,5 +1,9 @@
 #!/bin/bash
 
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
+
 # unset RAM_ORG_PATH
 export RAM_ORG_PATH=${RAM_ORG_PATH:-$PATH}
 
