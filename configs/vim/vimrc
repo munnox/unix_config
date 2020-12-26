@@ -164,7 +164,7 @@ let $RUST_SRC_PATH = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Color Schemes
 """"""""""""""""""""""""""""""""""""""""""""""""
-colorscheme molokai
+" colorscheme molokai
 " exec "source " . expand('<sfile>:p:h') . "/colors/dim.vim"
 
 highlight MatchParen cterm=bold ctermbg=none ctermfg=red
@@ -202,8 +202,13 @@ nmap <leader>bh :bprevious<CR>
 "
 " " Close the current buffer and move to the previous one
 " " This replicates the idea of closing a tab
-nmap <leader>bq :bp <BAR> bd #<CR>
+nmap <leader>bd :bp <BAR> bd #<CR>
 nmap <leader>bq! :bp <BAR> bd! #<CR>
+
+" https://www.rockyourcode.com/vim-close-all-other-buffers/
+command! Bd :up | %bd | e#
+" command! Bdd! :up | %bd! | e#
+" nnoremap <leader>bd :<c-u>up <bar> %bd <bar> e#<cr>
 
 " Add a mapping since :b doesn't work for this
 " nmap <leader>bs :sb<Space>
@@ -236,10 +241,6 @@ nmap <leader>2 :setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2<CR>
 " Permanent undo
 set undodir=~/.vimdid
 set undofile
-
-" https://www.rockyourcode.com/vim-close-all-other-buffers/
-command! Bd :up | %bd | e#
-" nnoremap <leader>bd :<c-u>up <bar> %bd <bar> e#<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""
 " Tab shortcuts

@@ -19,8 +19,19 @@ HOME = os.getenv("HOME", None)
 PWD = os.path.abspath(".")
 #  LOCAL_REPO = f"{PWD}"
 LOCAL_REPO = os.path.dirname(os.path.abspath(sys.argv[0]))
-print(sys.argv, LOCAL_REPO)
+print(f"Python arguments: {sys.argv},\nLocal repositry path: {LOCAL_REPO}")
 CONFIG_PATH = os.path.join(LOCAL_REPO, "configs")
+
+def main():
+    print("Installing settings and config\n")
+
+    fix_bash()
+    fix_xinit()
+    fix_neovim()
+    fix_tmux()
+    fix_alacritty()
+    fix_i3()
+    fix_git()
 
 
 def find_in_file(filename, pattern):
@@ -224,12 +235,4 @@ def fix_git():
 
 
 if __name__ == "__main__":
-    print("Installing settings and config")
-
-    fix_bash()
-    fix_xinit()
-    fix_neovim()
-    fix_tmux()
-    fix_alacritty()
-    fix_i3()
-    fix_git()
+    main()

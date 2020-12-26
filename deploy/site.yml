@@ -5,3 +5,6 @@
   tasks:
     - name: testing
       ping:
+    - name: debug hostvars
+      ansible.builtin.debug:
+        var: hostvars[inventory_hostname]
