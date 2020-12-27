@@ -8,8 +8,23 @@ case $1 in
   build)
     docker build . --tag $IMAGE_NAME
     ;;
+  d)
+    # run the image as a deamon with the terminal on
+    docker run -i -d \
+      -v "/etc/kolla:/etc/kolla" \
+      -v "/etc/hosts:/etc/hosts" \
+      -v "$HOME/.ssh/:/home/base/.ssh/" \
+      -v "$HOME/repo/:/home/base/repo/" \
+      --name ${2:-"$CONTAINER_NAME"} \
+      --hostname ${2:-"$CONTAINER_NAME"} \
+      $IMAGE_NAME
+    ;;
+  attach)
+    docker exec -it ${2:-"$CONTAINER_NAME"} bash
+    ;;
   run)
     docker run -it --rm \
+      -v "/etc/kolla:/etc/kolla" \
       -v "/etc/hosts:/etc/hosts" \
       -v "$HOME/.ssh/:/home/base/.ssh/" \
       -v "$HOME/repo/:/home/base/repo/" \
