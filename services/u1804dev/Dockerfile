@@ -22,7 +22,7 @@ USER base
 WORKDIR /home/base/
 
 RUN git clone https://github.com/munnox/unix_config /repo/unix_config 
-RUN cd /repo/unix_config/ && git pull && git checkout f94b9798d355cc245794fffe7aa5a4b167263518
+RUN cd /repo/unix_config/ && git pull && git checkout 5e7f38cf7f5596078fd3fcea977a9189bc7e964d
 
 
 RUN mkdir -p ~/.config/nvim
