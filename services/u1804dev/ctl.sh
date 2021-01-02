@@ -2,6 +2,44 @@
 
 IMAGE_NAME="u1804dev:1.0"
 CONTAINER_NAME="u1804dev"
+LOCAL_CONTAINER_NAME=${2:-"$CONTAINER_NAME"}
+
+run_as_daemon () {
+    # run the image as a deamon with the terminal on
+    echo "Running as demon $1"
+    docker run -i -d \
+      -v "/etc/kolla:/etc/kolla" \
+      -v "/etc/hosts:/etc/hosts" \
+      -v "$HOME/.ssh/:/home/base/.ssh/" \
+      -v "$HOME/repo/:/home/base/repo/" \
+      --name $1 \
+      --hostname $1 \
+      $IMAGE_NAME
+}
+
+one_shot () {
+    echo "Running as one shot"
+    docker run -it --rm \
+      -v "/etc/kolla:/etc/kolla" \
+      -v "/etc/hosts:/etc/hosts" \
+      -v "$HOME/.ssh/:/home/base/.ssh/" \
+      -v "$HOME/repo/:/home/base/repo/" \
+      # --name $CONTAINER_NAME \
+      # --hostname $CONTAINER_NAME \
+      $IMAGE_NAME bash
+}
+
+attach () {
+    echo "Attaching to container $1 bash"
+    docker exec -it $1 bash
+}
+
+clean () {
+    echo "Clean the container $1 bash"
+    docker exec -it $1 bash
+}
+
+echo "command $1"
 
 case $1 in
 
@@ -9,31 +47,22 @@ case $1 in
     docker build . --tag $IMAGE_NAME
     ;;
   d)
-    # run the image as a deamon with the terminal on
-    docker run -i -d \
-      -v "/etc/kolla:/etc/kolla" \
-      -v "/etc/hosts:/etc/hosts" \
-      -v "$HOME/.ssh/:/home/base/.ssh/" \
-      -v "$HOME/repo/:/home/base/repo/" \
-      --name ${2:-"$CONTAINER_NAME"} \
-      --hostname ${2:-"$CONTAINER_NAME"} \
-      $IMAGE_NAME
+    run_as_daemon $LOCAL_CONTAINER_NAME
     ;;
   attach)
-    docker exec -it ${2:-"$CONTAINER_NAME"} bash
+    attach $LOCAL_CONTAINER_NAME
     ;;
-  run)
-    docker run -it --rm \
-      -v "/etc/kolla:/etc/kolla" \
-      -v "/etc/hosts:/etc/hosts" \
-      -v "$HOME/.ssh/:/home/base/.ssh/" \
-      -v "$HOME/repo/:/home/base/repo/" \
-      --name $CONTAINER_NAME \
-      --hostname $CONTAINER_NAME \
-      $IMAGE_NAME bash
+  a)
+    attach $LOCAL_CONTAINER_NAME
+    ;;
+  os)
+    one_shot
     ;;
   clean)
-    docker image rm -f $IMAGE_NAME
+    clean $LOCAL_CONTAINER_NAME
+    ;;
+  rm)
+    docker rm -f $LOCAL_CONTAINER_NAME
     ;;
   *)
     echo "please specify cmd"

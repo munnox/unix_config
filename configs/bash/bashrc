@@ -15,11 +15,14 @@ LOCALSCRIPTS=(
 ../bash/bash_env.sh
 ../bash/bash_prompt.sh
 ../bash/bash_lscolours.sh
+../bash/bash_setup.sh
 )
 
 # Gets the current path of this source file
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DIR="$DIR"
+
+export PATH="./:$RAM_ORG_PATH"
 
 # Source all file defined above
 for p in ${LOCALSCRIPTS[@]}; do
@@ -39,7 +42,6 @@ export NVM_DIR="$HOME/.ramnvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export PATH="./:$RAM_ORG_PATH"
 
 # # git branch autocompletion
 # if [ -f ~/dotfiles/.git-completion.bash ]; then
