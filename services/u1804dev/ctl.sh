@@ -8,6 +8,7 @@ run_as_daemon () {
     # run the image as a deamon with the terminal on
     echo "Running as demon $1"
     docker run -i -d \
+      --network host \
       -v "/etc/kolla:/etc/kolla" \
       -v "/etc/hosts:/etc/hosts" \
       -v "$HOME/.ssh/:/home/base/.ssh/" \
