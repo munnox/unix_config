@@ -1,0 +1,180 @@
+#!/bin/sh
+
+image_name="ram/tsnew:0.1"
+container_name="twnew"
+local_container_name=${2:-"$container_name"}
+
+WIKINAME=base
+WIKIROOT="$(pwd)/wikis"
+WIKICREDS="$(pwd)/creds.csv"
+WIKIPATH=$WIKIROOT/$WIKINAME
+
+run_as_daemon () {
+    # run the image as a deamon with the terminal on
+    echo "running as demon $1"
+    # init 
+    if [ ! -d $WIKIPATH ]; then
+        echo "wiki doesn't exist so will be created" 
+        docker run --rm --name $1 \
+            -v $WIKIROOT:/opt/wiki \
+            -v $WIKICREDS:/opt/creds.csv \
+            $image_name \
+            tiddlywiki $WIKINAME --init empty
+        sudo mkdir $WIKIPATH/tiddlers/
+        cat << EOF | sudo tee $WIKIPATH/tiddlywiki.info
+{
+    "description": "Basic testing wiki",
+    "plugins": [
+        "tiddlywiki/internals",
+        "tiddlywiki/tiddlyweb",
+        "tiddlywiki/filesystem",
+        "tiddlywiki/pluginlibrary",
+        "tiddlywiki/codemirror",
+        "tiddlywiki/codemirror-closebrackets",
+        "tiddlywiki/codemirror-closetag",
+        "tiddlywiki/codemirror-autocomplete",
+        "tiddlywiki/codemirror-search-replace",
+        "tiddlywiki/codemirror-fullscreen-editing",
+        "tiddlywiki/codemirror-mode-xml",
+        "tiddlywiki/codemirror-mode-javascript",
+        "tiddlywiki/codemirror-mode-css",
+        "tiddlywiki/codemirror-mode-x-tiddlywiki",
+        "tiddlywiki/codemirror-mode-markdown",
+        "tiddlywiki/codemirror-keymap-sublime-text"
+    ],
+    "themes": [
+        "tiddlywiki/vanilla",
+        "tiddlywiki/snowwhite"
+    ],
+    "build": {
+        "index": [
+            "--rendertiddler",
+            "$:/core/save/all",
+            "index.html",
+            "text/plain"
+        ],
+        "empty": [
+            "--rendertiddler",
+            "$:/core/save/all",
+            "empty.html",
+            "text/plain",
+            "--rendertiddler",
+            "$:/core/save/all",
+            "empty.hta",
+            "text/plain"
+        ],
+        "externalimages": [
+            "--savetiddlers",
+            "[is[image]]",
+            "images",
+            "--setfield",
+            "[is[image]]",
+            "_canonical_uri",
+            "$:/core/templates/canonical-uri-external-image",
+            "text/plain",
+            "--setfield",
+            "[is[image]]",
+            "text",
+            "",
+            "text/plain",
+            "--rendertiddler",
+            "$:/core/save/all",
+            "externalimages.html",
+            "text/plain"
+        ],
+        "static": [
+            "--rendertiddler",
+            "$:/core/templates/static.template.html",
+            "static.html",
+            "text/plain",
+            "--rendertiddler",
+            "$:/core/templates/alltiddlers.template.html",
+            "alltiddlers.html",
+            "text/plain",
+            "--rendertiddlers",
+            "[!is[system]]",
+            "$:/core/templates/static.tiddler.html",
+            "static",
+            "text/plain",
+            "--rendertiddler",
+            "$:/core/templates/static.template.css",
+            "static/static.css",
+            "text/plain"
+        ]
+    }
+}
+EOF
+    fi
+    # run
+    echo "removal of container $1"
+    docker rm -f $1
+    echo "running new container $1"
+    docker run -d --name $1 \
+        -p 5000:5000 \
+        -e WIKINAME=$WIKINAME \
+        -v $WIKIROOT:/opt/wiki \
+        -v $WIKICREDS:/opt/wiki/creds.csv \
+        $image_name
+    # docker run -i -d \
+    #   --network host \
+    #   -v "/etc/kolla:/etc/kolla" \
+    #   -v "/etc/hosts:/etc/hosts" \
+    #   -v "$home/.ssh/:/home/base/.ssh/" \
+    #   -v "$home/repo/:/home/base/repo/" \
+    #   --name $1 \
+    #   --hostname $1 \
+    #   $image_name
+}
+
+one_shot () {
+    echo "running as one shot"
+    docker run -it --rm \
+      -p 5000:5000 \
+      -e WIKINAME=$WIKINAME \
+      -v $WIKIROOT:/opt/wiki \
+      -v $WIKICREDS:/opt/wiki/creds.csv \
+      # --name $container_name \
+      # --hostname $container_name \
+      $image_name sh
+}
+
+attach () {
+    echo "attaching to container $1 bash"
+    docker exec -it $1 sh
+}
+
+clean () {
+    echo "clean the container $1 bash"
+    docker image rm -f $image_name
+    sudo rm -rf wiki/
+}
+
+echo "command $1"
+
+case $1 in
+
+  build)
+    docker build . --rm --force-rm --tag $image_name
+    ;;
+  d)
+    run_as_daemon $local_container_name
+    ;;
+  attach)
+    attach $local_container_name
+    ;;
+  a)
+    attach $local_container_name
+    ;;
+  os)
+    one_shot
+    ;;
+  clean)
+    clean $local_container_name
+    ;;
+  rm)
+    docker rm -f $local_container_name
+    ;;
+  *)
+    echo "please specify cmd"
+    ;;
+esac
