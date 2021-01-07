@@ -29,6 +29,8 @@ run_as_daemon () {
         "tiddlywiki/tiddlyweb",
         "tiddlywiki/filesystem",
         "tiddlywiki/pluginlibrary",
+        "tiddlywiki/qrcode",
+        "tiddlywiki/share",
         "tiddlywiki/codemirror",
         "tiddlywiki/codemirror-closebrackets",
         "tiddlywiki/codemirror-closetag",
