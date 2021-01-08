@@ -26,7 +26,7 @@ def main():
     print("Installing settings and config\n")
 
     fix_bash()
-    fix_xinit()
+    #  fix_xinit()
     fix_neovim()
     fix_tmux()
     fix_alacritty()
