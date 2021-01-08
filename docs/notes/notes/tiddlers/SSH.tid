@@ -1,0 +1,82 @@
+created: 20201114101152321
+creator: robert
+modified: 20210108215814982
+modifier: robert
+tags: Linux Command Linux/Commands OpenSSL unix_config/Docs/Notes
+title: SSH
+tmap.id: 4111a0e5-c36d-4d7b-8920-08e9079896fd
+type: text/vnd.tiddlywiki
+
+! SSH Examples Config and Setup
+
+local port redirect and proxy
+
+```
+ssh -L <local_server>:<local_port>:<remote_port>:<remote_port> user@remote
+```
+
+Example
+
+```
+# For node red on test01
+ssh devops@test01 -L 0.0.0.0:1880:192.168.1.16:1880
+```
+
+[[SSH/Config]]
+
+try to connect to a server with a time out:
+
+`ssh -v -o ConnectTimeout=1 -o ConnectionAttempts=1 www.google.com`
+
+Connect and forward a port from the remote to a local port:
+
+`ssh -L 8080:loclhost:8080 ubuntu@example.com`
+
+or
+
+`ssh -L 3000:localhost:3000 -i "~/.ssh/AWS_Simple.pem" ubuntu@example.com`
+
+
+!! Port forwarding
+
+<<<
+https://www.techrepublic.com/article/how-to-use-local-and-remote-ssh-port-forwarding/
+
+* Local port forwarding - connections from an SSH client are forwarded, via the SSH server, to a destination server.
+* Remote port forwarding - connections from an SSH server are forwarded, via the SSH client, to a destination server
+* Dynamic port forwarding - connections from various programs are forwarded, via the SSH client to an SSH server, and finally to several destination server
+<<<
+
+!!! Local port forwarding
+
+Bring a server connection local
+
+```
+ssh -L 8080:www.slashdot.org:80 localhost
+```
+
+!!! Remote forwarding
+
+Push a local connection to a remote machine
+
+<<<
+https://www.techrepublic.com/article/how-to-use-local-and-remote-ssh-port-forwarding/
+
+Before you do this, however, you need to add an option to the /etc/ssh/sshd_config file. Open that file in your editor of choice and add the following line at the bottom:
+
+```
+GatewayPorts yes
+```
+
+Restart the SSH daemon with the command:
+
+```
+sudo systemctl restart sshd
+```
+
+To make this connection happen, you would need to have ssh access to the third-party's machine. Let's assume that machine is at IP address 192.168.1.192. To give them an encrypted tunnel for VNC access, you would issue the command:
+
+```
+ssh -R 5900:localhost:5900 USERNAME@192.168.1.192
+```
+<<<

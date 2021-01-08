@@ -4,7 +4,6 @@
         "tiddlywiki/internals",
         "tiddlywiki/tiddlyweb",
         "tiddlywiki/filesystem",
-        "tiddlywiki/pluginlibrary",
         "tiddlywiki/qrcode",
         "tiddlywiki/share",
         "tiddlywiki/codemirror",

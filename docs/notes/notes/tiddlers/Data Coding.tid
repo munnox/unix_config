@@ -1,0 +1,85 @@
+created: 20201231015725296
+creator: robert
+modified: 20210108215815007
+modifier: robert
+tags: unix_config/Docs/Notes Archival
+title: Data Coding
+type: text/vnd.tiddlywiki
+
+QR Code DataMatrix codes
+
+https://stackoverflow.com/questions/18486959/which-2d-barcode-has-the-highest-data-capacity-density#38705625
+
+Data Gyphs http://fileformats.archiveteam.org/wiki/DataGlyph
+
+QR Codes
+
+Capacity - https://blog.qr4.nl/page/QR-Code-Data-Capacity.aspx
+
+Version 40 30% error rate can hold 1273 bytes at 7% an hold 2953 bytes.
+
+Write
+https://pythonhosted.org/PyQRCode/moddoc.html
+
+```
+import pyqrcode
+import zlib
+import base64
+from pyqrcode import QRCode
+
+payload = "A" * (10)
+payload = payload[:-25]
+
+cmpstr = zlib.compress(payload.encode('utf-8'))
+uncmpstr = zlib.decompress(cmpstr)
+b64_str = base64.urlsafe_b64encode(cmpstr).decode()
+dest = f'http://example.com/?cb64={b64_str}'
+print("qrcode size: ", len(dest), "payload length: ", len(cmpstr), "\n", dest)
+
+myQR = QRCode(dest, error="L")
+myQR.show()
+myQR.png('qrcode1L.png', scale=1)
+
+myQR = QRCode(dest, error="Q")
+myQR.show()
+myQR.png('qrcode1Q.png', scale=1)
+
+myQR = QRCode(dest, error="H")
+myQR.show()
+myQR.png('qrcode1H.png', scale=1)
+```
+
+Read
+https://github.com/NaturalHistoryMuseum/pyzbar
+
+```
+# https://pypi.org/project/pyzbar/
+# Inspired from https://github.com/NaturalHistoryMuseum/pyzbar/blob/master/bounding_box_and_polygon.py
+
+#  sudo apt-get install libzbar0
+#  pip install pyzbar
+#  pip install pyzbar[scripts]
+
+import sys
+from PIL import Image, ImageDraw
+
+from pyzbar.pyzbar import decode
+
+
+image = Image.open(sys.argv[1]).convert('RGB')
+draw = ImageDraw.Draw(image)
+print(decode(image))
+for barcode in decode(image):
+    rect = barcode.rect
+    draw.rectangle(
+        (
+            (rect.left, rect.top),
+            (rect.left + rect.width, rect.top + rect.height)
+        ),
+        outline='#0080ff'
+    )
+
+    draw.polygon(barcode.polygon, outline='#e945ff')
+
+image.save('bounding_box_and_polygon.png')
+```

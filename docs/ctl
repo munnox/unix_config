@@ -15,9 +15,10 @@ run_as_daemon () {
     # init 
     if [ ! -d $WIKIPATH ]; then
         echo "wiki doesn't exist so will be created" 
-        docker run --rm --name $1 \
-            -v $WIKIROOT:/opt/wiki \
-            -v $WIKICREDS:/opt/creds.csv \
+        docker run --rm \
+            --name $1 \
+            --volume $WIKIROOT:/opt/wiki \
+            --volume $WIKICREDS:/opt/creds.csv \
             $image_name \
             tiddlywiki $WIKINAME --init empty
         sudo mkdir $WIKIPATH/tiddlers/
@@ -28,7 +29,6 @@ run_as_daemon () {
         "tiddlywiki/internals",
         "tiddlywiki/tiddlyweb",
         "tiddlywiki/filesystem",
-        "tiddlywiki/pluginlibrary",
         "tiddlywiki/qrcode",
         "tiddlywiki/share",
         "tiddlywiki/codemirror",
@@ -111,11 +111,12 @@ EOF
     echo "removal of container $1"
     docker rm -f $1
     echo "running new container $1"
-    docker run -d --name $1 \
+    docker run -d \
+        --name $1 \
         -p 5000:5000 \
         -e WIKINAME=$WIKINAME \
-        -v $WIKIROOT:/opt/wiki \
-        -v $WIKICREDS:/opt/wiki/creds.csv \
+        --volume $WIKIROOT:/opt/wiki \
+        --volume $WIKICREDS:/opt/wiki/creds.csv \
         $image_name
     # docker run -i -d \
     #   --network host \
@@ -131,12 +132,9 @@ EOF
 one_shot () {
     echo "running as one shot"
     docker run -it --rm \
-      -p 5000:5000 \
       -e WIKINAME=$WIKINAME \
-      -v $WIKIROOT:/opt/wiki \
-      -v $WIKICREDS:/opt/wiki/creds.csv \
-      # --name $container_name \
-      # --hostname $container_name \
+      --volume $WIKIROOT:/opt/wiki \
+      --volume $WIKICREDS:/opt/wiki/creds.csv \
       $image_name sh
 }
 
@@ -148,7 +146,7 @@ attach () {
 clean () {
     echo "clean the container $1 bash"
     docker image rm -f $image_name
-    sudo rm -rf wiki/
+    sudo rm -rf $WIKIROOT
 }
 
 echo "command $1"

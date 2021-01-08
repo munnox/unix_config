@@ -1,0 +1,112 @@
+created: 20201114140438614
+creator: robert
+modified: 20210108215814815
+modifier: robert
+tags: [[Linux KVM]] Install Setup unix_config/Docs/Notes
+title: Linux KVM/Install
+tmap.id: 2ab2637f-6360-4016-a970-2d721425da57
+type: text/vnd.tiddlywiki
+
+! Pre checks
+
+Sources:
+
+* https://help.ubuntu.com/community/KVM/Installation
+* https://www.cyberciti.biz/faq/how-to-install-kvm-on-centos-8-headless-server/
+
+```
+egrep -c '(vmx|svm)' /proc/cpuinfo
+kvm-ok
+lscpu | grep Virtualization
+```
+
+! Install
+
+[[Linux KVM/Install/Snippet/Ubuntu]]
+
+[[Linux KVM/Install/Snippet/CentOS]]
+
+Install the default network
+
+```
+sudo virsh net-info default
+sudo nmcli device
+sudos nmcli connection show
+```
+
+default network settings
+
+```
+# cat /var/lib/libvirt/dnsmasq/default.conf
+# egrep '^(dhcp-range|interface)' /var/lib/libvirt/dnsmasq/default.conf
+## use the ip command to verify info about the virbr0 ##
+# ip a show virbr0
+# ip r
+```
+
+check the loaded modules
+
+```
+lsmod | grep -i kvm
+```
+
+
+!! Allowing nested vm's
+
+```
+$ cat /sys/module/kvm_intel/parameters/nested
+Y
+```
+
+```
+virt-host-validate
+```
+
+!!! Intel
+
+```
+modprobe -r kvm_intel
+modprobe kvm_intel nested=1
+```
+
+to add nested vm permemently add `options kvm_intel nested=1`
+to `/etc/modprobe.d/kvm.conf`
+
+!!! AMD
+
+```
+modprobe -r kvm_amd
+modprobe kvm_amd nested=1
+```
+
+to add nested vm permemently add `options kvm_amd nested=1`
+to `/etc/modprobe.d/kvm.conf`
+
+Enable on guest
+
+set cpu to "host-model"
+
+or to:
+
+```
+<cpu mode='custom' match='exact' check='full'>
+    <model fallback='forbid'>SandyBridge-IBRS</model>
+    <vendor>Intel</vendor>
+    <feature policy='require' name='vme'/>
+    <feature policy='require' name='vmx'/>
+    <feature policy='require' name='pcid'/>
+    <feature policy='require' name='hypervisor'/>
+    <feature policy='require' name='arat'/>
+    <feature policy='require' name='tsc_adjust'/>
+    <feature policy='require' name='umip'/>
+    <feature policy='require' name='md-clear'/>
+    <feature policy='require' name='stibp'/>
+    <feature policy='require' name='arch-capabilities'/>
+    <feature policy='require' name='ssbd'/>
+    <feature policy='require' name='xsaveopt'/>
+    <feature policy='require' name='ibpb'/>
+    <feature policy='require' name='amd-ssbd'/>
+    <feature policy='require' name='skip-l1dfl-vmentry'/>
+    <feature policy='disable' name='aes'/>
+</cpu>
+```

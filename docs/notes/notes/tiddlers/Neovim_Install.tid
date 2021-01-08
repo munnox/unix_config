@@ -1,0 +1,26 @@
+created: 20201122123040906
+creator: robert
+modified: 20210108215815059
+modifier: robert
+tags: unix_config/Docs/Notes
+title: Neovim/Install
+tmap.id: 35af136e-eecc-4bf4-9985-5cf28c1c3305
+type: text/vnd.tiddlywiki
+
+Source https://dev.to/nabbisen/vim-neovim-on-centos-8-2b1d
+
+```
+# # prepare
+# dnf install curl
+# # for the sake of running appimage:
+# dnf install fuse-libs
+
+# get appimage binary
+sudo curl -o /usr/local/bin/nvim -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+# to get the nightly version instead:
+sudo curl -o /usr/local/bin/nvim -LO https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
+
+# # make it executable
+sudo chmod ugo+x /usr/local/bin/nvim
+sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
+```
