@@ -1,3 +1,14 @@
+created: 20210109100345984
+creator: robert
+modified: 20210109100648778
+modifier: robert
+tags: Snippet BASH unix_config/Docs/Notes
+title: Bash Tiddlywiki CTL script Example
+type: text/vnd.tiddlywiki
+
+
+
+```
 #!/bin/sh
 
 image_name="ram/tsnew:0.1"
@@ -30,6 +41,7 @@ run_as_daemon () {
         "tiddlywiki/tiddlyweb",
         "tiddlywiki/filesystem",
         "tiddlywiki/qrcode",
+        "tiddlywiki/share",
         "tiddlywiki/codemirror",
         "tiddlywiki/codemirror-closebrackets",
         "tiddlywiki/codemirror-closetag",
@@ -180,3 +192,5 @@ case $1 in
     echo "please specify cmd"
     ;;
 esac
+
+```

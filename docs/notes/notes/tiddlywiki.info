@@ -5,7 +5,6 @@
         "tiddlywiki/tiddlyweb",
         "tiddlywiki/filesystem",
         "tiddlywiki/qrcode",
-        "tiddlywiki/share",
         "tiddlywiki/codemirror",
         "tiddlywiki/codemirror-closebrackets",
         "tiddlywiki/codemirror-closetag",
