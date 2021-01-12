@@ -1,0 +1,62 @@
+created: 20201209073856139
+creator: robert
+modified: 20210112233122959
+modifier: robert
+tags: Kubernetes unix_config/Docs/Notes Ubuntu
+title: Kubernetes/Microk8s
+type: text/vnd.tiddlywiki
+
+Canonicals snap for Kubernetes
+
+* https://microk8s.io/
+* https://microk8s.io/docs
+
+Install
+
+Source https://microk8s.io/
+
+```
+sudo snap install microk8s --classic
+
+sudo usermod -aG microk8s $USER
+sudo chmod -f -R $USER ~/.kube
+```
+
+Check status
+
+```
+microk8s status --wait-ready
+```
+
+
+Turn on useful service
+
+```
+microk8s enable dashboard dns registry istio
+```
+
+Try
+
+microk8s kubectl get all --all-namespaces
+microk8s dashboard-proxy
+
+Further info
+
+Add-on: dashboard
+
+
+```
+microk8s enable dashboard
+token=$(microk8s kubectl -n kube-system get secret | grep default-token | cut -d " " -f1)
+microk8s kubectl -n kube-system describe secret $token
+
+microk8s kubectl port-forward -n kube-system service/kubernetes-dashboard 10443:443
+```
+
+
+
+
+
+
+
+

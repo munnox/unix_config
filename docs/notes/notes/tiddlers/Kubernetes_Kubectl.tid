@@ -1,0 +1,27 @@
+created: 20210111213343613
+creator: robert
+modified: 20210112233122975
+modifier: robert
+tags: unix_config/Docs/Notes Kubernetes
+title: Kubernetes/Kubectl
+type: text/vnd.tiddlywiki
+
+
+
+```
+kubectl api-resource
+kubectl api-versions
+kubectl explain pod.spec | less
+
+kubectl get pods
+kubectl get services
+
+kubectl create -f file.yaml
+kubectl delete -f file.yaml
+```
+
+
+```
+microk8s kubectl port-forward -n kube-system --address 0.0.0.0 service/kubernetes-dashboard 10443:443 
+```
+

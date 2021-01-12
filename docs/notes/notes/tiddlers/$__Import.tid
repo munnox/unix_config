@@ -1,16 +1,11 @@
-created: 20210109100648601
-modified: 20210109100648601
+created: 20210112233122870
+modified: 20210112233122870
 status: complete
 title: $:/Import
 type: text/vnd.tiddlywiki
 
 The following tiddlers were imported:
 
-# [[Data Coding]]
-# [[Docker/Install]]
-# [[Linux KVM/Install]]
-# [[Neovim/Install]]
-# [[SSH]]
-# [[unix_config/Docs/Notes]]
-# [[CouchDB]]
-# [[Bash Tiddlywiki CTL script Example]]
+# [[Bash Tiddlywiki CTL docker script Example]]
+# [[Kubernetes/Microk8s]]
+# [[Kubernetes/Kubectl]]
