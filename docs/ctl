@@ -1,13 +1,20 @@
 #!/bin/sh
 
-image_name="ram/tsnew:0.1"
-container_name="notes"
-local_container_name=${2:-"$container_name"}
+IMAGE_NAME="ram/tsnew:0.1"
+CONTAINER_NAME="notes"
+LOCAL_CONTAINER_NAME=${2:-"$CONTAINER_NAME"}
+LOCAL_PORT=${3:-"5000"}
 
-WIKINAME=$container_name
+WIKINAME=$LOCAL_CONTAINER_NAME
 WIKIROOT="$(pwd)/$WIKINAME"
 WIKICREDS="$(pwd)/creds.csv"
 WIKIPATH=$WIKIROOT/$WIKINAME
+
+echo "Note contiainer name: $WIKINAME"
+
+build () {
+    docker build . --no-cache --rm --force-rm --tag $IMAGE_NAME
+}
 
 run_as_daemon () {
     # run the image as a deamon with the terminal on
@@ -19,7 +26,7 @@ run_as_daemon () {
             --name $1 \
             --volume $WIKIROOT:/opt/wiki \
             --volume $WIKICREDS:/opt/creds.csv \
-            $image_name \
+            $IMAGE_NAME \
             tiddlywiki $WIKINAME --init empty
         sudo mkdir $WIKIPATH/tiddlers/
         cat << EOF | sudo tee $WIKIPATH/tiddlywiki.info
@@ -112,20 +119,11 @@ EOF
     echo "running new container $1"
     docker run -d \
         --name $1 \
-        -p 5000:5000 \
+        -p $LOCAL_PORT:5000 \
         -e WIKINAME=$WIKINAME \
         --volume $WIKIROOT:/opt/wiki \
         --volume $WIKICREDS:/opt/wiki/creds.csv \
-        $image_name
-    # docker run -i -d \
-    #   --network host \
-    #   -v "/etc/kolla:/etc/kolla" \
-    #   -v "/etc/hosts:/etc/hosts" \
-    #   -v "$home/.ssh/:/home/base/.ssh/" \
-    #   -v "$home/repo/:/home/base/repo/" \
-    #   --name $1 \
-    #   --hostname $1 \
-    #   $image_name
+        $IMAGE_NAME
 }
 
 one_shot () {
@@ -134,7 +132,7 @@ one_shot () {
       -e WIKINAME=$WIKINAME \
       --volume $WIKIROOT:/opt/wiki \
       --volume $WIKICREDS:/opt/wiki/creds.csv \
-      $image_name sh
+      $IMAGE_NAME sh
 }
 
 attach () {
@@ -143,9 +141,14 @@ attach () {
 }
 
 clean () {
-    echo "clean the container $1 bash"
-    docker image rm -f $image_name
+    echo "clean the container image and directory"
+    docker image rm -f $IMAGE_NAME
     sudo rm -rf $WIKIROOT
+}
+
+removal () {
+    echo "Remove the container"
+    docker rm -f $LOCAL_CONTAINER_NAME
 }
 
 echo "command $1"
@@ -153,16 +156,16 @@ echo "command $1"
 case $1 in
 
   build)
-    docker build . --no-cache --rm --force-rm --tag $image_name
+    build
     ;;
   d)
-    run_as_daemon $local_container_name
+    run_as_daemon $LOCAL_CONTAINER_NAME
     ;;
   attach)
-    attach $local_container_name
+    attach $LOCAL_CONTAINER_NAME
     ;;
   a)
-    attach $local_container_name
+    attach $LOCAL_CONTAINER_NAME
     ;;
   os)
     one_shot
@@ -171,10 +174,10 @@ case $1 in
     one_shot
     ;;
   clean)
-    clean $local_container_name
+    clean $LOCAL_CONTAINER_NAME
     ;;
   rm)
-    docker rm -f $local_container_name
+    removal
     ;;
   *)
     echo "please specify cmd"
