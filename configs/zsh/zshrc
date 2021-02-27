@@ -1,0 +1,49 @@
+# Basic zsh config script
+# Pull basic from mindriot101
+# Use powerline
+USE_POWERLINE="true"
+# Source manjaro-zsh-configuration
+if [[ -e /usr/share/zsh/manjaro-zsh-config ]]; then
+  source /usr/share/zsh/manjaro-zsh-config
+fi
+# Use manjaro zsh prompt
+if [[ -e /usr/share/zsh/manjaro-zsh-prompt ]]; then
+  source /usr/share/zsh/manjaro-zsh-prompt
+fi
+
+export LANG="en_GB.UTF-8"
+export LC_ALL="en_GB.UTF-8"
+export LC_CTYPE="en_GB.UTF-8"
+
+export PATH=${HOME}/.bin:/usr/local/bin:${PATH}:${HOME}/bin
+fpath=($HOME/.zsh/func $HOME/.zsh/completion $fpath)
+typeset -U fpath
+
+# Report the time taken for any long running command
+REPORTTIME=10
+
+# Disable Ctrl-s freezing the terminal
+stty stop undef
+
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=$HISTSIZE
+
+# Set up fzf
+export FZF_DEFAULT_OPTS="--color dark --tac --ansi --no-mouse --tabstop 4 --inline-info --tiebreak=begin,length --bind alt-k:preview-half-page-up,alt-j:preview-half-page-down"
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,venv,node_modules}/*" 2> /dev/null'
+export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
+export MANPATH=${MANPATH}:${HOME}/.fzf/man
+
+alias ll="ls -al --color=auto"
+alias vim="nvim"
+alias g="git"
+
+# if the cargo directry exists source it
+[ -s "~/.cargo/env" ] && \. "~/.cargo/env"  # this loads cargo for rust
+
+# node nvm setup and config
+export nvm_dir="$home/.ramnvm"
+[ -s "$nvm_dir/nvm.sh" ] && \. "$nvm_dir/nvm.sh"  # this loads nvm
+[ -s "$nvm_dir/bash_completion" ] && \. "$nvm_dir/bash_completion"  # this loads nvm bash_completion
+

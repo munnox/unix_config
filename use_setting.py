@@ -26,6 +26,7 @@ def main():
     print("Installing settings and config\n")
 
     fix_bash()
+    fix_zsh()
     #  fix_xinit()
     fix_neovim()
     fix_tmux()
@@ -65,6 +66,27 @@ def fix_bash():
             with open(config_path_bash, "a") as file_handle:
                 file_handle.write("\n{0}".format(bash_pattern))
             print(f"'{config_path_bash}' redirect added")
+
+def fix_zsh():
+    """Install zsh config file"""
+    # Test and copy zsh config
+    print("========== zsh Config ==========")
+    zsh_pattern = f"source {CONFIG_PATH}/zsh/zshrc"
+    config_path_zsh = f"{HOME}/.zshrc"
+
+    if os.path.exists(config_path_zsh):
+        print(f"'{config_path_zsh}' exists looking to append")
+        if find_in_file(config_path_zsh, zsh_pattern):
+            print(f"'{config_path_zsh}' redirect exists continuing")
+        else:
+            with open(config_path_zsh, "a") as file_handle:
+                file_handle.write("\n{0}".format(zsh_pattern))
+            print(f"'{config_path_zsh}' redirect added")
+    else:
+        with open(config_path_zsh, "w") as file_handle:
+            file_handle.write("\n{0}".format(zsh_pattern))
+        print(f"'{config_path_zsh}' redirect added")
+        
 
 
 def fix_xinit():
