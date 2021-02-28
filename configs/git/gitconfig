@@ -23,12 +23,12 @@
 #
 
 [core]
-  editor = /usr/bin/vim
+  editor = vim
   # editor = code --wait
   # editor = sublime -n -w
 [user]
   name = Robert Munnoch
-  email = munnox@hotmail.com
+  email = robert@unix_config.git
 [include]
   path = git_diff.ini
 [push]
