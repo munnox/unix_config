@@ -18,29 +18,27 @@ function setup_remove_docker() {
 
 function setup_install_u1804_dockerce() {
     sudo apt-get update
-    sudo apt-get install \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        gnupg2 \
-        software-properties-common
+    sudo apt-get upgrade -y
+    sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-    sudo apt-key fingerprint 0EBFCD88
-
-    # Should be "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
-    echo "Should be \"9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88\""
+    # The finger print should be "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
+    # the following checks this and returns if wrong
+    (sudo apt-key fingerprint 0EBFCD88 | grep "9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88"
+    if [ "$?" -eq 0 ]; then
+        echo "Fingerprint OK to continue"
+    else
+        echo "Failed fingerprint"
+        return
+    fi)
 
     sudo add-apt-repository \
-       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-	$(lsb_release -cs) stable"
+       "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
     sudo apt-get update
-
-    sudo apt-get install docker-ce docker-ce-cli containerd.io
-
-
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose
+    sudo usermod -aG docker $USER
 }
 
 function setup_install_pi_dockerce() {
@@ -54,10 +52,15 @@ function setup_install_pi_dockerce() {
 
     curl -fsSL https://download.docker.com/linux/raspbian/gpg | sudo apt-key add -
 
-    sudo apt-key fingerprint 0EBFCD88
-
-    # Should be "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
-    echo "Should be \"9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88\""
+    # The finger print should be "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
+    # the following checks this and returns if wrong
+    (sudo apt-key fingerprint 0EBFCD88 | grep "9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88"
+    if [ "$?" -eq 0 ]; then
+        echo "Fingerprint OK to continue"
+    else
+        echo "Failed fingerprint"
+        return
+    fi)
 
     # or armhf , stretch
     sudo add-apt-repository \
@@ -65,10 +68,8 @@ function setup_install_pi_dockerce() {
 	$(lsb_release -cs) stable"
 
     sudo apt-get update
-
-    sudo apt-get install docker-ce docker-ce-cli containerd.io
-
-
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
+    sudo usermod -aG docker $USER
 }
 
 
