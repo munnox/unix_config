@@ -40,6 +40,7 @@
         NODE_JS_VERSION=v14.15.3
         NODE_JS_DISTRO=linux-x64
         NODE_JS_NAME=\"node-$NODE_JS_VERSION-$NODE_JS_DISTRO\"
+        NODE_JS_PATH="/usr/local/lib/nodejs/$NODE_JS_NAME"
         curl https://nodejs.org/dist/$NODE_JS_VERSION/$NODE_JS_NAME.tar.xz --output $NODE_JS_NAME.tar.xz
         sudo mkdir -p /usr/local/lib/nodejs
         sudo tar -xJvf $NODE_JS_NAME.tar.xz -C /usr/local/lib/nodejs
@@ -47,14 +48,6 @@
         "
       args:
         creates: /usr/local/lib/nodejs/node-v14.15.3-linux-x64/bin/node
-
-    # NODE_JS_PATH="/usr/local/lib/nodejs/$NODE_JS_NAME"
-
-    # # set PATH so it includes user's private bin if it exists
-    # if [ -d "$NODE_JS_PATH/bin" ] ; then
-    #     NODE_JS_INSTALLED=1
-    #     PATH="$NODE_JS_PATH/bin:$PATH"
-    # fi
 
     # Setup Bash
     - name: test bash
