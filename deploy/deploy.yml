@@ -27,6 +27,8 @@
         sudo rm /usr/local/bin/vim
         sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
         "
+      args:
+        creates: /usr/local/bin/nvim
 
 
     # Install NodeJS
@@ -43,6 +45,8 @@
         sudo tar -xJvf $NODE_JS_NAME.tar.xz -C /usr/local/lib/nodejs
         rm $NODE_JS_NAME.tar.xz
         "
+      args:
+        creates: /usr/local/lib/nodejs/node-v14.15.3-linux-x64/bin/node
 
     # NODE_JS_PATH="/usr/local/lib/nodejs/$NODE_JS_NAME"
 
