@@ -1,0 +1,18 @@
+---
+
+- name: config deploy
+  hosts: localhost
+  # gather_subset: "!all"
+  tasks:
+    - name: testing
+      ping:
+    - name: setup
+      setup:
+        filter: network
+        gather_subset: network
+    - name: debug hostvars
+      ansible.builtin.debug:
+        var: inventory_hostname
+    - name: debug hostvars
+      ansible.builtin.debug:
+        var: hostvars[inventory_hostname]

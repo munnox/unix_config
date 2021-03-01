@@ -22,6 +22,7 @@ LOCAL_REPO = os.path.dirname(os.path.abspath(sys.argv[0]))
 print(f"Python arguments: {sys.argv},\nLocal repositry path: {LOCAL_REPO}")
 CONFIG_PATH = os.path.join(LOCAL_REPO, "configs")
 
+
 def main():
     print("Installing settings and config\n")
 
@@ -67,6 +68,7 @@ def fix_bash():
                 file_handle.write("\n{0}".format(bash_pattern))
             print(f"'{config_path_bash}' redirect added")
 
+
 def fix_zsh():
     """Install zsh config file"""
     # Test and copy zsh config
@@ -86,7 +88,6 @@ def fix_zsh():
         with open(config_path_zsh, "w") as file_handle:
             file_handle.write("\n{0}".format(zsh_pattern))
         print(f"'{config_path_zsh}' redirect added")
-        
 
 
 def fix_xinit():
@@ -158,7 +159,6 @@ def fix_neovim():
     # Redirect neovim to the HOME directory vim config
     with open(config_file_neovim, "w") as file_handle:
         file_handle.write("source ~/.vimrc")
-
 
 
 def fix_tmux():
