@@ -1,11 +1,10 @@
 created: 20210108230624626
 creator: robert
-modified: 20210109100648773
+modified: 20210301215727027
 modifier: robert
-tags: unix_config/Docs/Notes
+tags: unix_config/Docs/Notes ContainerisedService [[Document Database]]
 title: CouchDB
 type: text/vnd.tiddlywiki
-
 
 Documentation
 
@@ -15,7 +14,7 @@ Fauxton - https://docs.couchdb.org/en/3.1.1/fauxton/install.html
 
 http://localhost:5984/_utils/
 
-Mango search
+!! Mango search
 
 ```
 {
@@ -29,18 +28,58 @@ Mango search
 
 Will find a case insensitive regex field
 
-Docker
+!! API
 
-https://hub.docker.com/_/couchdb/
+Python - https://github.com/cloudant/python-cloudant
+
+!!! curl
+
+https://docs.couchdb.org/en/stable/intro/curl.html
+
+Get a uuid from the server
+
+`curl -H 'Content-Type: application/json' http://127.0.0.1:5984/_uuids`
+
+create database "demo"
+
+`curl -X PUT http://user:pass@127.0.0.1:5984/demo`
+
+create document
 
 ```
-docker run -d --name my-couchdb -p 5984:5984 couchdb:3.1.1
-docker run -d \
-  -p 5984:5984 \
-  -e COUCHDB_USER=admin \
-  -e COUCHDB_PASSWORD=password \
-  -v $(pwd)/couchdb/etc:/opt/couchdb/etc/local.d \
-  -v $(pwd)/couchdb/data:/opt/couchdb/data \
-  --name myc1 \
-  couchdb:3.1.1
+curl -H 'Content-Type: application/json' \
+            -X POST http://user:pass@127.0.0.1:5984/demo \
+            -d '{"company": "Example, Inc."}'
+{"ok":true,"id":"8843faaf0b831d364278331bc3001bd8",
+ "rev":"1-33b9fbce46930280dab37d672bbc8bb9"}
 ```
+
+```
+curl -X GET http://user:pass@127.0.0.1:5984/demo/8843faaf0b831d364278331bc3001bd8
+{"_id":"8843faaf0b831d364278331bc3001bd8",
+ "_rev":"1-33b9fbce46930280dab37d672bbc8bb9",
+ "company":"Example, Inc."}
+```
+
+Put an attachment
+
+```
+curl -X PUT -d arg=val -d arg2=val2 localhost:8080
+curl -X PUT -H "Content-Type: application/json" -d '{"key1":"value"}' "YOUR_URI"
+
+curl -X PUT "http://dockerplay:5984/test_general
+/service_backup%3A32d2cbf431220c6dc1bdda813700092f/netbox_2021_02_20.tar.gz" -F 'file=@./netbox.tar.gz' -H "If-Match: 10-1be37a97db593fea5b9e327fb46dd688" -H "Content-Type: application/gzip"
+
+curl -X PUT "http://dockerplay:5984/test_general/service_backup%3A32d2cbf431220c6dc1bdda813700092f/netbox_2021_02_20.tar.gz" --data-binary @./netbox.tar.gz -H "If-Match: 13-6a764c95952654c32b78033b374e6ae7" -H "Content-Type: application/gzip"
+
+```
+
+Compact the database
+
+```
+curl -H "Content-Type: application/json" -X POST http://localhost:5984/test_general/_compact
+```
+
+[[CouchDB/Install/Docker]]
+
+[[CouchDB/Config/Example/Config 2018_03_01]]

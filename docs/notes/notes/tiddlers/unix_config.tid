@@ -1,0 +1,13 @@
+created: 20201221003242176
+creator: robert
+modified: 20210301215727508
+modifier: robert
+tags: unix_config/Docs/Notes
+title: unix_config
+type: text/vnd.tiddlywiki
+
+Config repo for seting up a unix environment
+
+* SSH clone local - `git@munnoxtech.com:robert/unix_config.git`
+* https clone github - https://github.com/munnox/unix_config.git/
+* SSH git hub `git@github.com:munnox/unix_config.git`

@@ -1,4 +1,6 @@
 #!/bin/sh
+# ctl build
+# ctl d notes
 
 IMAGE_NAME="ram/tsnew:0.1"
 CONTAINER_NAME="notes"

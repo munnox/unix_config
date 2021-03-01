@@ -1,0 +1,95 @@
+created: 20210115065753951
+creator: robert
+modified: 20210301215727500
+modifier: robert
+tags: QRCode unix_config/Docs/Notes
+title: QRCode/Example/Python
+type: text/vnd.tiddlywiki
+
+Environment
+
+`Pipfile`
+
+```
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pillow = "*"
+pyzbar = "*"
+pyqrcode = "*"
+pypng = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+```
+
+Write
+Source - https://pythonhosted.org/PyQRCode/moddoc.html
+
+```
+import pyqrcode
+import zlib
+import base64
+from pyqrcode import QRCode
+
+payload = "A" * (10)
+payload = payload[:-25]
+
+cmpstr = zlib.compress(payload.encode('utf-8'))
+uncmpstr = zlib.decompress(cmpstr)
+b64_str = base64.urlsafe_b64encode(cmpstr).decode()
+dest = f'http://example.com/?cb64={b64_str}'
+print("qrcode size: ", len(dest), "payload length: ", len(cmpstr), "\n", dest)
+
+myQR = QRCode(dest, error="L")
+myQR.show()
+myQR.png('qrcode1L.png', scale=1)
+
+myQR = QRCode(dest, error="Q")
+myQR.show()
+myQR.png('qrcode1Q.png', scale=1)
+
+myQR = QRCode(dest, error="H")
+myQR.show()
+myQR.png('qrcode1H.png', scale=1)
+```
+
+Read
+Source - https://github.com/NaturalHistoryMuseum/pyzbar
+
+```
+# https://pypi.org/project/pyzbar/
+# Inspired from https://github.com/NaturalHistoryMuseum/pyzbar/blob/master/bounding_box_and_polygon.py
+
+#  sudo apt-get install libzbar0
+#  pip install pyzbar
+#  pip install pyzbar[scripts]
+
+import sys
+from PIL import Image, ImageDraw
+
+from pyzbar.pyzbar import decode
+
+
+image = Image.open(sys.argv[1]).convert('RGB')
+draw = ImageDraw.Draw(image)
+print(decode(image))
+for barcode in decode(image):
+    rect = barcode.rect
+    draw.rectangle(
+        (
+            (rect.left, rect.top),
+            (rect.left + rect.width, rect.top + rect.height)
+        ),
+        outline='#0080ff'
+    )
+
+    draw.polygon(barcode.polygon, outline='#e945ff')
+
+image.save('bounding_box_and_polygon.png')
+```

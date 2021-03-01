@@ -1,0 +1,169 @@
+created: 20210206233159301
+creator: robert
+modified: 20210301215727491
+modifier: robert
+tags: QRCode unix_config/Docs/Notes
+title: QRCode/Example/HTML_encode
+type: text/vnd.tiddlywiki
+
+https://davidshimjs.github.io/qrcodejs/
+
+Setup within an iframe
+
+<iframe style="width: 100%; height: 800px" srcdoc="""
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.js"></script>
+    <style>
+      img {
+        width: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <input type=number v-model.number="section_length" min=1>
+				Encode?: <input type=checkbox v-model="encodedflag">
+        <textarea v-model="text" cols="40" rows="5"></textarea>
+      </div>
+      Text length: {{ text.length }} encodedtext length: {{ encodedtext.length }}
+      Number sections: {{ sections.length }} @ {{ section_index }}
+      <button v-on:click="section_index--">
+        previous
+      </button>
+      <button v-on:click="section_index++">
+        next
+      </button>
+      <qrcode v-bind:section="current_section"></qrcode>
+      <div v-if="sections.length > 0">
+        <div v-for="section in sections" style="margin: 10px;">
+          Section : {{ section }}
+          <!--<qrcode v-bind:section="section"></qrcode>-->
+        </div>
+        Decoding<br/>
+			  <textarea v-model="result" cols="40" rows="5"></textarea>
+				<pre>{{ decodedtext }}</pre>
+      </div>
+
+    </div>
+    <script type="text/javascript">
+      function splittext(section_length, text) {
+        var total_length = text.length;
+        var number_of_sections = Math.ceil(total_length / section_length);
+        var sections = [];
+        for (var i = 0; i < number_of_sections; i++) {
+          var start = section_length * i,
+					    end = start + section_length + 0;
+          var section = text.slice(start, end);
+					console.log(`Start ${start}, End ${end} Total length: ${total_length} section length: ${section.length}`);
+          sections.push(section);
+        }
+        return sections;
+      }
+			
+			function utf8_to_b64( str ) {
+				return window.btoa(unescape(encodeURIComponent( str )));
+			}
+
+			function b64_to_utf8( str ) {
+				return decodeURIComponent(escape(window.atob( str )));
+			}
+
+      Vue.component('qrcode', {
+        template: `
+          <div style="margin: 20px;">
+            <div ref="test" style="width: 100px"></div>
+            Section: {{ section }}
+          </div>
+        `,
+        props: ["section"],
+        data: function() {
+          return {
+            count: 0,
+            //section: "testsection"
+          }
+        },
+        updated: function() {
+          console.log(this.$refs.test);
+          this.safe(this.section);
+        },
+        methods: {
+          makeqr: function(text) {
+					  console.log(`Draw QR code ${text.length}`);
+            this.$refs.test.innerHTML = "";
+            //if (this.qrcode === undefined) {
+              this.qrcode = new QRCode(
+                this.$refs.test, {
+                  text: text,
+                  width: 1024,
+                  height: 1024,
+                  colorDark: "#000000",
+                  colorLight: "#ffffff",
+                  correctLevel: QRCode.CorrectLevel.H
+                }
+              );
+            // }
+            // else {
+            //   this.qrcode.makeCode(text);
+            // }     
+            return text;
+          },
+          safe: function(text) {
+            if (this.$refs.test !== undefined) {
+              return this.makeqr(text);
+            } else {
+              return null;
+            }
+          }
+        },
+        computed: {
+          code: function() {
+            return this.safe(this.section);
+          }
+        }
+      })
+
+      var app = new Vue({
+        el: '#app',
+        data: {
+          message: 'Hello Vue!',
+          text: "testing",
+					result: "",
+          section_length: 100,
+          section_index: 0,
+					encodedflag: false,
+        },
+        computed: {
+					encodedtext: function() {
+						return utf8_to_b64(this.text);
+					},
+          sections: function() {
+					  var section_length = this.section_length;
+						if (this.section_length < 2) {
+						  var section_length = 2;
+						}
+						var innertext = this.text;
+						if (this.encodedflag) {
+							innertext = this.encodedtext
+						}
+            return splittext(
+              section_length,
+              innertext
+            );
+          },
+          current_section: function() {
+            return this.sections[this.section_index];
+          },
+					decodedtext: function() {
+						var concat = this.result.replace(/(?:\r\n|\r|\n)/g, '');
+						return b64_to_utf8(concat);
+					}
+        }
+      })
+    </script>
+  </body>
+</html>
+"""/>

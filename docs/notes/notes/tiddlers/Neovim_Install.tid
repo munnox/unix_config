@@ -1,11 +1,18 @@
 created: 20201122123040906
 creator: robert
-modified: 20210109100648758
+modified: 20210301215727066
 modifier: robert
 tags: unix_config/Docs/Notes
 title: Neovim/Install
 tmap.id: 35af136e-eecc-4bf4-9985-5cf28c1c3305
 type: text/vnd.tiddlywiki
+
+```
+# get appimage binary
+sudo curl -o /usr/local/bin/nvim -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+sudo chmod ugo+x /usr/local/bin/nvim
+sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
+```
 
 Source https://dev.to/nabbisen/vim-neovim-on-centos-8-2b1d
 

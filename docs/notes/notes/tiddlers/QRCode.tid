@@ -1,0 +1,21 @@
+created: 20210115065530936
+creator: robert
+modified: 20210301215727462
+modifier: robert
+tags: [[Data Coding]] unix_config/Docs/Notes
+title: QRCode
+type: text/vnd.tiddlywiki
+
+QR Codes
+
+Capacity - https://blog.qr4.nl/page/QR-Code-Data-Capacity.aspx
+
+Version 40 30% error rate can hold 1273 bytes at 7% an hold 2953 bytes.
+
+useful javascript functions to move between uri and plain text
+
+encodeURIComponent
+decodeURIComponent
+
+* [[QRCode/Example/Python]]
+* [[QRCode/Example/HTML]]

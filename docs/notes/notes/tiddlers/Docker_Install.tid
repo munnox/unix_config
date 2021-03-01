@@ -1,6 +1,6 @@
 created: 20201204163748498
 creator: robert
-modified: 20210109100648748
+modified: 20210301215727040
 modifier: robert
 tags: Docker Install unix_config/Docs/Notes
 title: Docker/Install
@@ -8,86 +8,31 @@ type: text/vnd.tiddlywiki
 
 https://docs.docker.com/engine/install/ubuntu/
 
-for a quick build use `curl https://raw.githubusercontent.com/docker/docker-install/master/install.sh > get-docker.sh`
-bash [[get-docker.sh]]
+for a quick build use the following there is a copy of the get-docker in [[unix_config]]:
+
+```
+curl https://raw.githubusercontent.com/docker/docker-install/master/install.sh > get-docker.sh
+bash get-docker.sh
+```
 
 ```
 sudo usermod -aG docker $USER
 ```
 
-install docker
+install docker there is a setup script in [[unix_config]] unix_config/configs/bash/bash_setup.sh
+
+[[Docker/Install/Snippet/Ubuntu]]
+
+[[Docker/Install/Snippet/RaspberryPI]]
+
+Other Helper functions
 
 ```
-#!/bin/bash
-
-# =========================== DOCKER =============================
-# Source <https://docs.docker.com/install/linux/docker-ce/ubuntu/>
-# Install Docker CE on linux
-#
-# Covenience script
-# curl -fsSL https://get.docker.com -o get-docker.sh
-
 function setup_test_docker() {
     sudo docker run hello-world
 }
 
 function setup_remove_docker() {
     sudo apt-get remove docker docker-engine docker.io containerd runc
-}
-
-function setup_install_u1804_dockerce() {
-    sudo apt-get update
-    sudo apt-get install \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        gnupg2 \
-        software-properties-common
-
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-    sudo apt-key fingerprint 0EBFCD88
-
-    # Should be "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
-    echo "Should be \"9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88\""
-
-    sudo add-apt-repository \
-       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-	$(lsb_release -cs) stable"
-
-    sudo apt-get update
-
-    sudo apt-get install docker-ce docker-ce-cli containerd.io
-
-   sudo usermod -aG docker $USER
-
-}
-
-function setup_install_pi_dockerce() {
-    sudo apt-get update
-    sudo apt-get install \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        gnupg2 \
-        software-properties-common
-
-    curl -fsSL https://download.docker.com/linux/raspbian/gpg | sudo apt-key add -
-
-    sudo apt-key fingerprint 0EBFCD88
-
-    # Should be "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
-    echo "Should be \"9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88\""
-
-    # or armhf , stretch
-    sudo add-apt-repository \
-       "deb [arch=arm64] https://download.docker.com/linux/raspbian \
-	$(lsb_release -cs) stable"
-
-    sudo apt-get update
-
-    sudo apt-get install docker-ce docker-ce-cli containerd.io
-
-
 }
 ```

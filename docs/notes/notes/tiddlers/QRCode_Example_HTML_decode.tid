@@ -1,0 +1,44 @@
+created: 20210206233001458
+creator: robert
+modified: 20210301215727483
+modifier: robert
+tags: QRCode unix_config/Docs/Notes
+title: QRCode/Example/HTML_decode
+type: text/vnd.tiddlywiki
+
+https://davidshimjs.github.io/qrcodejs/
+
+Setup within an iframe
+
+<iframe style="width: 100%; height: 400px" srcdoc="""
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  </head>
+  <body>
+    <div id="app">
+			Decoding<br/>
+			<textarea v-model="result" cols="40" rows="5"></textarea>
+			<pre>{{ decodedtext }}</pre>
+    </div>
+    <script type="text/javascript">			
+			function b64_to_utf8( str ) {
+				return decodeURIComponent(escape(window.atob( str )));
+			}
+      var app = new Vue({
+        el: '#app',
+        data: {
+					result: "",
+        },
+        computed: {
+					decodedtext: function() {
+						var concat = this.result.replace(/(?:\r\n|\r|\n)/g, '');
+						return b64_to_utf8(concat);
+					}
+        }
+      })
+    </script>
+  </body>
+</html>
+"""/>

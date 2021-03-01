@@ -1,6 +1,6 @@
 created: 20201209073856139
 creator: robert
-modified: 20210112233122959
+modified: 20210301215727052
 modifier: robert
 tags: Kubernetes unix_config/Docs/Notes Ubuntu
 title: Kubernetes/Microk8s
@@ -42,8 +42,14 @@ microk8s dashboard-proxy
 
 Further info
 
-Add-on: dashboard
+Export Config
 
+```
+# Export the custom config
+sudo microk8s kubectl config view --raw > $HOME/.kube/config
+```
+
+Add-on: dashboard
 
 ```
 microk8s enable dashboard

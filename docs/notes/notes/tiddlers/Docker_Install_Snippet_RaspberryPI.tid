@@ -1,0 +1,40 @@
+created: 20210228165012285
+modified: 20210301215727440
+tags: Docker/Install unix_config/Docs/Notes
+title: Docker/Install/Snippet/RaspberryPI
+type: text/vnd.tiddlywiki
+
+There is a setup script in [[unix_config]] unix_config/configs/bash/bash_setup.sh
+
+```
+function setup_install_pi_dockerce() {
+    sudo apt-get update
+    sudo apt-get install \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg2 \
+        software-properties-common
+
+    curl -fsSL https://download.docker.com/linux/raspbian/gpg | sudo apt-key add -
+
+    # The finger print should be "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
+    # the following checks this and returns if wrong
+    (sudo apt-key fingerprint 0EBFCD88 | grep "9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88"
+    if [ "$?" -eq 0 ]; then
+        echo "Fingerprint OK to continue"
+    else
+        echo "Failed fingerprint"
+        return
+    fi)
+
+    # or armhf , stretch
+    sudo add-apt-repository \
+       "deb [arch=arm64] https://download.docker.com/linux/raspbian \
+	$(lsb_release -cs) stable"
+
+    sudo apt-get update
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
+    sudo usermod -aG docker $USER
+}
+```
