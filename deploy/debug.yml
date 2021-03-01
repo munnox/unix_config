@@ -10,9 +10,41 @@
       setup:
         filter: network
         gather_subset: network
-    - name: debug hostvars
+    - name: debug hostname
       ansible.builtin.debug:
         var: inventory_hostname
     - name: debug hostvars
       ansible.builtin.debug:
         var: hostvars[inventory_hostname]
+    - name: debug facts
+      ansible.builtin.debug:
+        var: ansible_facts
+    - name: "Display General Facts"
+      ansible.builtin.debug:
+        msg: |
+          Facts:
+          * Version 'ansible_version' {{ ansible_version.string }}
+
+          groups: {{ groups }}
+
+          inventory file: {{ inventory_file }}
+
+          Playbook file: {{ playbook_dir }}
+    - name: "Display Facts"
+      ansible.builtin.debug:
+        msg: |
+          Facts for inventory_hostname: "{{ inventory_hostname }}" distribution:
+          * Distibution 'discovered_interpreter_python' {{ discovered_interpreter_python }}
+
+          Host Variable keys:
+          {{ hostvars[inventory_hostname].keys() }}
+          
+      # {{ hostvars[inventory_hostname].keys() | to_nice_json }}
+
+      # Machine Fact keys:
+      # {{ ansible_facts.keys()  | to_nice_json }}
+      # {{ hostvars[inventory_hostname]vim /etc/.split('\n') | to_nice_json}}
+      # when: item != 'localhost' and item != '127.0.0.1'
+      with_items:
+        - "{{ groups.all | list }}"
+
