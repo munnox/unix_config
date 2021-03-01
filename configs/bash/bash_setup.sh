@@ -1,31 +1,35 @@
 #!/bin/sh
 
+# =========================== DOCKER =============================
+# Source <https://docs.docker.com/install/linux/docker-ce/ubuntu/>
+# Install Docker CE on linux
+#
+# Covenience script
+# curl -fsSL https://get.docker.com -o get-docker.sh
 
-setup_install_u1804_dockerce () {
+function setup_install_u1804_dockerce() {
     sudo apt-get update
-    sudo apt-get install \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        gnupg2 \
-        software-properties-common
+    sudo apt-get upgrade -y
+    sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
 
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-    sudo apt-key fingerprint 0EBFCD88
-
-    # Should be "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
-    echo "Should be \"9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88\""
+    # The finger print should be "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
+    # the following checks this and returns if wrong
+    (sudo apt-key fingerprint 0EBFCD88 | grep "9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88"
+    if [ "$?" -eq 0 ]; then
+        echo "Fingerprint OK to continue"
+    else
+        echo "Failed fingerprint"
+        return
+    fi)
 
     sudo add-apt-repository \
-       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-	$(lsb_release -cs) stable"
+       "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
     sudo apt-get update
-
-    sudo apt-get install docker-ce docker-ce-cli containerd.io
-
-
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose
+    sudo usermod -aG docker $USER
 }
 
 setup_install_nodejs () {
@@ -42,15 +46,31 @@ setup_install_neovim () {
   sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
 }
 
+# =================== Ansible =======================================
+# Source <https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW#latest-releases-via-apt-ubuntu>
+# Install Ansible on ubuntu 18.04
 
-setup_install_kvm () {
+function setup_install_ansible() {
+    sudo apt update
+    sudo apt install software-properties-common
+    sudo apt-add-repository --yes --update ppa:ansible/ansible
+    sudo apt install ansible
+}
+
+function setup_install_python_ansible() {
+   sudo apt install python3 python-venv python3-pip
+   sudo pip3 install ansible
+}
+
+# ======================== KVM Ubuntu 18.04/20.04 =========================
+# source https://help.ubuntu.com/community/KVM/Installation
+
+function setup_install_kvm() {
     sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
+
     # libvirt-bin provides libvirtd which you need to administer qemu and kvm instances using libvirt
-
     # qemu-kvm (kvm in Karmic and earlier) is the backend
-
     # ubuntu-vm-builder powerful command line tool for building virtual machines
-
     # bridge-utils provides a bridge from your network to the virtual machines
         
     sudo adduser `id -un` libvirt
@@ -60,12 +80,141 @@ setup_install_kvm () {
 
     sudo apt-get install virt-manager
 
+    # VLANs
     # lsmod | grep 8021q
 
     # enable nested vm's
     sudo touch /etc/modprobe.d/kvm.conf
     echo "options kvm_intel nested=1" | sudo tee -a /etc/modprobe.d/kvm.conf
 
+}
+
+# ======================== VirtualBox =========================
+# source https://www.virtualbox.org/wiki/Linux_Downloads
+
+function setup_install_virtualbox() {
+    wget https://download.virtualbox.org/virtualbox/6.1.16/virtualbox-6.1_6.1.16-140961~Ubuntu~eoan_amd64.deb
+
+    sudo apt install ./virtualbox-6.1_6..16-140961-Ubuntu-eon_and64.deb
+
+}
+
+function setup_install_podman() {
+    # Source https://podman.io/getting-started/installation
+    . /etc/os-release
+    echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+    curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
+    sudo apt-get update
+    sudo apt-get -y upgrade 
+    sudo apt-get -y install podman
+}
+
+# ======================== RUST Ubuntu 18.04/20.04 =========================
+# Source <https://www.rust-lang.org/tools/install>
+# Install Docker CE on linux
+
+function setup_install_rust() {
+    # useful programs
+    # sudo apt install git tmux neovim gcc
+    # Required program
+    sudo apt install curl
+    curl https://sh.rustup.rs -sSf | sh
+}
+
+function setup_install_alacritty {
+    # Original source https://gist.github.com/Aaronmacaron/8a4e82ed0033290cb2e12d9df4e77efe
+    #!/bin/bash
+    sudo snap install alacritty --edge --classic
+    mkdir -p ~/.config/alacrity/
+
+    # # This installs alacritty terminal on ubuntu (https://github.com/jwilm/alacritty)
+    # # You have to have rust/cargo installed for this to work
+
+    # # Install required tools
+    # sudo apt-get install cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev python3
+
+    # # Download, compile and install Alacritty
+    # git clone https://github.com/alacritty/alacritty.git
+    # cd alacritty
+    # cargo build --release
+    # cargo install
+
+    # # Add Man-Page entries
+    # sudo mkdir -p /usr/local/share/man/man1
+    # gzip -c alacritty.man | sudo tee /usr/local/share/man/man1/alacritty.1.gz > /dev/null
+
+    # # Terminfo
+    # sudo tic -xe alacritty,alacritty-direct extra/alacritty.info
+
+    # # Add shell completion for bash and zsh
+    # mkdir -p ~/.bash_completion
+    # cp alacritty-completions.bash ~/.bash_completion/alacritty
+    # echo "source ~/.bash_completion/alacritty" >> ~/.bashrc
+
+    # # Copy default config into home dir
+    # cp alacritty.yml ~/.alacritty.yml
+
+    # # Create desktop file
+    # cp Alacritty.desktop ~/.local/share/applications/
+
+    # # Copy binary to path
+    # sudo cp target/release/alacritty /usr/local/bin
+
+    # # Use Alacritty as default terminal (Ctrl + Alt + T)
+    # gsettings set org.gnome.desktop.default-applications.terminal exec 'alacritty'
+
+    # # # Remove temporary dir
+    # # cd ..
+    # # rm -r alacritty
+
+}
+
+# ======================== dotnet Ubuntu 18.04/20.04 =========================
+
+
+function install_dotnet() {
+    # Source https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current
+    # Install DotNET Core on ubuntu 18.04
+
+    # Download the Microsoft repository GPG keys
+    wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+    
+    # Register the Microsoft repository GPG keys
+    sudo dpkg -i packages-microsoft-prod.deb
+
+    # Enable the "universe" repositories
+    sudo add-apt-repository universe
+
+    sudo apt-get install apt-transport-https
+
+    # Update the list of products
+    sudo apt update
+
+    # Install Dotnet Core
+    sudo apt install dotnet-sdk-2.2
+}
+
+function install_powershell() {
+    # Source https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7
+    # Install Powershell on ubuntu 18.04
+
+    # Download the Microsoft repository GPG keys
+    wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+
+    # Register the Microsoft repository GPG keys
+    sudo dpkg -i packages-microsoft-prod.deb
+
+    # Update the list of products
+    sudo apt-get update
+
+    # Enable the "universe" repositories
+    sudo add-apt-repository universe
+
+    # Install PowerShell
+    sudo apt-get install -y powershell
+
+    # # Start PowerShell
+    # pwsh
 }
 
 
