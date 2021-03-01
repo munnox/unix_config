@@ -3,12 +3,157 @@
 - name: config deploy
   hosts: localhost
   tasks:
-    - name: testing
-      ping:
-    - name: debug hostvars
-      ansible.builtin.debug:
-        var: inventory_hostname
-    - name: debug hostvars
-      ansible.builtin.debug:
-        var: hostvars[inventory_hostname]
+    # - name: Ping the machine to deploy
+    #   ping:
+    # - name: Print the playbook dir
+    #   ansible.builtin.debug:
+    #     var: playbook_dir
+    - name: Compute the repo config dir
+      set_fact:
+        repo_config_path: "{{ (playbook_dir, '../configs') | path_join | realpath }}"
+    # - name: Print the repo config dir
+    #   ansible.builtin.debug:
+    #     var: repo_config_path
 
+    # Setup Bash
+    - name: test bash
+      command: which bash
+      register: result
+      ignore_errors: yes
+    - name: Is bash present
+      ansible.builtin.set_fact:
+        bash_present: "{{ result.rc == 0 }}"
+    - name: Add config set redirect bashrc
+      blockinfile:
+        path: "{{ '~/.bashrc' | expanduser }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        # insertafter: "<body>"
+        block: |
+          source {{repo_config_path}}/bash/bashrc
+      when: bash_present
+
+    # Setup GIT
+    - name: test git
+      command: which git
+      register: result
+      ignore_errors: yes
+    - name: Is git present
+      ansible.builtin.set_fact:
+        git_present: "{{ result.rc == 0 }}"
+    - name: Add config set redirect gitconfig
+      blockinfile:
+        path: "{{ '~/.gitconfig' | expanduser }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        # insertafter: "<body>"
+        block: |
+          [include]
+              path = {{repo_config_path}}/git/gitconfig
+      when: git_present
+
+    # Setup I3 symlink
+    - name: test I3
+      command: which i3
+      register: result
+      ignore_errors: yes
+    - name: Is I3 present
+      ansible.builtin.set_fact:
+        i3_present: "{{ result.rc == 0 }}"
+    - name: Create a symbolic link I3 config
+      ansible.builtin.file:
+        src: "{{ '~/.config/i3status/config' | expanduser }}"
+        dest: "{{repo_config_path}}/i3/i3status.conf"
+        # owner: foo
+        # group: foo
+        state: link
+      when: i3_present
+
+    # Setup Tmux symlink
+    - name: test tmux
+      command: which tmux
+      register: result
+      ignore_errors: yes
+    - name: Is tmux present
+      ansible.builtin.set_fact:
+        tmux_present: "{{ result.rc == 0 }}"
+    - name: Create a symbolic link tmux config
+      ansible.builtin.file:
+        src: "{{repo_config_path}}/tmux/tmux.conf"
+        dest: "{{ '~/.tmux.conf' | expanduser }}"
+        # owner: foo
+        # group: foo
+        state: link
+      when: tmux_present
+
+    # Setup alacritty symlink
+    - name: test alacritty
+      command: which alacritty
+      register: result
+      ignore_errors: yes
+    - name: Is alacritty present
+      ansible.builtin.set_fact:
+        alacritty_present: "{{ result.rc == 0 }}"
+    - name: Create a symbolic link alacritty config
+      ansible.builtin.file:
+        src: "{{repo_config_path}}/alacritty/alacritty.conf"
+        dest: "{{ '~/.config/alacritty/alacritty.yml' | expanduser }}"
+        # owner: foo
+        # group: foo
+        state: link
+      when: alacritty_present
+
+    # Setup zsh
+    - name: test zsh
+      command: which zsh
+      register: result
+      ignore_errors: yes
+    - name: Is zsh present
+      ansible.builtin.set_fact:
+        zsh_present: "{{ result.rc == 0 }}"
+    - name: Add config set redirect zsh
+      blockinfile:
+        path: "{{ '~/.zshrc' | expanduser }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        # insertafter: "<body>"
+        block: |
+          source {{repo_config_path}}/zsh/zshrc
+      when: zsh_present
+
+    # Setup vim
+    - name: test vim
+      command: which vim
+      register: result
+      ignore_errors: yes
+    - name: Is neovim present
+      ansible.builtin.set_fact:
+        vim_present: "{{ result.rc == 0 }}"
+    - name: Add config set redirect neovim
+      blockinfile:
+        path: "{{ '~/.vimrc' | expanduser }}"
+        marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+        # insertafter: "<body>"
+        block: |
+          source {{repo_config_path}}/vim/vimrc
+      when: vim_present
+
+    # Setup neovim
+    - name: test neovim
+      command: which nvim
+      register: result
+      ignore_errors: yes
+    - name: Is neovim present
+      ansible.builtin.set_fact:
+        neovim_present: "{{ result.rc == 0 }}"
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ '~/.config/nvim/' | expanduser }}"
+        state: directory
+        mode: '0755'
+      when: neovim_present
+    - name: Add config set redirect neovim
+      blockinfile:
+        path: "{{ '~/.config/nvim/init.vim' | expanduser }}"
+        marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+        # insertafter: "<body>"
+        block: |
+          source {{ '~/.vimrc' | expanduser }}
+      when: neovim_present
