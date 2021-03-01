@@ -63,7 +63,7 @@
     - name: Add config set redirect bashrc
       blockinfile:
         path: "{{ '~/.bashrc' | expanduser }}"
-        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        marker: "# {mark} ANSIBLE MANAGED UNIX_CONFIG BLOCK"
         # insertafter: "<body>"
         block: |
           source {{repo_config_path}}/bash/bashrc
@@ -80,7 +80,7 @@
     - name: Add config set redirect gitconfig
       blockinfile:
         path: "{{ '~/.gitconfig' | expanduser }}"
-        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        marker: "# {mark} ANSIBLE MANAGED UNIX_CONFIG BLOCK"
         # insertafter: "<body>"
         block: |
           [include]
@@ -149,7 +149,7 @@
     - name: Add config set redirect zsh
       blockinfile:
         path: "{{ '~/.zshrc' | expanduser }}"
-        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        marker: "# {mark} ANSIBLE MANAGED UNIX_CONFIG BLOCK"
         # insertafter: "<body>"
         block: |
           source {{repo_config_path}}/zsh/zshrc
@@ -166,7 +166,7 @@
     - name: Add config set redirect neovim
       blockinfile:
         path: "{{ '~/.vimrc' | expanduser }}"
-        marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+        marker: "\" {mark} ANSIBLE MANAGED UNIX_CONFIG BLOCK"
         # insertafter: "<body>"
         block: |
           source {{repo_config_path}}/vim/vimrc
@@ -189,7 +189,7 @@
     - name: Add config set redirect neovim
       blockinfile:
         path: "{{ '~/.config/nvim/init.vim' | expanduser }}"
-        marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+        marker: "\" {mark} ANSIBLE MANAGED UNIX_CONFIG BLOCK"
         # insertafter: "<body>"
         block: |
           source {{ '~/.vimrc' | expanduser }}
