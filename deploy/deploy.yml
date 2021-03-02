@@ -61,6 +61,7 @@
       command: which bash
       register: result
       ignore_errors: yes
+      changed_when: false
     - name: Is bash present
       ansible.builtin.set_fact:
         bash_present: "{{ result.rc == 0 }}"
@@ -101,8 +102,15 @@
         i3_present: "{{ result.rc == 0 }}"
     - name: Create a symbolic link I3 config
       ansible.builtin.file:
-        src: "{{ '~/.config/i3status/config' | expanduser }}"
-        dest: "{{repo_config_path}}/i3/i3status.conf"
+        src: "{{repo_config_path}}/i3/config"
+        dest: "{{ '~/.config/i3/config' | expanduser }}"
+        # owner: foo
+        # group: foo
+        state: link
+    - name: Create a symbolic link I3status config
+      ansible.builtin.file:
+        src: "{{repo_config_path}}/i3/i3status.conf"
+        dest: "{{ '~/.config/i3status/config' | expanduser }}"
         # owner: foo
         # group: foo
         state: link
@@ -135,8 +143,8 @@
         alacritty_present: "{{ result.rc == 0 }}"
     - name: Create a symbolic link alacritty config
       ansible.builtin.file:
-        src: "{{repo_config_path}}/alacritty/alacritty.conf"
-        dest: "{{ '~/.config/alacritty/alacritty.yml' | expanduser }}"
+        src: "{{ '~/.config/alacritty/alacritty.yml' | expanduser }}"
+        dest: "{{repo_config_path}}/alacritty/alacritty.conf"
         # owner: foo
         # group: foo
         state: link
@@ -155,6 +163,7 @@
         path: "{{ '~/.zshrc' | expanduser }}"
         marker: "# {mark} ANSIBLE MANAGED UNIX_CONFIG BLOCK"
         # insertafter: "<body>"
+        create: yes
         block: |
           source {{repo_config_path}}/zsh/zshrc
       when: zsh_present
