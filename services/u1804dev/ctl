@@ -45,7 +45,7 @@ echo "command $1"
 case $1 in
 
   build)
-    docker build . --tag $IMAGE_NAME
+    docker build --force-rm --tag $IMAGE_NAME .
     ;;
   d)
     run_as_daemon $LOCAL_CONTAINER_NAME
@@ -66,6 +66,6 @@ case $1 in
     docker rm -f $LOCAL_CONTAINER_NAME
     ;;
   *)
-    echo "please specify cmd"
+          echo "please specify cmd options include (build, d, attach, a, os, clean, rm)"
     ;;
 esac

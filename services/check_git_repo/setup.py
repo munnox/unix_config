@@ -10,4 +10,7 @@ setup(
     author_email="a@b.c",
     url="",
     packages=["check_git_repo"],
+    entry_points = {
+        'console_scripts': ['checkgit=check_git_repo:main'],
+    }
 )

@@ -182,6 +182,6 @@ case $1 in
     removal
     ;;
   *)
-    echo "please specify cmd"
+    echo "please specify cmd options include: (build, d, attach, a, os, ctl, clean, rm)"
     ;;
 esac

@@ -1,4 +1,9 @@
- 
+import os
+import click
+
+#  https://gitpython.readthedocs.io/en/stable/tutorial.html
+from git import Repo
+from git.exc import GitCommandError
 
 class bcolors:
     """console colors
