@@ -146,7 +146,7 @@
         path: "{{ '~/.config/alacritty/' | expanduser }}"
         state: directory
         mode: '0755'
-      when: neovim_present
+      when: alacritty_present
     - name: Create a symbolic link alacritty config
       ansible.builtin.file:
         src: "{{repo_config_path}}/alacritty/alacritty.yml"
