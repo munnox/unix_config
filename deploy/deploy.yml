@@ -143,8 +143,8 @@
         alacritty_present: "{{ result.rc == 0 }}"
     - name: Create a symbolic link alacritty config
       ansible.builtin.file:
-        src: "{{ '~/.config/alacritty/alacritty.yml' | expanduser }}"
-        dest: "{{repo_config_path}}/alacritty/alacritty.yml"
+        src: "{{repo_config_path}}/alacritty/alacritty.yml"
+        dest: "{{ '~/.config/alacritty/alacritty.yml' | expanduser }}"
         # owner: foo
         # group: foo
         state: link

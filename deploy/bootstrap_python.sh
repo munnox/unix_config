@@ -7,7 +7,7 @@ python3 -m pip install --user pipx
 # Add ~/.local/bin to the the PATH
 python3 -m pipx ensurepath
 # Following needs to be added to .bashrc"
-echo "eval $(register-python-argcomplete pipx)"> ~/.bashrc
+echo "eval $(register-python-argcomplete pipx)" >> ~/.bashrc
 
 source ~/.bashrc
 
