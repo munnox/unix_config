@@ -65,6 +65,7 @@
         # insertafter: "<body>"
         block: |
           source {{repo_config_path}}/bash/bashrc
+        create: yes
       when: bash_present
 
     # Setup GIT
@@ -84,6 +85,7 @@
         block: |
           [include]
               path = {{repo_config_path}}/git/gitconfig
+        create: yes
       when: git_present
 
     # Setup I3 symlink
@@ -183,6 +185,7 @@
         # insertafter: "<body>"
         block: |
           source {{repo_config_path}}/vim/vimrc
+        create: yes
       when: vim_present
 
     # Setup neovim
