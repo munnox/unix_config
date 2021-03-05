@@ -18,15 +18,15 @@
     "window.zoomLevel": 0,
     "git.path": "C:\\Program Files (x86)\\Git\\bin\\git.exe",
     "files.associations": {
-        "**/defaults/**/*": "ansible",
-        "**/tasks/**/*.yml" : "ansible",
-        "**/handler/*.yml" : "ansible",
-        "**/*_vars/**/*.yml" : "ansible",
-        "**/roles/**/*.yml" : "ansible",
-        "**/playbooks/**/*.yml" : "ansible",
-        "**/*ansible*/**/*.yml" : "ansible",
-        "**/vars/**/*.yml": "ansible",
-        "**/inventory/*/*": "ansible"
+        "**/defaults/**/*": "yaml",
+        "**/tasks/**/*.yml": "yaml",
+        "**/handler/*.yml": "yaml",
+        "**/*_vars/**/*.yml": "yaml",
+        "**/roles/**/*.yml": "yaml",
+        "**/playbooks/**/*.yml": "yaml",
+        "**/*ansible*/**/*.yml": "yaml",
+        "**/vars/**/*.yml": "yaml",
+        "**/inventory/*/*": "yaml"
     },
     "files.watcherExclude": {
         "**/.git/objects/**": true,
