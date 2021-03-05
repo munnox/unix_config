@@ -141,6 +141,12 @@
     - name: Is alacritty present
       ansible.builtin.set_fact:
         alacritty_present: "{{ result.rc == 0 }}"
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ '~/.config/alacritty/' | expanduser }}"
+        state: directory
+        mode: '0755'
+      when: neovim_present
     - name: Create a symbolic link alacritty config
       ansible.builtin.file:
         src: "{{repo_config_path}}/alacritty/alacritty.yml"
