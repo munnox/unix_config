@@ -210,4 +210,5 @@
         # insertafter: "<body>"
         block: |
           source {{ '~/.vimrc' | expanduser }}
+        create: yes
       when: neovim_present
