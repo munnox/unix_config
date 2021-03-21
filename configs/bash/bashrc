@@ -1,8 +1,9 @@
 #!/bin/bash
 
-export LC_ALL=C.UTF-8
-export LANG=C.UTF-8
-
+# export LC_ALL=C.UTF-8
+# export LANG=C.UTF-8
+# export LC_ALL=en_GB.UTF-8
+export LANG=en_GB.UTF-8
 
 # unset RAM_ORG_PATH
 export RAM_ORG_PATH=${RAM_ORG_PATH:-$PATH}
@@ -35,13 +36,15 @@ for p in ${LOCALSCRIPTS[@]}; do
 done
 
 # If the cargo directry exists source it
-[ -s "~/.cargo/env" ] && \. "~/.cargo/env"  # This loads cargo for rust
+# This loads cargo for a rust environment
+[ -s "~/.cargo/env" ] && \. "~/.cargo/env"  
 
-# Node NVM setup and config
+# Node NVM setup and config first checking if the directory exists
 export NVM_DIR="$HOME/.ramnvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
+# This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
+# This loads nvm bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
 
 # # git branch autocompletion
 # if [ -f ~/dotfiles/.git-completion.bash ]; then
@@ -49,5 +52,5 @@ export NVM_DIR="$HOME/.ramnvm"
 # fi
 
 # disable the ctrl-s
-# stty -ixon
+stty -ixon
 
