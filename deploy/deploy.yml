@@ -21,6 +21,7 @@
         cmd: |
           sed -i -E 's/^# en_GB(.*)/en_GB\1/' /etc/locale.gen
           locale-gen
+          timedatectl set-timezone Europe/London
 
     # Install NodeJS
     - name: Install neovim
