@@ -13,16 +13,25 @@ ENV NODE_JS_NAME="node-$NODE_JS_VERSION-$NODE_JS_DISTRO"
 # RUN apt-get update && apt-get install -y --no-install-recommends neovim curl git
 RUN apt-get update && \
     # apt remove python python-pip && \
-    apt-get install -y neovim curl git tmux sudo htop && \
+    apt-get install -y neovim curl git tmux sudo htop locales && \
     apt-get install -y gcc libffi-dev libssl-dev build-essential time && \
     apt-get install -y python3.8 python3-dev libpython3.8-dev python3-pip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN sed -i -E 's/^# en_GB(.*)/en_GB\1/' /etc/locale.gen
+# RUN echo "en_GB.UTF8 UTF-8" > /etc/locale.gen
+RUN locale-gen
+ENV LC_ALL=en_GB.UTF-8
+ENV LANG=en_GB.UTF-8
+ENV TZ=Europe/London
+
+# RUN localectl set-locale LANG=en_GB.utf8
+
+# Add a personal DNS resolver for look up
 RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
-# COPY ../../ /repo/unix_config/
-run pip3 install pipenv
+RUN pip3 install pipenv
 
 RUN useradd -ms /bin/bash -G sudo  base
 RUN echo "base:Docker!" | chpasswd
@@ -35,23 +44,23 @@ RUN curl https://nodejs.org/dist/v14.15.3/$NODE_JS_NAME.tar.xz --output $NODE_JS
     mkdir -p /usr/local/lib/nodejs && \
     tar -xJvf $NODE_JS_NAME.tar.xz -C /usr/local/lib/nodejs
 
-
 RUN mkdir /repo/ && chown base:base -R /repo/
 
 USER base
 WORKDIR /home/base/
 
+# COPY ../../ /repo/unix_config/
 RUN git clone https://github.com/munnox/unix_config /repo/unix_config 
 RUN cd /repo/unix_config/ && git pull && git checkout 22679e3603a72fae3bba24eebc8c8a0f512df986
 
 
-RUN mkdir -p ~/.config/nvim
-RUN cd /repo/unix_config && python3 use_setting.py
+# RUN mkdir -p ~/.config/nvim
+# RUN cd /repo/unix_config && python3 use_setting.py
+RUN cd /repo/unix_config/deploy && ./bootstrap_python.sh
+# RUN cd /repo/unix_config/deploy && pipenv install
+RUN cd /repo/unix_config/deploy && pipenv run ansible-playbook deploy.yml
 
-# RUN [ "/bin/bash", "-c", "nvim --headless -n -i NONE -es -S <(echo -e 'silent! PlugInstall')"]
+# # RUN [ "/bin/bash", "-c", "nvim --headless -n -i NONE -es -S <(echo -e 'silent! PlugInstall')"]
 RUN [ "/bin/bash", "-c", "nvim --headless +PlugInstall +qall"]
 
-
-# WORKDIR /home/
-
-CMD nvim
+# CMD bash

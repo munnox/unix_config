@@ -4,6 +4,7 @@
 # export LANG=C.UTF-8
 # export LC_ALL=en_GB.UTF-8
 export LANG=en_GB.UTF-8
+export TZ=Europe/London
 
 # unset RAM_ORG_PATH
 export RAM_ORG_PATH=${RAM_ORG_PATH:-$PATH}
