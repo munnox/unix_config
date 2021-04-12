@@ -20,7 +20,7 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def process_repo(root, url, push, pull):
+def process_repo(root, url, push, pull, verbose=False):
     repo = Repo(root)
     assert not repo.bare
 
@@ -36,7 +36,7 @@ def process_repo(root, url, push, pull):
     logs = []
     if len(remotes_matched) > 0:
         logs.append(f"{bcolors.HEADER}remote: {root}{bcolors.ENDC}")
-        print(f"{bcolors.HEADER}remote: {root}{bcolors.ENDC}")
+        # print(f"{bcolors.HEADER}remote: {root}{bcolors.ENDC}")
         logs.append(f"Repo Branches: {[b.name for b in repo.heads]}")
         for remote in remotes_matched:
             logs.append(f"Remotes: {remote.name} = {remote.url}")
@@ -46,7 +46,7 @@ def process_repo(root, url, push, pull):
                 logs.append(f"fetching remotes")
             except GitCommandError as error:
                 logs.append(f"{bcolors.FAIL} unable to fetch remote {remote} {error}")
-                print(f"{bcolors.FAIL} unable to fetch remote {remote} {error}")
+                # print(f"{bcolors.FAIL} unable to fetch remote {remote} {error}")
 
             for repo_branch in repo.heads:
                 #  print(f"repo_branch: {repo_branch}")
@@ -57,27 +57,27 @@ def process_repo(root, url, push, pull):
                             behind_commits = list(repo.iter_commits(f'{repo_branch.name}..{remote.name}/{repo_branch.name}'))
                             ahead_commits = list(repo.iter_commits(f'{remote.name}/{repo_branch.name}..{repo_branch.name}'))
                         except GitCommandError as error:
-                            logs.append(f"{bcolors.FAIL} cannot calc remote ref {error}")
-                            print(f"{bcolors.FAIL} cannot calc remote ref {error}")
+                            logs.append(f"{bcolors.FAIL} cannot calculate the remote reference Error: '{error}'")
+                            # print(f"{bcolors.FAIL} cannot calc remote ref {error}")
                             behind_commit = []
                             ahead_commit = []
                         logs.append(f"repo_branch: {repo_branch} -> remote_branch: {remote_branch} behind-{len(behind_commits)}  ahead-{len(ahead_commits)}")
                         if len(behind_commits) == 0 and len(ahead_commits) > 0:
                             logs.append(f"{bcolors.WARNING}Would be useful to push{bcolors.ENDC}")
-                            print(f"{bcolors.WARNING}Would be useful to push{bcolors.ENDC}")
+                            # print(f"{bcolors.WARNING}Would be useful to push{bcolors.ENDC}")
                             if push:
                                 pushinfolist = remote.push() 
                                 for pushinfo in pushinfolist:
                                     logs.append(f"{bcolors.OKGREEN}Pushing to remote {pushinfo.summary} was at {pushinfo.old_commit}{bcolors.ENDC}")
-                                    print(f"{bcolors.OKGREEN}Pushing to remote {pushinfo.summary} was at {pushinfo.old_commit}{bcolors.ENDC}")
+                                    # print(f"{bcolors.OKGREEN}Pushing to remote {pushinfo.summary} was at {pushinfo.old_commit}{bcolors.ENDC}")
                         if len(behind_commits) > 0 and len(ahead_commits) == 0:
-                            logs.append(f"{bcolors.WARNING}Would be useful to pull{bcolors.ENDC}")
-                            print(f"{bcolors.WARNING}Would be useful to pull{bcolors.ENDC}")
+                            logs.append(f"{bcolors.WARNING}Would be useful to pull append '--push' to the call{bcolors.ENDC}")
+                            # print(f"{bcolors.WARNING}Would be useful to pull{bcolors.ENDC}")
                             if pull:
                                 pullinfolist = remote.pull() 
                                 for pullinfo in pullinfolist:
                                     logs.append(f"{bcolors.OKGREEN}Pulling to remote {pullinfo.summary} was at {pullinfo.old_commit}{bcolors.ENDC}")
-                                    print(f"{bcolors.OKGREEN}Pulling to remote {pullinfo.summary} was at {pullinfo.old_commit}{bcolors.ENDC}")
+                                    # print(f"{bcolors.OKGREEN}Pulling to remote {pullinfo.summary} was at {pullinfo.old_commit}{bcolors.ENDC}")
             logs.append("")
     return logs
 
