@@ -20,64 +20,70 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+def test_remote_url(remote, url):
+    if url != "":
+        if remote.url.find(url) >= 0:
+            return True
+        else:
+            return False
+    return True
+
 def process_repo(root, url, push, pull, verbose=False):
     repo = Repo(root)
     assert not repo.bare
 
     remotes_matched = []
     for remote in repo.remotes:
-        if url != "":
-            if remote.url.find(url) >= 0:
-                #  for repo_branch in repo.heads:
-                remotes_matched.append(remote)
-        else:
+        if test_remote_url(remote, url):
             remotes_matched.append(remote)
 
     logs = []
+    logs.append(f"Remotes in Repository Matched: {[r.name for r in remotes_matched]}")
     if len(remotes_matched) > 0:
-        logs.append(f"{bcolors.HEADER}remote: {root}{bcolors.ENDC}")
-        # print(f"{bcolors.HEADER}remote: {root}{bcolors.ENDC}")
+        logs.append(f"{bcolors.HEADER}Respository: '{root}'{bcolors.ENDC}")
         logs.append(f"Repo Branches: {[b.name for b in repo.heads]}")
         for remote in remotes_matched:
-            logs.append(f"Remotes: {remote.name} = {remote.url}")
-            logs.append(f"Remote Refs: {[b.name for b in remote.refs]}")
+            logs.append(f"Remotes: {remote.name} -[mapped to]-> {remote.url}. Remote Refs/Branches: {[b.name for b in remote.refs]}")
+
+            if not test_remote_url(remote, url):
+                continue
             try:
                 fetch_results = remote.fetch()
                 logs.append(f"fetching remotes")
             except GitCommandError as error:
-                logs.append(f"{bcolors.FAIL} unable to fetch remote {remote} {error}")
-                # print(f"{bcolors.FAIL} unable to fetch remote {remote} {error}")
+                logs.append(f"{bcolors.FAIL} unable to fetch remote {remote} {error}{bcolors.ENDC}")
 
             for repo_branch in repo.heads:
-                #  print(f"repo_branch: {repo_branch}")
                 for remote_refs in remote.refs:
                     remote_branch = remote_refs.name
                     if remote_branch.find(repo_branch.name) >= 0:
                         try:
-                            behind_commits = list(repo.iter_commits(f'{repo_branch.name}..{remote.name}/{repo_branch.name}'))
-                            ahead_commits = list(repo.iter_commits(f'{remote.name}/{repo_branch.name}..{repo_branch.name}'))
+                            behind_commits = list(repo.iter_commits(f"{repo_branch.name}..{remote.name}/{repo_branch.name}"))
+                            ahead_commits = list(repo.iter_commits(f"{remote.name}/{repo_branch.name}..{repo_branch.name}"))
                         except GitCommandError as error:
-                            logs.append(f"{bcolors.FAIL} cannot calculate the remote reference Error: '{error}'")
-                            # print(f"{bcolors.FAIL} cannot calc remote ref {error}")
+                            logs.append(f"{bcolors.FAIL}Cannot calculate the remote reference Error: '{error}'{bcolors.ENDC}")
                             behind_commit = []
                             ahead_commit = []
-                        logs.append(f"repo_branch: {repo_branch} -> remote_branch: {remote_branch} behind-{len(behind_commits)}  ahead-{len(ahead_commits)}")
+
+                        behind_string = f"{bcolors.OKGREEN}{len(behind_commits)}{bcolors.ENDC}"
+                        if len(behind_commits) > 0:
+                            behind_string = f"{bcolors.WARNING}{len(behind_commits)}{bcolors.ENDC}"
+                        ahead_string = f"{bcolors.OKGREEN}{len(ahead_commits)}{bcolors.ENDC}"
+                        if len(ahead_commits) > 0:
+                            ahead_string = f"{bcolors.WARNING}{len(ahead_commits)}{bcolors.ENDC}"
+                        logs.append(f"Behind-{behind_string} Ahead-{ahead_string}. Branch mapping local -> remote: {repo_branch} -> {remote_branch} ")
                         if len(behind_commits) == 0 and len(ahead_commits) > 0:
-                            logs.append(f"{bcolors.WARNING}Would be useful to push{bcolors.ENDC}")
-                            # print(f"{bcolors.WARNING}Would be useful to push{bcolors.ENDC}")
+                            logs.append(f"{bcolors.WARNING}Would be useful to push append '--push' to the call{bcolors.ENDC}")
                             if push:
                                 pushinfolist = remote.push() 
                                 for pushinfo in pushinfolist:
                                     logs.append(f"{bcolors.OKGREEN}Pushing to remote {pushinfo.summary} was at {pushinfo.old_commit}{bcolors.ENDC}")
-                                    # print(f"{bcolors.OKGREEN}Pushing to remote {pushinfo.summary} was at {pushinfo.old_commit}{bcolors.ENDC}")
                         if len(behind_commits) > 0 and len(ahead_commits) == 0:
-                            logs.append(f"{bcolors.WARNING}Would be useful to pull append '--push' to the call{bcolors.ENDC}")
-                            # print(f"{bcolors.WARNING}Would be useful to pull{bcolors.ENDC}")
+                            logs.append(f"{bcolors.WARNING}Would be useful to pull append '--pull' to the call{bcolors.ENDC}")
                             if pull:
                                 pullinfolist = remote.pull() 
                                 for pullinfo in pullinfolist:
                                     logs.append(f"{bcolors.OKGREEN}Pulling to remote {pullinfo.summary} was at {pullinfo.old_commit}{bcolors.ENDC}")
-                                    # print(f"{bcolors.OKGREEN}Pulling to remote {pullinfo.summary} was at {pullinfo.old_commit}{bcolors.ENDC}")
             logs.append("")
     return logs
 
@@ -92,16 +98,22 @@ def main(path, url, push, pull):
     logs = []
     full_path = os.path.abspath(os.path.expanduser(path))
     print(f"Running git repo checker in {full_path}")
+    repos_to_process = []
     for root, dirs, files in os.walk(full_path, topdown=False):
         #  for name in files:
         #      print(os.path.join(root, name))
         if ".git" in dirs:
+            repos_to_process.append(root)
             #  print(f"git directory found: {root}")
-            logs += process_repo(root, url, push, pull)
+    repo_string = "\n".join([f"* {root}" for root in repos_to_process])
+    logs.append(f"Repositories to process: {repo_string}\n")
+    for repo_path in repos_to_process:
+        logs += process_repo(repo_path, url, push, pull)
+
         #  for name in dirs:
         #      print(os.path.join(root, name))
     log_str = "\n".join(logs)
-    print(log_str)  
+    click.echo(log_str)  
 
 if __name__ == "__main__":
     main()

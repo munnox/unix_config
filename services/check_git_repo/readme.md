@@ -13,5 +13,5 @@ or
 ```
 pipenv run checkgit --help
 # traverse repo root and push repo back to github if they have a remote
-pipenv run checkgit --path ../../../ --url github
+pipenv run checkgit --path ../../../ --url github.com
 ```
