@@ -377,6 +377,8 @@ set pastetoggle=<F11>
 set colorcolumn=80
 " Set guides at 80 then 120 then every 5 characters
 let &colorcolumn="80,".join(range(120,999, 5),",")
+" Setting column color :help ctermbg
+highlight ColorColumn ctermbg=8
 
 " Setup soft linebreak will not list the line number and should not change the
 " text but keep the test on screen

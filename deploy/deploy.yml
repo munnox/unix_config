@@ -15,16 +15,18 @@
     #   ansible.builtin.debug:
     #     var: repo_config_path
 
-    - name: uncomment the en_GB language for localegen
+    - name: Uncomment the en_GB language for localegen but if not don't panic
       become: yes
       ansible.builtin.shell:
         cmd: |
           sed -i -E 's/^# en_GB(.*)/en_GB\1/' /etc/locale.gen
           locale-gen
           timedatectl set-timezone Europe/London
+      ignore_errors: yes
+      # changed_when: False
 
     # Install NodeJS
-    - name: Install neovim
+    - name: Install neovim as an AppImage
       ansible.builtin.shell: |
         bash -c "
         # get appimage binary
