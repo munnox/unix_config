@@ -44,6 +44,8 @@ setup_install_neovim () {
   # Make executable
   sudo chmod ugo+x /usr/local/bin/nvim
   sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
+  # ./nvim.appimage --appimage-extract
+  # ./squashfs-root/usr/bin/nvim
 }
 
 # =================== Ansible =======================================

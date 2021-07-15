@@ -2,6 +2,7 @@
 
 IMAGE_NAME="u1804dev:1.0"
 CONTAINER_NAME="u1804dev"
+DOCKERFILE="${3:-"ubuntu"}/Dockerfile"
 LOCAL_CONTAINER_NAME=${2:-"$CONTAINER_NAME"}
 
 run_as_daemon () {
@@ -45,7 +46,7 @@ echo "command $1"
 case $1 in
 
   build)
-    docker build --force-rm --tag $IMAGE_NAME .
+    docker build --force-rm --tag $IMAGE_NAME -f $DOCKERFILE .
     ;;
   d)
     run_as_daemon $LOCAL_CONTAINER_NAME
