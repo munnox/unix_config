@@ -4,6 +4,9 @@
   hosts: localhost
   vars:
     nodejs_version: "v14.15.3"
+    set_language: False
+    install_neovim: False
+    install_nodejs: False
   tasks:
     # - name: Ping the machine to deploy
     #   ping:
@@ -26,8 +29,9 @@
           timedatectl set-timezone Europe/London
       ignore_errors: yes
       # changed_when: False
+      when: set_language
 
-    # Install NodeJS
+    # Install Neovim Appimage
     - name: Install neovim as an AppImage
       ansible.builtin.shell: |
         bash -c "
@@ -35,15 +39,16 @@
         rm /usr/local/bin/nvim
         sudo curl -o /usr/local/bin/nvim -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
         # # make it executable
-        sudo chmod ugo+x /usr/local/bin/nvim
+        # sudo chmod ugo+x /usr/local/bin/nvim
         sudo rm /usr/local/bin/vim
-        sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
+        # sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
         # Work without FUSE
         # ./nvim.appimage --appimage-extract
         # ./squashfs-root/usr/bin/nvim
         "
       args:
         creates: /usr/local/bin/nvim
+      when: install_neovim
 
 
     # Install NodeJS
@@ -61,8 +66,9 @@
         rm $NODE_JS_NAME.tar.xz
         # echo \"{{nodejs_version}}\" > /home/rocky/nodeversion
         "
-     args:
-       creates: /usr/local/lib/nodejs/node-v14.15.3-linux-x64/bin/node
+      args:
+        creates: /usr/local/lib/nodejs/node-{{nodejs_version}}-linux-x64/bin/node
+      when: install_nodejs
 
     # Setup Bash
     - name: test bash
@@ -236,6 +242,8 @@
     - name: repor
       debug:
         msg: |
+          install nodejs: {{install_nodejs}}
+          install neovim: {{install_neovim}}
           vim present?: {{vim_present}}
           git present?: {{git_present}}
           neovim present?: {{neovim_present}}
