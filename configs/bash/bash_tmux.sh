@@ -14,3 +14,9 @@ alias tmuxns='tmux new-session -A -s'
 # d detach from current session
 # $ rename current sessionc
 
+# tmux aliases
+alias tls='tmux ls'
+alias tns='tmux new -s'
+alias ta='tmux a -t'
+
+

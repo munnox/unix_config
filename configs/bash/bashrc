@@ -18,6 +18,9 @@ LOCALSCRIPTS=(
 ../bash/bash_prompt.sh
 ../bash/bash_lscolours.sh
 ../bash/bash_setup.sh
+../bash/bash_kubernetes.sh
+../bash/bash_tmux.sh
+../bash/bash_terminal.sh
 )
 
 # Gets the current path of this source file
