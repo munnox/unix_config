@@ -70,8 +70,10 @@ Plug 'davidhalter/jedi-vim'
 " " Code completion
 " Plug 'Valloric/YouCompleteMe'
 
-" " Semantic language support
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+if version > 810 || has('nvim-0.4')
+  " " Semantic language support
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+end
 
 "
 " " Muliline editing
@@ -145,14 +147,17 @@ else
   nnoremap <leader>gp :Git push<CR>
 endif
 
-" Rust Lang
-let g:rustfmt_autosave = 1
-" racer + rust
-" https://github.com/rust-lang/rust.vim/issues/192
-let g:rustfmt_emit_files = 1
-let g:rustfmt_fail_silently = 0
-let g:rust_clip_command = 'xclip -selection clipboard'
-let $RUST_SRC_PATH = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/rust/src"
+
+if executable('rustc')
+  " Rust Lang
+  let g:rustfmt_autosave = 1
+  " racer + rust
+  " https://github.com/rust-lang/rust.vim/issues/192
+  let g:rustfmt_emit_files = 1
+  let g:rustfmt_fail_silently = 0
+  let g:rust_clip_command = 'xclip -selection clipboard'
+  let $RUST_SRC_PATH = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/rust/src"
+end
 
 
 " " vim-syntastic/syntastic.git
@@ -329,8 +334,6 @@ if has("autocmd")
     autocmd Bufread,BufNewFile *.yaml set filetype=yaml
     autocmd Bufread,BufNewFile *.yml set filetype=yaml
     autocmd FileType python set tabstop=4 shiftwidth=4 softtabstop=4
-    autocmd FileType javascript,htmljinja,jinja set tabstop=2 shiftwidth=2 softtabstop=2
-    autocmd FileType rust set tabstop=2 shiftwidth=2 softtabstop=2
     autocmd FileType yaml set tabstop=2 shiftwidth=2 softtabstop=2
     autocmd FileType vim set tabstop=2 shiftwidth=2 softtabstop=2
 endif
