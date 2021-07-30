@@ -29,9 +29,12 @@
 [user]
   name = Robert Munnoch
   email = robert@unix_config.git
-[include]
-  path = git_diff.ini
 [push]
   default = simple
+[pull]
+  ff = only
+  rebase = false # Default pull stratergy
+[include]
+  path = git_diff.ini
 [include] # Valid since git version 1.7.10.2
   path = git_alias.ini
