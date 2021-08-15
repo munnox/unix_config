@@ -6,6 +6,7 @@
     nodejs_version: "v14.15.3"
     set_language: False
     install_neovim: False
+    install_neovim_appimage: False
     install_nodejs: False
   tasks:
     # - name: Ping the machine to deploy
@@ -42,6 +43,24 @@
         # sudo chmod ugo+x /usr/local/bin/nvim
         sudo rm /usr/local/bin/vim
         # sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
+        # Work without FUSE
+        # ./nvim.appimage --appimage-extract
+        # ./squashfs-root/usr/bin/nvim
+        "
+      args:
+        creates: /usr/local/bin/nvim
+      when: install_neovim_appimage
+
+    # Install Neovim
+    - name: Install neovim 
+      ansible.builtin.shell: |
+        bash -c "
+        # get appimage binary
+        rm /usr/local/bin/nvim
+        sudo curl https://github.com/neovim/neovim/releases/download/v0.5.0/nvim-linux64.tar.gz --output nvim.tar.gz
+        sudo mkdir -p /usr/local/lib/nvim
+        sudo tar -xJvf nvim.tar.gz -C /usr/local/lib/nvim
+        sudo ln -s /usr/local/bin/nvim /usr/local/lib/nvim/bin/nvim
         # Work without FUSE
         # ./nvim.appimage --appimage-extract
         # ./squashfs-root/usr/bin/nvim
@@ -244,6 +263,7 @@
         msg: |
           install nodejs: {{install_nodejs}}
           install neovim: {{install_neovim}}
+          install neovim as appimage: {{install_neovim_appimage}}
           vim present?: {{vim_present}}
           git present?: {{git_present}}
           neovim present?: {{neovim_present}}
