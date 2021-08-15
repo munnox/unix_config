@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 function rocky() {
+  echo "bootstraping python and ansible for rocky linux"
   sudo yum install python38-devel python38-pip libffi-dev gcc libssl-dev git curl tmux
   
   # Setup a basic python 3.8 environment
@@ -12,12 +13,13 @@ function rocky() {
   
   source ~/.bashrc
   
-  pip install pipenv
+  pipx install pipenv
   
   pipenv install --three
 }
 
 function ubuntu() {
+  echo "bootstraping python and ansible for ubuntu linux"
   sudo apt install python3.8-dev python3.8-dev python3.8-venv python3-pip python3-venv libffi-dev gcc libssl-dev git curl tmux
   
   # Setup a basic python 3.8 environment
@@ -42,5 +44,8 @@ case $1 in
   ubuntu)
     echo "run ubuntu"
     ubuntu
+    ;;
+  *)
+    echo "Select either 'ubuntu' or 'rocky'"
     ;;
 esac;
