@@ -1,0 +1,16 @@
+- git: false
+  root: ./test_snapshots
+- git: false
+  root: ./test
+- git: false
+  root: ./Checkgit.egg-info
+- git: false
+  root: ./.pytest_cache/v/cache
+- git: false
+  root: ./.pytest_cache/v
+- git: false
+  root: ./.pytest_cache
+- git: false
+  root: ./check_git_repo
+- git: false
+  root: ./
