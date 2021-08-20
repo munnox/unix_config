@@ -1,5 +1,6 @@
 import os
 import click
+import time
 
 #  https://gitpython.readthedocs.io/en/stable/tutorial.html
 from git import Repo
@@ -28,22 +29,36 @@ def test_remote_url(remote, url):
             return False
     return True
 
-def process_repo(root, url, push, pull, verbose=False):
+def process_repo(root, url, assess_only, push, pull, verbose=False):
     repo = Repo(root)
     assert not repo.bare
 
+    logs = []
     remotes_matched = []
     for remote in repo.remotes:
-        if test_remote_url(remote, url):
+        if test_remote_url(remote, url) or assess_only:
             remotes_matched.append(remote)
 
-    logs = []
+    logs.append(f"{bcolors.HEADER}Respository: '{root}'{bcolors.ENDC}")
     logs.append(f"Remotes in Repository Matched: {[r.name for r in remotes_matched]}")
     if len(remotes_matched) > 0:
-        logs.append(f"{bcolors.HEADER}Respository: '{root}'{bcolors.ENDC}")
+        try:
+            headcommit = repo.head.commit
+            commit_str = time.strftime("%a, %d %b %y %h:%m", time.gmtime(headcommit.committed_date)) 
+            author_str = time.strftime("%a, %d %b %y %h:%m", time.gmtime(headcommit.authored_date)) 
+            logs.append(f"{bcolors.OKCYAN}Commit info {headcommit.hexsha} {headcommit.author.name} {commit_str} {author_str}{bcolors.ENDC}")
+        except Exception as error:
+            print(f"{bcolors.FAIL}Git head issue: {root} {repo.heads}{bcolors.ENDC}")
+            #  raise error
+            #  continue
+
         logs.append(f"Repo Branches: {[b.name for b in repo.heads]}")
         for remote in remotes_matched:
             logs.append(f"Remotes: {remote.name} -[mapped to]-> {remote.url}. Remote Refs/Branches: {[b.name for b in remote.refs]}")
+            logs.append(f"Assess only: {assess_only}")
+
+            if assess_only:
+                continue
 
             if not test_remote_url(remote, url):
                 continue
@@ -62,8 +77,8 @@ def process_repo(root, url, push, pull, verbose=False):
                             ahead_commits = list(repo.iter_commits(f"{remote.name}/{repo_branch.name}..{repo_branch.name}"))
                         except GitCommandError as error:
                             logs.append(f"{bcolors.FAIL}Cannot calculate the remote reference Error: '{error}'{bcolors.ENDC}")
-                            behind_commit = []
-                            ahead_commit = []
+                            behind_commits = []
+                            ahead_commits = []
 
                         behind_string = f"{bcolors.OKGREEN}{len(behind_commits)}{bcolors.ENDC}"
                         if len(behind_commits) > 0:
@@ -91,9 +106,10 @@ def process_repo(root, url, push, pull, verbose=False):
 #  @click.option('--count', default=1, help='Number of greetings.')
 @click.option("--path", prompt="Enter path", help="Enter the path to the repo dir", default=".")
 @click.option("--url", prompt="Enter url to push", help="Enter the url to the push", default="")
+@click.option("--assess_only", is_flag=True, default=False)
 @click.option('--push', is_flag=True, default=False)
 @click.option('--pull', is_flag=True, default=False)
-def main(path, url, push, pull):
+def main(path, url, assess_only, push, pull):
     """Simple program to find git repos within a given path."""
     logs = []
     full_path = os.path.abspath(os.path.expanduser(path))
@@ -108,7 +124,7 @@ def main(path, url, push, pull):
     repo_string = "\n".join([f"* {root}" for root in repos_to_process])
     logs.append(f"Repositories to process: {repo_string}\n")
     for repo_path in repos_to_process:
-        logs += process_repo(repo_path, url, push, pull)
+        logs += process_repo(repo_path, url, assess_only, push, pull)
 
         #  for name in dirs:
         #      print(os.path.join(root, name))
