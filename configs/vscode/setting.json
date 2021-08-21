@@ -95,6 +95,13 @@
             "commands": [
                 "workbench.action.navigateRight"
             ]
+        }, // https://github.com/VSCodeVim/Vim/issues/2376 trouble moving to the terminal
+        {  
+            "before": ["ctrl+k"],          
+            "commands": [
+                "workbench.action.focusActiveEditorGroup"
+            ], 
+            "when": "terminalFocus" 
         }
     ],
     "vim.visualModeKeyBindings": [
@@ -116,7 +123,11 @@
             "before": ["j", "j"],
             "after": ["<Esc>"]
         }
-    ]
+    ],
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-f>": false
+    },
     "redhat.telemetry.enabled": false,
     "vs-kubernetes": {
         "vscode-kubernetes.kubectl-path.linux": "/home/ubuntu/.vs-kubernetes/tools/kubectl/kubectl",
