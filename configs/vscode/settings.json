@@ -1,21 +1,25 @@
 {
     "telemetry.enableCrashReporter": false,
     "telemetry.enableTelemetry": false,
-    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\bash.exe",
+    // "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\bash.exe",
     "python.disablePromptForFeatures": [
         "pylint"
     ],
     "files.eol": "\n",
+    // "python.pythonPath": "${workspaceFolder}/pyvenv/bin/python",
     "python.envFile": "${workspaceFolder}/.env.sh",
     "gitlens.keymap": "alternate",
     "gitlens.advanced.messages": {
         "suppressShowKeyBindingsNotice": true
     },
     "remote.SSH.remotePlatform": {
-        "main-dev": "linux"
+        "sia": "linux"
     },
-    "git.path": "C:\\Program Files (x86)\\Git\\bin\\git.exe",
+    //"git.path": "C:\\Program Files (x86)\\Git\\bin\\git.exe",
+    "window.zoomLevel": 0,
     "files.associations": {
+        "settings.json": "jsonc",
+        "keybindings.json": "jsonc",
         "**/defaults/**/*": "yaml",
         "**/tasks/**/*.yml": "yaml",
         "**/handler/*.yml": "yaml",
@@ -24,7 +28,8 @@
         "**/playbooks/**/*.yml": "yaml",
         "**/*ansible*/**/*.yml": "yaml",
         "**/vars/**/*.yml": "yaml",
-        "**/inventory/*/*": "yaml"
+        "**/inventory/*/*": "yaml",
+        "*.yml": "yaml",
     },
     "files.watcherExclude": {
         "**/.git/objects/**": true,
@@ -95,18 +100,6 @@
                 "workbench.action.navigateRight"
             ]
         },
-        {
-            "before": ["<leader>", "m"],
-            "commands": [
-                "bookmarks.toggle"
-            ]
-        },
-        {
-            "before": ["<leader>", "b"],
-            "commands": [
-                "bookmarks.list"
-            ]
-        }
     ],
     "vim.visualModeKeyBindings": [
         {
@@ -128,10 +121,19 @@
             "after": ["<Esc>"]
         }
     ],
+    // "vim.handleKeys": {
+    //     "<C-a>": false,
+    //     "<C-f>": false
+    // },
+    "redhat.telemetry.enabled": false,
+    "vs-kubernetes": {
+        "vscode-kubernetes.kubectl-path.linux": "/home/ubuntu/.vs-kubernetes/tools/kubectl/kubectl",
+        "vscode-kubernetes.minikube-path.linux": "/home/ubuntu/.vs-kubernetes/tools/minikube/linux-amd64/minikube",
+        "vscode-kubernetes.helm-path.linux": "/home/ubuntu/.vs-kubernetes/tools/helm/linux-amd64/helm"
+    },
     "workbench.editorAssociations": {
         "*.ipynb": "jupyter-notebook"
     },
-    "window.zoomLevel": 2,
     "notebook.cellToolbarLocation": {
         "default": "right",
         "jupyter-notebook": "left"
