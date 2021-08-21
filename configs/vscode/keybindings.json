@@ -1,0 +1,29 @@
+// Place your key bindings in this file to override the defaults
+[
+    // https://github.com/VSCodeVim/Vim/issues/2376 trouble moveing to the terminal
+    { 
+        "key": "ctrl+k",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "terminalFocus"
+    },
+    // {
+    //     "key": "ctrl+l",
+    //     "command": "workbench.action.focusActiveEditorGroup",
+    //     "when": "explorerViewletFocus"
+    // },
+    {
+        "key": "ctrl+j",
+        "command": "outline.focus",
+        "when": "filesExplorerFocus"
+    },
+    {
+        "key": "ctrl+k",
+        "command": "workbench.files.action.focusFilesExplorer",
+        "when": "outlineFocused"
+    },
+    {
+        "key": "ctrl+l",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "outlineFocused"
+    }
+]

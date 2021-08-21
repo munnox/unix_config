@@ -1,24 +1,21 @@
 {
     "telemetry.enableCrashReporter": false,
     "telemetry.enableTelemetry": false,
-    // "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\bash.exe",
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\bash.exe",
     "python.disablePromptForFeatures": [
         "pylint"
     ],
     "files.eol": "\n",
-    // "python.pythonPath": "${workspaceFolder}/pyvenv/bin/python",
-    // "python.envFile": "${workspaceFolder}/.env.sh",
-    // "gitlens.keymap": "alternate",
-    // "gitlens.advanced.messages": {
-    //     "suppressShowKeyBindingsNotice": true
-    // },
+    "python.envFile": "${workspaceFolder}/.env.sh",
+    "gitlens.keymap": "alternate",
+    "gitlens.advanced.messages": {
+        "suppressShowKeyBindingsNotice": true
+    },
     "remote.SSH.remotePlatform": {
         "main-dev": "linux"
     },
-    "window.zoomLevel": 0,
-    // "git.path": "C:\\Program Files (x86)\\Git\\bin\\git.exe",
+    "git.path": "C:\\Program Files (x86)\\Git\\bin\\git.exe",
     "files.associations": {
-        "settings.json": "jsonc",
         "**/defaults/**/*": "yaml",
         "**/tasks/**/*.yml": "yaml",
         "**/handler/*.yml": "yaml",
@@ -27,20 +24,22 @@
         "**/playbooks/**/*.yml": "yaml",
         "**/*ansible*/**/*.yml": "yaml",
         "**/vars/**/*.yml": "yaml",
-        "**/inventory/*/*": "yaml",
-        "*.yml": "yaml",
+        "**/inventory/*/*": "yaml"
     },
     "files.watcherExclude": {
         "**/.git/objects/**": true,
         "**/.git/subtree-cache/**": true,
-        "**/node_modules/*/**": true
+        "**/node_modules/*/**": true,
+        "**/venvs/**": true
     },
+    // Vim extension settings https://github.com/VSCodeVim/Vim#vscodevim-settings
     "vim.leader": "<space>",
     "vim.useSystemClipboard": true,
     "vim.easymotion": true,
     "vim.hlsearch": true,
     "vim.incsearch": true,
     "vim.useCtrlKeys": true,
+    "vim.debug.loggingLevelForConsole": "debug",
     "vim.normalModeKeyBindings": [
         // {
         //     "before": ["h"],
@@ -95,13 +94,18 @@
             "commands": [
                 "workbench.action.navigateRight"
             ]
-        }, // https://github.com/VSCodeVim/Vim/issues/2376 trouble moving to the terminal
-        {  
-            "before": ["ctrl+k"],          
+        },
+        {
+            "before": ["<leader>", "m"],
             "commands": [
-                "workbench.action.focusActiveEditorGroup"
-            ], 
-            "when": "terminalFocus" 
+                "bookmarks.toggle"
+            ]
+        },
+        {
+            "before": ["<leader>", "b"],
+            "commands": [
+                "bookmarks.list"
+            ]
         }
     ],
     "vim.visualModeKeyBindings": [
@@ -124,14 +128,12 @@
             "after": ["<Esc>"]
         }
     ],
-    "vim.handleKeys": {
-        "<C-a>": false,
-        "<C-f>": false
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
     },
-    "redhat.telemetry.enabled": false,
-    "vs-kubernetes": {
-        "vscode-kubernetes.kubectl-path.linux": "/home/ubuntu/.vs-kubernetes/tools/kubectl/kubectl",
-        "vscode-kubernetes.minikube-path.linux": "/home/ubuntu/.vs-kubernetes/tools/minikube/linux-amd64/minikube",
-        "vscode-kubernetes.helm-path.linux": "/home/ubuntu/.vs-kubernetes/tools/helm/linux-amd64/helm"
+    "window.zoomLevel": 2,
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
     }
 }
