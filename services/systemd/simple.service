@@ -1,0 +1,13 @@
+# This is an example service unit which can be triggered by a timer
+# /etc/systemd/system/simple.service
+
+[Unit]
+Description=Run a simple program to the systemd journal
+Wants=myMonitor.timer
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/ls /home/robert/.ssh
+
+[Install]
+WantedBy=multi-user.target

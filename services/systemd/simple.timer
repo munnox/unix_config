@@ -1,0 +1,12 @@
+# This is an example timer unit to work with the service
+
+[Unit]
+Description=Triggers the simple.service every minute.
+Requires=simple.service
+
+[Timer]
+Unit=simple.service
+OnCalendar=*-*-* *:*:00
+
+[Install]
+WantedBy=timers.target
