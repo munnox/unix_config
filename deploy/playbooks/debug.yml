@@ -1,0 +1,77 @@
+---
+
+- name: config debug
+  hosts: all
+  # gather_facts: yes
+  # Enable the line below to pull just the minimum facts
+  # gather_subset: "all"
+  # vars:
+  #   ansible_distribution: "testing"
+  tasks:
+    - name: testing connection with ping
+      ping:
+    # - name: setup and gather information on networks
+    #   setup:
+    #     # filter: network
+    #     gather_subset: network
+    - name: Common role print facts and hostvars
+      ansible.builtin.debug:
+        msg: |-
+          Facts:
+          {{ ansible_facts | to_nice_json  }}
+          HostVars:
+          {{ hostvars[inventory_hostname] | to_nice_yaml }}
+    #   tags: debug_info
+    # - ansible.builtin.debug:
+    #     msg: |
+    #       Facts for "{{ inventory_hostname }}" distribution:
+    #       * Distibution 'ansible_distribution' {{ ansible_distribution }}
+    #       * Version 'ansible_distribution_release' {{ ansible_distribution_release }}
+    #       Added to the default but also should be passed in:
+    #         state: {{ state }}
+    #         port: {{ port }}
+    #         message:
+    #         {{ message }}
+    - name: debug print inventory_hostname
+      ansible.builtin.debug:
+        var: inventory_hostname
+    # - name: debug print hostvars for machine
+    #   ansible.builtin.debug:
+    #     var: hostvars[inventory_hostname]
+    - name: debug print discovered facts
+      ansible.builtin.debug:
+        var: ansible_facts
+    - name: "Display General Facts"
+      ansible.builtin.debug:
+        msg: |
+          Facts:
+          * Version 'ansible_version' {{ ansible_version.string }}
+          * Inventory file: {{ inventory_file }}
+          * Playbook file: {{ playbook_dir }}
+          * groups: {{ groups }}
+    # - name: python freeze
+    #   command: "{{ discovered_interpreter_python }} -m pip freeze"
+    #   register: result
+    # - name: "Display Facts"
+    #   ansible.builtin.debug:
+    #     msg: |
+    #       Facts for inventory_hostname: "{{ inventory_hostname }}" on {{ item }} distribution:
+    #       * Distibution 'discovered_interpreter_python' {{ discovered_interpreter_python }}
+
+    #       Host Variable keys:
+    #       {{ hostvars[inventory_hostname].keys() }}
+
+    #       Type of result.stdout: {{ result.stdout | type_debug }}
+    #       {{ result.stdout.splitlines() | to_nice_json }}
+
+    #       {{ hostvars[inventory_hostname] | to_nice_json }}
+          
+      # {{ hostvars[inventory_hostname].keys() | to_nice_json }}
+
+      # Machine Fact keys:
+      # {{ ansible_facts.keys()  | to_nice_json }}
+      # {{ hostvars[inventory_hostname]vim /etc/.split('\n') | to_nice_json}}
+      # when: item != 'localhost' and item != '127.0.0.1'
+      with_items:
+        - "{{ groups.all | list }}"
+

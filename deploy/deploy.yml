@@ -1,5 +1,4 @@
 ---
-
 - name: config deploy
   hosts: localhost
   vars:
@@ -50,6 +49,7 @@
       args:
         creates: /usr/local/bin/nvim
       when: install_neovim_appimage
+      tags: install_neovim_appimage
 
     # Install Neovim
     - name: Install neovim 
@@ -68,6 +68,7 @@
       args:
         creates: /usr/local/bin/nvim
       when: install_neovim
+      tags: install_neovim
 
 
     # Install NodeJS
@@ -88,6 +89,7 @@
       args:
         creates: /usr/local/lib/nodejs/node-{{nodejs_version}}-linux-x64/bin/node
       when: install_nodejs
+      tags: install_nodejs
 
     # Setup Bash
     - name: test bash

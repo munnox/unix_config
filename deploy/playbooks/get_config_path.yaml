@@ -1,0 +1,4 @@
+---
+- name: Compute the repo config dir
+  set_fact:
+    repo_config_path: "{{ (playbook_dir, '../configs') | path_join | realpath }}"
