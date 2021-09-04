@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-molecule = {extras = ["docker", "podman"], version = ">=3.4"}
+molecule = {extras = ["docker"], version = ">=3.4"}
 ansible = "~=2.10.6"
 molecule-openstack = "*"
 openstacksdk = "*"
@@ -21,3 +21,6 @@ cookiecutter = "~=1.7.2"
 
 [requires]
 python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true

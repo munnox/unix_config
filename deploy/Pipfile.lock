@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7c787afa9daa8624d7660aceb2b0abbf08a9ecc98fa9fbcf6d4b9152716e9a39"
+            "sha256": "470f9e9d9ef00c3a4c9053c4e4d2131c6ff4521645005d666f964735aa5b208d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -394,8 +394,7 @@
         },
         "molecule": {
             "extras": [
-                "docker",
-                "podman"
+                "docker"
             ],
             "hashes": [
                 "sha256:6aa2d659189908469c52b1eb5b3a88c1125f23448e23e27c227c5ec9d9063aa9",
@@ -418,13 +417,6 @@
             ],
             "index": "pypi",
             "version": "==0.3"
-        },
-        "molecule-podman": {
-            "hashes": [
-                "sha256:9efcc2714ab60ffe11844f10c7e10ef73fa322f54bd1ecf24c41f96d61530df6",
-                "sha256:d05c407759cd61c2f0576cfe04eb9c96a1cd1f0e52283aed7e3ed3e10c97eca2"
-            ],
-            "version": "==1.0.1"
         },
         "munch": {
             "hashes": [
@@ -684,7 +676,7 @@
                 "sha256:820adcf1b4451c9cc7759848797703263ba0eb6a4cad76d73548a9e0d57b7926",
                 "sha256:d435f514e834e3fdc0941f6a29d086b80b2ea51b28112aee6254bd104ee42a74"
             ],
-            "markers": "sys_platform == 'linux' and sys_platform == 'linux' and sys_platform == 'linux'",
+            "markers": "sys_platform == 'linux' and sys_platform == 'linux'",
             "version": "==0.2.1"
         },
         "six": {

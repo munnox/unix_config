@@ -9,5 +9,3 @@
   tasks:
     - name: Run nodejs install tasks
       include_tasks: ../tasks/install_nodejs.yaml
-    - name: please fail
-      fail:

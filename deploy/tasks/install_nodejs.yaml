@@ -12,7 +12,14 @@
 
 - name: Set derived nodejs parameters to define final install path
   set_fact:
-    nodejs: '{{ nodejs | combine( {"final_path": nodejs.path + "/" + nodejs.binary_name }) }}'
+    nodejs: '{{
+        nodejs | combine(
+          {
+            "final_path": nodejs.path + "/" + nodejs.binary_name,
+            "final_url": "https://nodejs.org/dist/" + nodejs.version + "/" + nodejs.binary_name + ".tar.xz"
+          }
+        )
+      }}'
 
 - name: Summaries NodeJS facts
   debug:
@@ -20,30 +27,58 @@
       nodejs variable:
 
       {{nodejs | to_nice_yaml}}
-    # NodejVs version: {{nodejs_version}}
-    # Nodejs distro: {{nodejs_distro}}
-    # Nodejs install path: {{nodejs_path}}
-    # Nodejs install: {{nodejs_install}}
 
-- name: please fail
-  fail:
+# - name: please fail
+#   fail:
+
 # Install NodeJS based on version
 - name: Install NodeJS
   ansible.builtin.shell: |
     bash -c "
-    # Install nodejs
-    NODE_JS_VERSION={{nodejs.version}}
-    NODE_JS_DISTRO={{nodejs.distro}}
-    NODE_JS_NAME=\"{{nodejs.binary_name}}\"
-    # NODE_JS_PATH=\"{{nodejs.final_path}}\"
-    curl https://nodejs.org/dist/$NODE_JS_VERSION/$NODE_JS_NAME.tar.xz --output $NODE_JS_NAME.tar.xz
-    sudo mkdir -p {{nodejs.path}}
-    sudo tar -xJvf $NODE_JS_NAME.tar.xz -C {{nodejs.path}}
-    rm $NODE_JS_NAME.tar.xz
-    # echo \"{{nodejs.version}}\" > /home/rocky/nodeversion
+      # Install nodejs
+      curl {{ nodejs.final_url }} --output {{nodejs.binary_name}}.tar.xz
+      sudo mkdir -p {{nodejs.path}}
+      sudo tar -xJvf {{nodejs.binary_name}}.tar.xz -C {{nodejs.path}}
+      rm {{nodejs.binary_name}}.tar.xz
     "
   args:
-    creates: "{{nodejs_path}}/node-{{nodejs_version}}-linux-x64/bin/node"
+    creates: "{{nodejs.path}}/node-{{nodejs.version}}-{{nodejs.distro}}/bin/node"
   tags: install_nodejs
 
 # TODO Add path modification to .bashrc
+- name: Add path to .bashrc block
+  blockinfile:
+    path: "~/.bashrc"
+    block: |
+      export PATH="{{nodejs.path}}/node-{{nodejs.version}}-{{nodejs.distro}}/bin/:$PATH"
+    marker: "# {mark} ANSIBLE NODEJS MANAGED BLOCK"
+
+- name: test node version
+  ansible.builtin.shell: |
+    bash -c "
+      source ~/.bashrc
+      node --version
+    "
+  register: result_node
+
+- name: test node version
+  ansible.builtin.shell: |
+    bash -c "
+      source ~/.bashrc
+      npm --version
+    "
+  register: result_npm
+
+- name: Test NodeJS Install
+  assert:
+    that:
+      - result_node.stdout == nodejs.version
+      - result_npm.stdout.split('.')|length >= 2
+    fail_msg: |
+      NodeJS failed to install correctly
+      node --version = {{ result_node.stdout }}
+      npm --version = {{ result_npm.stdout }}
+    success_msg: |
+      NodeJS found and noted to be the right version
+      node --version = {{ result_node.stdout }}
+      npm --version = {{ result_npm.stdout }}
