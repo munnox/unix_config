@@ -3,7 +3,7 @@
 # aliases
 alias ll='ls -lah'
 
-# if [ '$DESKTOP_SESSION' = 'ubuntu']; then 
+# if [ '$DESKTOP_SESSION' = 'ubuntu']; then
 # alias ls='ls -alHh --color'
 # else
 alias lsn='ls -alGHh'

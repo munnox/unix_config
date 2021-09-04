@@ -18,5 +18,3 @@ alias tmuxns='tmux new-session -A -s'
 alias tls='tmux ls'
 alias tns='tmux new -s'
 alias ta='tmux a -t'
-
-

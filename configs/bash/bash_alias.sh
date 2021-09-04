@@ -32,7 +32,7 @@ Host dev
   # similar to 'ssh -D 8080 dropletA'
   # DynamicForward 8080
 
-  # allow a localhost only port 8000 on remote accessible locally only 
+  # allow a localhost only port 8000 on remote accessible locally only
   # similar to 'ssh -L 8000:localhost:8000 dev'
   # Localforward 8000 localhost:8000
 

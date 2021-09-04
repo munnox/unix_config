@@ -58,6 +58,3 @@ openssl ca -config intermediate/openssl.cnf \
 > Enter pass phrase for intermediate.key.pem: secretpassword
 > Revoking Certificate 1001.
 > Data Base Updated
-
-
-

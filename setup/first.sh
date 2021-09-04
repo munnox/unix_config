@@ -7,5 +7,3 @@ python3.8 -m pip install pipenv
 sudo curl -o /usr/local/bin/nvim -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
 sudo chmod ugo+x /usr/local/bin/nvim
 sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
-
-

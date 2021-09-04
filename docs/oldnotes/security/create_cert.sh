@@ -13,5 +13,3 @@ openssl x509 -req -days 360 -in sha1.csr -CA ca.cert.pem -CAkey ca.key.pem -CAcr
 
 # Check signed certificate
 openssl x509 -text -noout -in sha1.crt
-
-

@@ -10,4 +10,3 @@ Ceph Octopus
 Charms->Openstack->Ceph
 
 Charmed openstask and ceph
-

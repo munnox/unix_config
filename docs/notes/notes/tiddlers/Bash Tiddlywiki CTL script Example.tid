@@ -23,9 +23,9 @@ WIKIPATH=$WIKIROOT/$WIKINAME
 run_as_daemon () {
     # run the image as a deamon with the terminal on
     echo "running as demon $1"
-    # init 
+    # init
     if [ ! -d $WIKIPATH ]; then
-        echo "wiki doesn't exist so will be created" 
+        echo "wiki doesn't exist so will be created"
         docker run --rm \
             --name $1 \
             --volume $WIKIROOT:/opt/wiki \

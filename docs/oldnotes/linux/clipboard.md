@@ -54,7 +54,7 @@ fi
 
 # if copy backend is resolved, copy and exit
 if [ -n "$copy_backend" ]; then
-  printf "$buf" | eval "$copy_backend" 
+  printf "$buf" | eval "$copy_backend"
   exit;
 fi
 
@@ -72,7 +72,7 @@ buflen=$( printf %s "$buf" | wc -c )
 # The maximum length of an OSC 52 escape sequence is 100_000 bytes, of which
 # 7 bytes are occupied by a "\033]52;c;" header, 1 byte by a "\a" footer, and
 # 99_992 bytes by the base64-encoded result of 74_994 bytes of copyable text
-maxlen=74994 
+maxlen=74994
 
 # warn if exceeds maxlen
 if [ "$buflen" -gt "$maxlen" ]; then
@@ -91,4 +91,3 @@ target_tty="${SSH_TTY:-$pane_active_tty}"
 
 printf "$esc" > "$target_tty"
 ```
-

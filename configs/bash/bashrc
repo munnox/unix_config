@@ -11,7 +11,7 @@ export RAM_ORG_PATH=${RAM_ORG_PATH:-$PATH}
 
 # Array of localscripts
 LOCALSCRIPTS=(
-../bash/bash_alias.sh 
+../bash/bash_alias.sh
 ../bash/bash_display.sh
 ../bash/bash_terminal.sh
 ../bash/bash_env.sh
@@ -41,14 +41,14 @@ done
 
 # If the cargo directry exists source it
 # This loads cargo for a rust environment
-[ -s "~/.cargo/env" ] && \. "~/.cargo/env"  
+[ -s "~/.cargo/env" ] && \. "~/.cargo/env"
 
 # Node NVM setup and config first checking if the directory exists
 export NVM_DIR="$HOME/.ramnvm"
 # This loads nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 # This loads nvm bash_completion
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # # git branch autocompletion
 # if [ -f ~/dotfiles/.git-completion.bash ]; then
@@ -57,4 +57,3 @@ export NVM_DIR="$HOME/.ramnvm"
 
 # disable the ctrl-s
 stty -ixon
-

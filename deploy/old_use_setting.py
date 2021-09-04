@@ -10,10 +10,8 @@ Use config settings in python
 """
 
 import os
-import sys
-
-#  import shutil
 import subprocess
+import sys
 
 HOME = os.getenv("HOME", None)
 PWD = os.path.abspath(".")
@@ -24,6 +22,7 @@ CONFIG_PATH = os.path.join(LOCAL_REPO, "configs")
 
 
 def main():
+    "Main function for deploy the config settings."
     print("Installing settings and config\n")
 
     fix_bash()
@@ -37,23 +36,21 @@ def main():
 
 
 def find_in_file(filename, pattern):
-    """Look for a pattern in a given file and report"""
-    with open(filename, "r") as file_handle:
+    """Look for a pattern in a given file and report."""
+    with open(filename, "r", encoding="utf-8") as file_handle:
         if file_handle.read().find(pattern) >= 0:
             return True
     return False
 
 
 def run_process(*args):
-    """Simple wrapper for running a process
-    Untested
-    """
-    sub_process = subprocess.Popen(args)
-    sub_process.communicate()
+    """Simple wrapper for running a process. (Untested)"""
+    with subprocess.Popen(args) as sub_process:
+        sub_process.communicate()
 
 
 def fix_bash():
-    """Install bash config file"""
+    """Install bash config file."""
     # Test and copy BASH config
     print("========== BASH Config ==========")
     bash_pattern = f"source {CONFIG_PATH}/bash/bashrc"
@@ -64,13 +61,13 @@ def fix_bash():
         if find_in_file(config_path_bash, bash_pattern):
             print(f"'{config_path_bash}' redirect exists continuing")
         else:
-            with open(config_path_bash, "a") as file_handle:
+            with open(config_path_bash, "a", encoding="utf-8") as file_handle:
                 file_handle.write("\n{0}".format(bash_pattern))
             print(f"'{config_path_bash}' redirect added")
 
 
 def fix_zsh():
-    """Install zsh config file"""
+    """Install zsh config file."""
     # Test and copy zsh config
     print("========== zsh Config ==========")
     zsh_pattern = f"source {CONFIG_PATH}/zsh/zshrc"
@@ -81,17 +78,17 @@ def fix_zsh():
         if find_in_file(config_path_zsh, zsh_pattern):
             print(f"'{config_path_zsh}' redirect exists continuing")
         else:
-            with open(config_path_zsh, "a") as file_handle:
+            with open(config_path_zsh, "a", encoding="utf-8") as file_handle:
                 file_handle.write("\n{0}".format(zsh_pattern))
             print(f"'{config_path_zsh}' redirect added")
     else:
-        with open(config_path_zsh, "w") as file_handle:
+        with open(config_path_zsh, "w", encoding="utf-8") as file_handle:
             file_handle.write("\n{0}".format(zsh_pattern))
         print(f"'{config_path_zsh}' redirect added")
 
 
 def fix_xinit():
-    """Install xwin config file"""
+    """Install xwin config file."""
     # Test and copy BASH config
     print("========== XWIN Config ==========")
     xsession_pattern = f"{CONFIG_PATH}/xwin/xsession"
@@ -100,8 +97,8 @@ def fix_xinit():
     try:
         os.symlink(xsession_pattern, config_path_xsession)
         print(f"Linking xinitrc config to:\n{config_path_xsession}")
-    except FileExistsError as error:  # pylint: disable=broad-except
-        print(f"Already linked")
+    except FileExistsError:  # pylint: disable=broad-except
+        print("Already linked")
 
     xres_pattern = f"{CONFIG_PATH}/xwin/Xresources"
     config_path_xres = f"{HOME}/.Xresources"
@@ -109,8 +106,8 @@ def fix_xinit():
     try:
         os.symlink(xres_pattern, config_path_xres)
         print(f"Linking xresources config to:\n{config_path_xres}")
-    except FileExistsError as error:  # pylint: disable=broad-except
-        print(f"Already linked")
+    except FileExistsError:  # pylint: disable=broad-except
+        print("Already linked")
 
     xmodmap_pattern = f"{CONFIG_PATH}/xwin/xmodmap"
     config_path_xmodmap = f"{HOME}/.xmodmap"
@@ -118,12 +115,12 @@ def fix_xinit():
     try:
         os.symlink(xmodmap_pattern, config_path_xmodmap)
         print(f"Linking xmodmap config to:\n{config_path_xmodmap}")
-    except FileExistsError as error:  # pylint: disable=broad-except
-        print(f"Already linked")
+    except FileExistsError:  # pylint: disable=broad-except
+        print("Already linked")
 
 
 def fix_neovim():
-    """Install neovim config file"""
+    """Install neovim config file."""
     # Test and copy NEOVIM
     print("========== NEOVIM Config ==========")
     vim_pattern = f"source {CONFIG_PATH}/vim/vimrc"
@@ -139,11 +136,11 @@ def fix_neovim():
         if find_in_file(config_file_vim, vim_pattern):
             print(f"'{config_file_vim}' redirect to repo exists continuing")
         else:
-            with open(config_file_vim, "a") as file_handle:
+            with open(config_file_vim, "a", encoding="utf-8") as file_handle:
                 file_handle.write("\n{0}".format(vim_pattern))
             print(f"'{config_file_vim}' redirect to repo added")
     else:
-        with open(config_file_vim, "w") as file_handle:
+        with open(config_file_vim, "w", encoding="utf-8") as file_handle:
             file_handle.write(vim_pattern)
         print(f"'{config_file_vim}' file created and redirect to repo set")
 
@@ -157,12 +154,12 @@ def fix_neovim():
         # os.mkdir(config_path_neovim)
 
     # Redirect neovim to the HOME directory vim config
-    with open(config_file_neovim, "w") as file_handle:
+    with open(config_file_neovim, "w", encoding="utf-8") as file_handle:
         file_handle.write("source ~/.vimrc")
 
 
 def fix_tmux():
-    """Install tmux config file"""
+    """Install tmux config file."""
     # Test and copy Tmux config
     print("========== TMUX Config ==========")
     config_file_tmux = f"{HOME}/.tmux.conf"
@@ -171,15 +168,15 @@ def fix_tmux():
         os.symlink(path_tmux, config_file_tmux)
         #  shutil.copy(path_tmux, config_file_tmux)
         print(f"Copying Tmux config as cannot link to repo to:\n{path_tmux}")
-    except FileExistsError as error:  # pylint: disable=broad-except
-        print(f"Already linked")
+    except FileExistsError:  # pylint: disable=broad-except
+        print("Already linked")
 
     except Exception as error:  # pylint: disable=broad-except
         print(f"Tmux config.\nError type: ({type(error)}):\n{error}")
 
 
 def fix_alacritty():
-    """Install alacritty config file"""
+    """Install alacritty config file."""
     # Test and copy Tmux config
     print("========== ALACRITTY Config ==========")
     config_file_alacritty = f"{HOME}/.config/alacritty/alacritty.yml"
@@ -188,15 +185,15 @@ def fix_alacritty():
         os.symlink(path_alacritty, config_file_alacritty)
         #  shutil.copy(path_alacritty, config_file_alacritty)
         print(f"Copying alacritty config as cannot link to repo to:\n{path_alacritty}")
-    except FileExistsError as error:  # pylint: disable=broad-except
-        print(f"Already linked")
+    except FileExistsError:  # pylint: disable=broad-except
+        print("Already linked")
 
     except Exception as error:  # pylint: disable=broad-except
         print(f"alacritty config.\nError type: ({type(error)}):\n{error}")
 
 
 def fix_i3():
-    """Install i3 config and i3 status env config file
+    """Install i3 config and i3 status env config file.
 
     Further info https://i3wm.org/i3status/manpage.html
     """
@@ -216,8 +213,8 @@ def fix_i3():
         os.symlink(path_i3config, config_file_i3config)
         #  shutil.copy(path_i3, config_file_i3)
         print(f"Copying I3 config as cannot link to repo to:\n{path_i3config}")
-    except FileExistsError as error:  # pylint: disable=broad-except
-        print(f"Already linked")
+    except FileExistsError:
+        print("Already linked")
 
     except Exception as error:  # pylint: disable=broad-except
         print(f"I3 potentially not installed.\nError type: ({type(error)}):\n{error}")
@@ -231,15 +228,15 @@ def fix_i3():
         os.symlink(file_i3status, config_file_i3status)
         #  shutil.copy(file_i3, config_file_i3)
         print(f"Copying I3 status config as cannot link to repo to:\n{file_i3status}")
-    except FileExistsError as error:  # pylint: disable=broad-except
-        print(f"Already linked")
+    except FileExistsError:  # pylint: disable=broad-except
+        print("Already linked")
 
     except Exception as error:  # pylint: disable=broad-except
         print(f"I3 potentially not installed.\nError type: ({type(error)}):\n{error}")
 
 
 def fix_git():
-    """Install git config file"""
+    """Install git config file."""
     # Test and copy git config
     print("========== GIT Config ==========")
     config_file_git = f"{HOME}/.gitconfig"
@@ -249,10 +246,10 @@ def fix_git():
         if find_in_file(config_file_git, pattern_git):
             print(f"'{config_file_git}' redirect exists continuing")
         else:
-            with open(config_file_git, "a") as file_handle:
+            with open(config_file_git, "a", encoding="utf-8") as file_handle:
                 file_handle.write(pattern_git)
     else:
-        with open(config_file_git, "a") as file_handle:
+        with open(config_file_git, "a", encoding="utf-8") as file_handle:
             file_handle.write(pattern_git)
 
 

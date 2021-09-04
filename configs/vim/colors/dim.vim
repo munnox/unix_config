@@ -50,4 +50,3 @@ else
   highlight VertSplit    ctermfg=7    ctermbg=8    cterm=NONE
   highlight SignColumn                ctermbg=8
 endif
-

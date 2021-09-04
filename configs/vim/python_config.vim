@@ -76,4 +76,3 @@
 " mkdir -p ~/.vim/ftplugin
 " wget -0 ~/.vim/ftplugin/python_editing.vim http://www.vim.org/script
 " set nofoldenable
-

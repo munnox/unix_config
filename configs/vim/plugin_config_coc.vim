@@ -31,7 +31,7 @@ endfunction
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
-        
+
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
@@ -57,4 +57,3 @@ nnoremap <silent> <space>i  :call CocActionAsync('codeAction', '', 'Implement mi
 
 " Show actions available at this location
 nnoremap <silent> <space>a  :CocAction<cr>
-

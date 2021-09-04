@@ -11,5 +11,3 @@ docker run  --rm -it --volume-from <container_name> -v $(pwd):/backup ubuntu tar
 ```
 docker run --rm -it --volume-from {{ container_name }} -v ${pwd}:/backup ubuntu bash -c "cd /models && tar xvf /backup/backup.tar --strip 1"
 ```
-
-

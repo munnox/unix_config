@@ -43,5 +43,3 @@ letsencrypt['auto_renew_hour'] = "12"
 letsencrypt['auto_renew_minute'] = "30"
 letsencrypt['auto_renew_day_of_month'] = "*/7"
 ```
-
-

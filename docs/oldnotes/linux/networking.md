@@ -40,5 +40,3 @@ nmtui
 # gui connection editor
 nm-connection-editor
 ```
-
-

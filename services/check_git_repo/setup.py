@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
+
 import setuptools
+
 
 def get_install_requirements():
     """Get a list of requirement from the pipfile.
@@ -12,6 +14,7 @@ def get_install_requirements():
     # failing to install package when installing this package
     # TODO having to use the print statement with python setup.py to the setup function
     import toml
+
     try:
         # read my pipfile
         with open("Pipfile", "r") as fh:
@@ -22,7 +25,9 @@ def get_install_requirements():
         return []  # if the package's key isn't there then just return an empty list
     try:
         required_packages = pipfile_toml["packages"].items()
-        required_packages = [(pkg, ver) for pkg, ver in required_packages if not isinstance(ver, dict)] 
+        required_packages = [
+            (pkg, ver) for pkg, ver in required_packages if not isinstance(ver, dict)
+        ]
         print(required_packages)
     except KeyError:
         return []
@@ -44,9 +49,7 @@ setup(
     author_email="a@b.c",
     url="",
     # TODO removed due to TOML import issue and fixed requires from get_install_requirements(),
-    install_requires=['toml', 'pyyaml ==5.4.1', 'click ==7.1.2', 'GitPython ==3.1.11'],
+    install_requires=["toml", "pyyaml ==5.4.1", "click ==7.1.2", "GitPython ==3.1.11"],
     packages=["check_git_repo"],
-    entry_points={
-        "console_scripts": ["checkgit=main:main"],
-    },
+    entry_points={"console_scripts": ["checkgit=main:main"]},
 )

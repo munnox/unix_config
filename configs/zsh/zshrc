@@ -46,4 +46,3 @@ alias g="git"
 export nvm_dir="$home/.ramnvm"
 [ -s "$nvm_dir/nvm.sh" ] && \. "$nvm_dir/nvm.sh"  # this loads nvm
 [ -s "$nvm_dir/bash_completion" ] && \. "$nvm_dir/bash_completion"  # this loads nvm bash_completion
-

@@ -24,7 +24,7 @@ sudo fuser -vki /var/lib/dpkg/lock-frontend
 
 then try to purge and fix snapd
 
-either 
+either
 
 ```
 sudo apt purge snapd
@@ -46,4 +46,3 @@ sudo apt full-upgrade
 ```
 
 did work fine the machine seems ok and back to normal
-

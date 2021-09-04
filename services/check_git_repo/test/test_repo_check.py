@@ -1,7 +1,6 @@
-import yaml
-import pytest
 import check_git_repo
-
+import pytest
+import yaml
 
 # Basic remote url test set
 testdata = [

@@ -63,4 +63,3 @@ chmod 444 $INT_CA_PATH/certs/intermediate.cert.pem
 cat $INT_CA_PATH/certs/intermediate.cert.pem \
     /root/ca/certs/ca.cert.pem > $INT_CA_PATH/certs/ca-chain.cert.pem
 chmod 444 $INT_CA_PATH/certs/ca-chain.cert.pem
-

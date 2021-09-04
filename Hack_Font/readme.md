@@ -21,5 +21,3 @@ Or use package manager
 ```
 apt install fonts-hack-ttf
 ```
-
-

@@ -1,7 +1,7 @@
 // Place your key bindings in this file to override the defaults
 [
     // https://github.com/VSCodeVim/Vim/issues/2376 trouble moveing to the terminal
-    { 
+    {
         "key": "ctrl+k",
         "command": "workbench.action.focusActiveEditorGroup",
         "when": "terminalFocus"

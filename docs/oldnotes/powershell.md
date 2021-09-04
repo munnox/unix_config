@@ -20,7 +20,7 @@ TCP
 From the Technet article above use:
 
 > You can set PowerShell remoting to use 80 (HTTP and 443 (HTTPS) by running the following commands
-> 
+>
 > ```
 > Set-Item WSMan:\localhost\Service\EnableCompatibilityHttpListener -Value true
 > Set-Item WSMan:\localhost\Service\EnableCompatibilityHttpsListener -Value true
@@ -42,5 +42,3 @@ $d = @{
         name='foo item 2'
     }
 }
-
-

@@ -91,4 +91,3 @@ virsh dominfo your_vm_name
 virsh # edit centos
 virsh # dumpxml centos8
 ```
-

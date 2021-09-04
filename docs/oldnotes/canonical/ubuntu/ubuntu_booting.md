@@ -7,7 +7,7 @@ Source <https://askubuntu.com/questions/859630/how-to-start-ubuntu-in-console-mo
 
 Boot into recovery mode
 
-on boot hit Shift or ESC if UEFI 
+on boot hit Shift or ESC if UEFI
 
 Edit `/etc/default/grub`
 

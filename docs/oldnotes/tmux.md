@@ -24,5 +24,3 @@ default binding is `ctrl-b` and `ctrl_b ?` can be used to get a list of other sh
 My bindings
 ctrl-s+{h,j,k,l} to move windows.
 ctrl+s d to disconnect
-
-

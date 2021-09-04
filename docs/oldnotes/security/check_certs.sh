@@ -8,9 +8,9 @@
 openssl s_client -connect www.paypal.com:443
 
 # check private key checksum
-openssl pkey -in privateKey.key -pubout -outform pem | sha256sum 
+openssl pkey -in privateKey.key -pubout -outform pem | sha256sum
 # check certificate checksum
-openssl x509 -in certificate.crt -pubkey -noout -outform pem | sha256sum 
+openssl x509 -in certificate.crt -pubkey -noout -outform pem | sha256sum
 # check certificate request# check certificate checksum
 openssl req -in CSR.csr -pubkey -noout -outform pem | sha256sum
 

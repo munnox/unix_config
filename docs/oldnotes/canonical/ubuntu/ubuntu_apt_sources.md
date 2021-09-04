@@ -20,5 +20,3 @@ or the full line
 this enables `main`, `universe`, `restricted` and `multiverse`
 
 OR on GUI use "software center"->edit->"Software Sources"
-
-

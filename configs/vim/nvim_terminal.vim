@@ -31,4 +31,3 @@ if has("nvim")
     nnoremap <leader>termss :vsplit <BAR> terminal<CR>
 
 endif
-

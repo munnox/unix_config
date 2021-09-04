@@ -22,7 +22,7 @@ Setup within an iframe
 			<textarea v-model="result" cols="40" rows="5"></textarea>
 			<pre>{{ decodedtext }}</pre>
     </div>
-    <script type="text/javascript">			
+    <script type="text/javascript">
 			function b64_to_utf8( str ) {
 				return decodeURIComponent(escape(window.atob( str )));
 			}

@@ -52,7 +52,7 @@
       tags: install_neovim_appimage
 
     # Install Neovim
-    - name: Install neovim 
+    - name: Install neovim
       ansible.builtin.shell: |
         bash -c "
         # get appimage binary

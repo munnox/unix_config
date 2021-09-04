@@ -62,4 +62,3 @@ services:
       # - ./certificate.key:/certs/server.key
       # - ./servers.json:/pgadmin4/servers.json
 ```
-

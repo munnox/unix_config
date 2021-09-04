@@ -61,4 +61,3 @@ New-ItemProperty -Path $kbLayout -Name "Scancode Map" -PropertyType Binary -Valu
 ## QMK
 
 * https://config.qmk.fm/#/ergodox_ez/LAYOUT_ergodox_pretty
-

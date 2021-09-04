@@ -13,4 +13,3 @@ RUN apt-get update && apt-get install -y neovim curl git tmux \
 
 CMD bash
 ```
-

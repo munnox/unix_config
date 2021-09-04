@@ -7,7 +7,7 @@
 # This has worked on windows cmder out of the box an path
 # variant seem to work ok on linux too. Windows just seem
 # to be more picky aobut the path
-# 
+#
 # A way of testing the config is
 #
 # $ git config --show-origin -l

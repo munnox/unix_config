@@ -43,7 +43,7 @@ RUN echo "base:Docker!" | chpasswd
 
 RUN curl -o /usr/local/bin/nvim -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage && \
     chmod ugo+x /usr/local/bin/nvim && \
-    ln -s /usr/local/bin/nvim /usr/local/bin/vim 
+    ln -s /usr/local/bin/nvim /usr/local/bin/vim
 
 RUN curl https://nodejs.org/dist/v14.15.3/$NODE_JS_NAME.tar.xz --output $NODE_JS_NAME.tar.xz && \
     mkdir -p /usr/local/lib/nodejs && \
@@ -55,7 +55,7 @@ USER base
 WORKDIR /home/base/
 
 COPY ./ /repo/unix_config/
-# RUN git clone https://github.com/munnox/unix_config /repo/unix_config 
+# RUN git clone https://github.com/munnox/unix_config /repo/unix_config
 # RUN cd /repo/unix_config/ && git pull && git checkout 2a1942a571fb8c4292582a9b3b2d4d78d6201568
 
 

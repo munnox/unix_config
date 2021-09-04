@@ -41,10 +41,10 @@ Setup within an iframe
             }
         );
 
-        function makeCode () {      
+        function makeCode () {
             var elText = document.getElementById("text");
             var elTextArea = document.getElementById("texta");
-            
+
             if (!elText.value) {
                 alert("Input a text");
                 elText.focus();
@@ -57,9 +57,9 @@ Setup within an iframe
             }
             qrcode.makeCode(text);
         }
-        
+
         makeCode();
-        
+
         $("#text,#texta").
             on("blur", function () {
                 makeCode();
@@ -69,7 +69,7 @@ Setup within an iframe
                     makeCode();
                 }
             });
-        
+
         </script>
     </body>
 </html>
@@ -135,7 +135,7 @@ Setup within an iframe
         }
         return sections;
       }
-			
+
 			function utf8_to_b64( str ) {
 				return window.btoa(unescape(encodeURIComponent( str )));
 			}
@@ -180,7 +180,7 @@ Setup within an iframe
             }
             else {
               this.qrcode.makeCode(text);
-            }     
+            }
             return text;
           },
           safe: function(text) {
@@ -299,7 +299,7 @@ Setup within an iframe
         }
         return sections;
       }
-			
+
 			function utf8_to_b64( str ) {
 				return window.btoa(unescape(encodeURIComponent( str )));
 			}
@@ -344,7 +344,7 @@ Setup within an iframe
             }
             else {
               this.qrcode.makeCode(text);
-            }     
+            }
             return text;
           },
           safe: function(text) {
@@ -412,7 +412,7 @@ Setup within an iframe
 			<textarea v-model="result" cols="40" rows="5"></textarea>
 			<pre>{{ decodedtext }}</pre>
     </div>
-    <script type="text/javascript">			
+    <script type="text/javascript">
 			function utf8_to_b64( str ) {
 				return window.btoa(unescape(encodeURIComponent( str )));
 			}

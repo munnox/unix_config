@@ -4,7 +4,7 @@ Online docs and help files
 
 * http://vimdoc.sourceforge.net/htmldoc/help.html
 * https://noahfrederick.com/log/a-list-of-vims-lists
-* 
+*
 
 Interesting less used shortcuts:
 
@@ -24,4 +24,3 @@ Interesting less used shortcuts:
 * `<C-r>` - To paste from a register into the cmd line. See `:help c_<C-R>`
 * `<C-r><C-w>` - Paste the current word under the course into the cmd line. See `:help cmdline-editing`
 * `<C+r><C-k>` - copies what is under the cursor in the commandline.
-

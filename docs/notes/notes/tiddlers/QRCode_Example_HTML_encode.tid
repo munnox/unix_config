@@ -63,7 +63,7 @@ Setup within an iframe
         }
         return sections;
       }
-			
+
 			function utf8_to_b64( str ) {
 				return window.btoa(unescape(encodeURIComponent( str )));
 			}
@@ -108,7 +108,7 @@ Setup within an iframe
             // }
             // else {
             //   this.qrcode.makeCode(text);
-            // }     
+            // }
             return text;
           },
           safe: function(text) {

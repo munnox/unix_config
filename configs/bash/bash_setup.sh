@@ -79,7 +79,7 @@ setup_install_nodejs () {
   curl https://nodejs.org/dist/$NODE_JS_VERSION/$NODE_JS_NAME.tar.xz --output $NODE_JS_NAME.tar.xz
   # Extract and use
   sudo mkdir -p /usr/local/lib/nodejs
-  sudo tar -xJvf $NODE_JS_NAME.tar.xz -C /usr/local/lib/nodejs 
+  sudo tar -xJvf $NODE_JS_NAME.tar.xz -C /usr/local/lib/nodejs
 }
 
 
@@ -118,7 +118,7 @@ function setup_install_kvm() {
     # qemu-kvm (kvm in Karmic and earlier) is the backend
     # ubuntu-vm-builder powerful command line tool for building virtual machines
     # bridge-utils provides a bridge from your network to the virtual machines
-        
+
     sudo adduser `id -un` libvirt
     sudo adduser `id -un` kvm
 
@@ -151,7 +151,7 @@ function setup_install_podman() {
     echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
     curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
     sudo apt-get update
-    sudo apt-get -y upgrade 
+    sudo apt-get -y upgrade
     sudo apt-get -y install podman
 }
 
@@ -231,7 +231,7 @@ function install_dotnet() {
 
     # Download the Microsoft repository GPG keys
     wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
-    
+
     # Register the Microsoft repository GPG keys
     sudo dpkg -i packages-microsoft-prod.deb
 

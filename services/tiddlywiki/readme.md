@@ -11,5 +11,3 @@ sudo docker run -d --name tw -p 8080:8080 -v $($HOME)/.tiddlywiki:/var/lib/tiddl
 ```
 
 Sign in with is `user` / `wiki`
-
-

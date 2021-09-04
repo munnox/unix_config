@@ -1,5 +1,5 @@
-import click
 import check_git_repo
+import click
 
 
 @click.command()

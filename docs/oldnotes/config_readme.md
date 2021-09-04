@@ -48,7 +48,7 @@ Plug 'airblade/vim-gitgutter'
 `<leader>hu`- undo hunk
 `<leader>hs`- stage hunk
 
-`K` - CoC Get documentation 
+`K` - CoC Get documentation
 
 ## i3 wm
 
@@ -301,4 +301,3 @@ bind-key    -T root         MouseDrag1Border  resize-pane -M
 bind-key    -T root         WheelUpPane       if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= \"#{pane_in_mode}\" \"send-keys -M\" \"copy-mode -et=\""
 bind-key    -T root         WheelUpStatus     previous-window
 bind-key    -T root         WheelDownStatus   next-window
-

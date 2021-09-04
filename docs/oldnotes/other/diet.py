@@ -13,21 +13,21 @@ Author Robert Munnoch
 import datetime
 
 target_daily_calories = 1560.0
-rate = target_daily_calories/24.0
+rate = target_daily_calories / 24.0
 
 calories = input("How many calories comsumed?\n")
 
 try:
-	calories = float(calories)
+    calories = float(calories)
 except:
-	raise Exception("Calories entered must be a number e.g. 100")
+    raise Exception("Calories entered must be a number e.g. 100")
 
 hour_wait = calories / rate
 
 dt = datetime.timedelta(hours=hour_wait)
 current = datetime.datetime.now()
 
-target = current+ dt
+target = current + dt
 
 print(f"Current Time: {current.isoformat()}")
 print(f"hours to wait: {hour_wait:0.3f}")
