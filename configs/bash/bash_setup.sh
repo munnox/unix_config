@@ -32,12 +32,56 @@ function setup_install_u1804_dockerce() {
     sudo usermod -aG docker $USER
 }
 
+# =========================== DOCKER =============================
+# Source <https://techviewleo.com/install-docker-and-docker-compose-on-rocky-linux/>
+# Source <>
+# Install Docker CE on linux
+#
+# Covenience script
+# curl -fsSL https://get.docker.com -o get-docker.sh
+
+function setup_install_rocky_dockerce() {
+    sudo dnf update -y
+    sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+
+
+    # sudo yum install -y yum-utils
+    # sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+    # sudo dnf install docker-ce --allowerassing
+    sudo dnf install docker-ce docker-ce-cli containerd.io
+    # If you encounter a containerd.io error, use command below to bypass the error.
+    # sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose --allowerassing
+
+    # https://devcoops.com/how-to-install-docker-compose-on-rocky-linux/
+    # sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    # sudo chmod +x /usr/local/bin/docker-compose
+    # sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    # docker-compose --version
+
+    sudo usermod -aG docker $USER
+}
+
+NODE_JS_INSTALLED=0
+NODE_JS_VERSION=v14.17.6
+NODE_JS_DISTRO=linux-x64
+NODE_JS_NAME="node-$NODE_JS_VERSION-$NODE_JS_DISTRO"
+NODE_JS_PATH="/usr/local/lib/nodejs/$NODE_JS_NAME"
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$NODE_JS_PATH/bin" ] ; then
+    NODE_JS_INSTALLED=1
+    PATH="$NODE_JS_PATH/bin:$PATH"
+fi
+
 setup_install_nodejs () {
-  curl https://nodejs.org/dist/v14.15.3/$NODE_JS_NAME.tar.xz --output $NODE_JS_NAME.tar.xz
+  # see above set env variable and the path if found
+  curl https://nodejs.org/dist/$NODE_JS_VERSION/$NODE_JS_NAME.tar.xz --output $NODE_JS_NAME.tar.xz
   # Extract and use
   sudo mkdir -p /usr/local/lib/nodejs
   sudo tar -xJvf $NODE_JS_NAME.tar.xz -C /usr/local/lib/nodejs 
 }
+
 
 setup_install_neovim () {
   sudo curl -o /usr/local/bin/nvim -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
@@ -95,9 +139,9 @@ function setup_install_kvm() {
 # source https://www.virtualbox.org/wiki/Linux_Downloads
 
 function setup_install_virtualbox() {
-    wget https://download.virtualbox.org/virtualbox/6.1.16/virtualbox-6.1_6.1.16-140961~Ubuntu~eoan_amd64.deb
+    wget https://download.virtualbox.org/virtualbox/6.1.26/virtualbox-6.1_6.1.26-145957~Ubuntu~eoan_amd64.deb
 
-    sudo apt install ./virtualbox-6.1_6..16-140961-Ubuntu-eon_and64.deb
+    sudo apt install ./virtualbox-6.1_6.1.26-145957~Ubuntu~eoan_amd64.deb
 
 }
 
@@ -119,7 +163,16 @@ function setup_install_rust() {
     # useful programs
     # sudo apt install git tmux neovim gcc
     # Required program
-    sudo apt install curl
+    if command -v apt &> /dev/null
+    then
+        echo "apt found assuming debian"
+        sudo apt install curl
+    fi
+    if command -v dnf &> /dev/null
+    then
+        echo "dng found assuming centos or rocky"
+        sudo dnf install curl
+    fi
     curl https://sh.rustup.rs -sSf | sh
 }
 
@@ -172,8 +225,6 @@ function setup_install_alacritty {
 }
 
 # ======================== dotnet Ubuntu 18.04/20.04 =========================
-
-
 function install_dotnet() {
     # Source https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current
     # Install DotNET Core on ubuntu 18.04
@@ -218,18 +269,3 @@ function install_powershell() {
     # # Start PowerShell
     # pwsh
 }
-
-
-NODE_JS_INSTALLED=0
-NODE_JS_VERSION=v14.15.3
-NODE_JS_DISTRO=linux-x64
-NODE_JS_NAME="node-$NODE_JS_VERSION-$NODE_JS_DISTRO"
-NODE_JS_PATH="/usr/local/lib/nodejs/$NODE_JS_NAME"
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$NODE_JS_PATH/bin" ] ; then
-    NODE_JS_INSTALLED=1
-    PATH="$NODE_JS_PATH/bin:$PATH"
-fi
-
-

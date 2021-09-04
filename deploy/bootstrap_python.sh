@@ -1,8 +1,10 @@
 #!/bin/bash
 
 function rocky() {
+  # set -x
   echo "bootstraping python and ansible for rocky linux"
-  sudo yum install python38-devel python38-pip libffi-dev gcc libssl-dev git curl tmux
+  # sudo dnf install python38-devel python38-pip libffi-dev gcc libssl-dev git curl tmux
+  sudo dnf install python38-devel python38-pip git curl tmux
   
   # Setup a basic python 3.8 environment
   python3 -m pip install --user pipx
