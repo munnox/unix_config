@@ -2,26 +2,12 @@
 - name: config deploy
   hosts: localhost
   vars:
-    nodejs_version: "v14.17.6"
-    install_nodejs: False
+    # nodejs_version: "v14.17.5"
+    # nodejs_install: False
+    nodejs:
+      install_flag: no
   tasks:
-    # Install NodeJS based on version
-    - name: Install NodeJS
-      ansible.builtin.shell: |
-        bash -c "
-        # Install nodejs
-        NODE_JS_VERSION={{nodejs_version}}
-        NODE_JS_DISTRO=linux-x64
-        NODE_JS_NAME=\"node-$NODE_JS_VERSION-$NODE_JS_DISTRO\"
-        NODE_JS_PATH=\"/usr/local/lib/nodejs/$NODE_JS_NAME\"
-        curl https://nodejs.org/dist/$NODE_JS_VERSION/$NODE_JS_NAME.tar.xz --output $NODE_JS_NAME.tar.xz
-        sudo mkdir -p /usr/local/lib/nodejs
-        sudo tar -xJvf $NODE_JS_NAME.tar.xz -C /usr/local/lib/nodejs
-        rm $NODE_JS_NAME.tar.xz
-        # echo \"{{nodejs_version}}\" > /home/rocky/nodeversion
-        "
-      args:
-        creates: /usr/local/lib/nodejs/node-{{nodejs_version}}-linux-x64/bin/node
-      when: install_nodejs
-      tags: install_nodejs
-    # TODO Add path modification to .bashrc
+    - name: Run nodejs install tasks
+      include_tasks: ../tasks/install_nodejs.yaml
+    - name: please fail
+      fail:

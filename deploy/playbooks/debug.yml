@@ -65,7 +65,7 @@
     #       {{ result.stdout.splitlines() | to_nice_json }}
 
     #       {{ hostvars[inventory_hostname] | to_nice_json }}
-          
+
       # {{ hostvars[inventory_hostname].keys() | to_nice_json }}
 
       # Machine Fact keys:
@@ -74,4 +74,3 @@
       # when: item != 'localhost' and item != '127.0.0.1'
       with_items:
         - "{{ groups.all | list }}"
-

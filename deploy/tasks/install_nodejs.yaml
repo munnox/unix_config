@@ -1,0 +1,49 @@
+- name: Set NodeJS version default is note set
+  set_fact:
+    nodejs:
+      version: "{{ nodejs.version | default('v14.17.6') }}"
+      distro: "{{ nodejs.distro | default('linux-x64') }}"
+      path: "{{ nodejs.path | default('/usr/local/lib/nodejs') }}"
+      install_flag: "{{ nodejs.install_flag | default(True) }}"
+
+- name: Set derived nodejs parameters to define binary
+  set_fact:
+    nodejs: '{{ nodejs | combine( {"binary_name": "node-" + nodejs.version + "-" + nodejs.distro}) }}'
+
+- name: Set derived nodejs parameters to define final install path
+  set_fact:
+    nodejs: '{{ nodejs | combine( {"final_path": nodejs.path + "/" + nodejs.binary_name }) }}'
+
+- name: Summaries NodeJS facts
+  debug:
+    msg: |
+      nodejs variable:
+
+      {{nodejs | to_nice_yaml}}
+    # NodejVs version: {{nodejs_version}}
+    # Nodejs distro: {{nodejs_distro}}
+    # Nodejs install path: {{nodejs_path}}
+    # Nodejs install: {{nodejs_install}}
+
+- name: please fail
+  fail:
+# Install NodeJS based on version
+- name: Install NodeJS
+  ansible.builtin.shell: |
+    bash -c "
+    # Install nodejs
+    NODE_JS_VERSION={{nodejs.version}}
+    NODE_JS_DISTRO={{nodejs.distro}}
+    NODE_JS_NAME=\"{{nodejs.binary_name}}\"
+    # NODE_JS_PATH=\"{{nodejs.final_path}}\"
+    curl https://nodejs.org/dist/$NODE_JS_VERSION/$NODE_JS_NAME.tar.xz --output $NODE_JS_NAME.tar.xz
+    sudo mkdir -p {{nodejs.path}}
+    sudo tar -xJvf $NODE_JS_NAME.tar.xz -C {{nodejs.path}}
+    rm $NODE_JS_NAME.tar.xz
+    # echo \"{{nodejs.version}}\" > /home/rocky/nodeversion
+    "
+  args:
+    creates: "{{nodejs_path}}/node-{{nodejs_version}}-linux-x64/bin/node"
+  tags: install_nodejs
+
+# TODO Add path modification to .bashrc
