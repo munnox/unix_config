@@ -1,0 +1,67 @@
+---
+- name: Set Neovim variables
+  set_fact:
+    install_neovim: True
+    install_neovim_appimage: False
+    neovim:
+      install: True
+      install_appimage: False
+      version: "v0.5.0"
+
+# Install Neovim Appimage
+- name: Install neovim as an AppImage
+  ansible.builtin.shell: |
+    bash -c "
+    # get appimage binary
+    rm /usr/local/bin/nvim
+    sudo curl -o /usr/local/bin/nvim -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+    # # make it executable
+    # sudo chmod ugo+x /usr/local/bin/nvim
+    sudo rm /usr/local/bin/vim
+    # sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
+    # Work without FUSE
+    # ./nvim.appimage --appimage-extract
+    # ./squashfs-root/usr/bin/nvim
+    "
+  args:
+    creates: /usr/local/bin/nvim
+  when: neovim.install_appimage
+  tags: neovim_install_appimage
+
+# Install Neovim
+- name: Install neovim
+  ansible.builtin.shell: |
+    bash -c "
+      # Get binary
+      curl -L https://github.com/neovim/neovim/releases/download/{{neovim.version}}/nvim-linux64.tar.gz --output nvim.tar.gz
+      mkdir -p /usr/local/lib/nvim
+      tar -xzf nvim.tar.gz -C /usr/local/lib/nvim
+      ln -s  /usr/local/lib/nvim/nvim-linux64/bin/nvim /usr/local/bin/nvim
+    "
+  args:
+    creates: /usr/local/bin/nvim
+  when: neovim.install
+  tags: neovim_install
+
+- name: test node version
+  ansible.builtin.shell: |
+    bash -c "
+      source ~/.bashrc
+      nvim --version
+    "
+  register: result_neovim
+
+- name: Test neovim Install
+  assert:
+    that:
+      - result_neovim.stdout.split("\n")[0] == "NVIM " + neovim.version
+    fail_msg: |
+      Neovim failed to install correctly
+      CMD: nvim --version
+      Result:
+      {{ result_neovim.stdout }}
+    success_msg: |
+      Neovim found and noted to be the right version
+      CMD: nvim --version
+      Result:
+      {{ result_neovim.stdout }}

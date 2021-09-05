@@ -4,3 +4,5 @@
   tasks:
     - name: Run nodejs install tasks
       include_tasks: ../../tasks/install_nodejs.yaml
+    - name: Run neovim install tasks
+      include_tasks: ../../tasks/install_neovim.yaml
