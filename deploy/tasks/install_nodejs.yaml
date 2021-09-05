@@ -59,6 +59,7 @@
       source ~/.bashrc
       node --version
     "
+  changed_when: false
   register: result_node
 
 - name: test node version
@@ -67,6 +68,7 @@
       source ~/.bashrc
       npm --version
     "
+  changed_when: false
   register: result_npm
 
 - name: Test NodeJS Install

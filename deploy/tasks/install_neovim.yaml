@@ -30,6 +30,7 @@
 
 # Install Neovim
 - name: Install neovim
+  become: yes
   ansible.builtin.shell: |
     bash -c "
       # Get binary
@@ -43,12 +44,12 @@
   when: neovim.install
   tags: neovim_install
 
-- name: test node version
+- name: test neovim version
   ansible.builtin.shell: |
     bash -c "
-      source ~/.bashrc
       nvim --version
     "
+  changed_when: false
   register: result_neovim
 
 - name: Test neovim Install

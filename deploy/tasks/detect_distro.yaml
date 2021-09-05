@@ -1,0 +1,24 @@
+# Simple distro detection without needing any other facts
+- name: Test presence of apt package manager
+  command: "command -v apt &> /dev/null"
+  register: apt_installed
+  changed_when: false
+  ignore_errors: yes
+
+- name: Test presence of dnf package manager
+  command: "command -v dnf &> /dev/null"
+  register: dnf_installed
+  changed_when: false
+  ignore_errors: yes
+
+- name: Test presence of systemd manager
+  command: "systemctl &> /dev/null"
+  register: systemd_installed
+  changed_when: false
+  ignore_errors: yes
+
+- name: Detect Distro
+  set_fact:
+    debian_family: "{{ apt_installed.rc == 0 }}"
+    rhel_family: "{{ dnf_installed.rc == 0 }}"
+    systemd_present: "{{ systemd_installed.rc == 0 }}"

@@ -5,7 +5,6 @@
     nodejs_version: "v14.15.3"
     set_language: False
     install_neovim: False
-    install_neovim_appimage: False
     install_nodejs: False
   tasks:
     # - name: Ping the machine to deploy
@@ -20,74 +19,31 @@
     #   ansible.builtin.debug:
     #     var: repo_config_path
 
+    - name: Detect distro
+      include_tasks: ../tasks/detect_distro.yaml
+
+    - name: summary
+      ansible.builtin.debug:
+        msg: |
+          {{ ubuntu_family }}
+          {{ rhel_family }}
+          {{ systemd_present }}
+
     - name: Uncomment the en_GB language for localegen but if not don't panic
       become: yes
-      ansible.builtin.shell:
-        cmd: |
-          sed -i -E 's/^# en_GB(.*)/en_GB\1/' /etc/locale.gen
-          locale-gen
-          timedatectl set-timezone Europe/London
-      ignore_errors: yes
-      # changed_when: False
+      include_tasks: ../tasks/set_gb_lang.yaml
       when: set_language
 
     # Install Neovim Appimage
-    - name: Install neovim as an AppImage
-      ansible.builtin.shell: |
-        bash -c "
-        # get appimage binary
-        rm /usr/local/bin/nvim
-        sudo curl -o /usr/local/bin/nvim -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
-        # # make it executable
-        # sudo chmod ugo+x /usr/local/bin/nvim
-        sudo rm /usr/local/bin/vim
-        # sudo ln -s /usr/local/bin/nvim /usr/local/bin/vim
-        # Work without FUSE
-        # ./nvim.appimage --appimage-extract
-        # ./squashfs-root/usr/bin/nvim
-        "
-      args:
-        creates: /usr/local/bin/nvim
-      when: install_neovim_appimage
-      tags: install_neovim_appimage
-
-    # Install Neovim
-    - name: Install neovim
-      ansible.builtin.shell: |
-        bash -c "
-        # get appimage binary
-        rm /usr/local/bin/nvim
-        sudo curl https://github.com/neovim/neovim/releases/download/v0.5.0/nvim-linux64.tar.gz --output nvim.tar.gz
-        sudo mkdir -p /usr/local/lib/nvim
-        sudo tar -xJvf nvim.tar.gz -C /usr/local/lib/nvim
-        sudo ln -s /usr/local/bin/nvim /usr/local/lib/nvim/bin/nvim
-        # Work without FUSE
-        # ./nvim.appimage --appimage-extract
-        # ./squashfs-root/usr/bin/nvim
-        "
-      args:
-        creates: /usr/local/bin/nvim
+    - name: Run neovim install tasks
+      include_tasks: ../tasks/install_neovim.yaml
       when: install_neovim
       tags: install_neovim
 
 
     # Install NodeJS
-    - name: Install NodeJS
-      ansible.builtin.shell: |
-        bash -c "
-        # Install nodejs
-        NODE_JS_VERSION={{nodejs_version}}
-        NODE_JS_DISTRO=linux-x64
-        NODE_JS_NAME=\"node-$NODE_JS_VERSION-$NODE_JS_DISTRO\"
-        NODE_JS_PATH=\"/usr/local/lib/nodejs/$NODE_JS_NAME\"
-        curl https://nodejs.org/dist/$NODE_JS_VERSION/$NODE_JS_NAME.tar.xz --output $NODE_JS_NAME.tar.xz
-        sudo mkdir -p /usr/local/lib/nodejs
-        sudo tar -xJvf $NODE_JS_NAME.tar.xz -C /usr/local/lib/nodejs
-        rm $NODE_JS_NAME.tar.xz
-        # echo \"{{nodejs_version}}\" > /home/rocky/nodeversion
-        "
-      args:
-        creates: /usr/local/lib/nodejs/node-{{nodejs_version}}-linux-x64/bin/node
+    - name: Run nodejs install tasks
+      include_tasks: ../tasks/install_nodejs.yaml
       when: install_nodejs
       tags: install_nodejs
 

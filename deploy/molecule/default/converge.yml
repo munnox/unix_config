@@ -6,3 +6,15 @@
       include_tasks: ../../tasks/install_nodejs.yaml
     - name: Run neovim install tasks
       include_tasks: ../../tasks/install_neovim.yaml
+    - name: Try to install Language
+      include_tasks: ../../tasks/set_gb_lang.yaml
+
+    - name: Detect distro
+      include_tasks: ../../tasks/detect_distro.yaml
+
+    - name: summary
+      ansible.builtin.debug:
+        msg: |
+          Debian Family:   {{ debian_family }}
+          RHEL Family:     {{ rhel_family }}
+          Systemd running: {{ systemd_present }}

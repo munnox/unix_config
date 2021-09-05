@@ -1,0 +1,10 @@
+- name: Uncomment the en_GB language for localegen but if not don't panic
+  become: yes
+  ansible.builtin.shell:
+    cmd: |
+      sed -i -E 's/^# en_GB(.*)/en_GB\1/' /etc/locale.gen
+      locale-gen
+      timedatectl set-timezone Europe/London
+  ignore_errors: yes
+  # changed_when: False
+  when: (ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian')
