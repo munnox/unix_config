@@ -1,0 +1,7 @@
+---
+# Need dependancies
+# 
+- name: Create Resource group
+  shell: |
+    echo "Hello world"
+  
