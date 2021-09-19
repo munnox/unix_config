@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  vars:
+    name: rg_instance
+    # ansible_python_interpreter: "/home/robert/.local/share/virtualenvs/deploy-eGhfOb-l/bin/python"
+    ansible_python_interpreter: "{{lookup('env', 'VIRTUAL_ENV')}}/bin/python"
+  tasks:
+    - name: Deleting resource group - "{{ name }}"
+      azure_rm_resourcegroup:
+        name: "{{ name }}"
+        state: absent
+        force_delete_nonempty: yes
+      register: rg
+    - debug:
+        var: rg
