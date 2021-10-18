@@ -1,0 +1,64 @@
+---
+all:
+  hosts:
+    localhost: {}
+  children:
+    proxmox:
+      hosts:
+        test_ubuntu:
+          ansible_host: "test-ubuntu"
+          tf_proxmox:
+            id: 101
+            # name: "test-ubuntu"
+            cores: 2
+            memory: 2048
+            hdd_size: 50G
+            username: ubuntu
+            image_name: img-us2004-cloud-agent
+            init_config: |-
+              sudo apt update -y
+              sudo apt upgrade -y
+            # ipconfig: "ip=dhcp"
+            # unused_init_config: |
+            #   sudo apt install -y python3-pip ca-certificates
+            #   sudo apt install -y docker.io
+            #   sudo usermod -aG docker ubuntu
+            #   ssh-keyscan git.lan.local >> mtKey
+            #   ssh-keygen -lf mtKey
+            #   cat mtKey >> ~/.ssh/known_hosts
+            #   rm mtKey
+            #   mkdir repo
+            #   cd repo
+            #   # git clone git@git.lan.local:robert/unix_config.git
+            #   # sudo docker run -d --name nr -p 1880:1880 -v node_red_data:/data --name mynodered nodered/node-red:latest
+            #   # sudo apt install -y pipenv
+            vlan: 1
+          
+        test_rocky:
+          ansible_host: "test-rocky"
+          tf_proxmox:
+            id: 102
+            # name: "test-rocky"
+            cores: 2
+            memory: 2048
+            hdd_size: 50G
+            username: rocky
+            image_name: img-rocky84-cloud-agent
+            # init_config: |-
+            #   sudo dnf upgrade -y
+            # ipconfig: "ip=192.168.0.128/24,gw=192.168.0.1"
+            # ipconfig: "ip=dhcp"
+            vlan: 1
+      vars:
+        tf_vm_var: vm_main
+        
+        # URL and node set from group var
+        # proxmox_target_node: "node"
+        # proxmox_url: "{{ proxmox_api_url }}"
+        tf_proxmox_tls_insecure: true
+    kayobe:
+      hosts:
+        test_kayobe:
+          proxmox_name: "test_ubuntu"
+
+

@@ -1,0 +1,130 @@
+
+# Clone a Machine using proxmox and run a setup script on it.
+# Author Robert Munnoch
+# # Set secrets via environment variables
+# export TF_VAR_username=(the username)
+# export TF_VAR_password=(the password)
+# export PM_USER="root@pam"
+# export PM_PASS="password"
+
+{% set variable_name = vm.tf_vm_var | default('default_vm') | replace('-', '_') %}
+
+terraform {
+  required_providers {
+    proxmox = {
+      source = "telmate/proxmox"
+      version = "~> 2.7.4"
+    }
+  }
+}
+
+variable "username" {
+  description = "The username for the proxmox master user"
+  type        = string
+}
+variable "password" {
+  description = "The password for the proxmox master user"
+  type        = string
+  sensitive = true
+}
+
+provider "proxmox" {
+  # Configuration options
+  pm_api_url = "{{ vm.api_url | default('https://localhost:8006/api2/json/') }}"
+  pm_tls_insecure = {{ vm.tls_insecure | default(false) | lower }}
+  pm_user = var.username
+  pm_password = var.password
+{% if false %}
+  # Logging setup
+  pm_log_enable = true
+  pm_log_file = "terraform-plugin-proxmox.log"
+  pm_log_levels = {
+    _default = "debug"
+    _capturelog = ""
+  }
+{% endif %}
+}
+
+output "vm_ip" {
+  value = proxmox_vm_qemu.{{ variable_name }}.ssh_host
+  //sensitive = true
+}
+
+output "vm_name" {
+  value = proxmox_vm_qemu.{{ variable_name }}.name
+  //sensitive = true
+}
+
+output "vm_username" {
+  value = proxmox_vm_qemu.{{ variable_name }}.ssh_user
+  //sensitive = true
+}
+
+resource "proxmox_vm_qemu" "{{ variable_name }}" {
+{% if vm.id | default(false) %}
+  vmid = "{{ vm.id }}"
+{% endif %}
+  name = "{{ vm.name | mandatory }}"
+  target_node = "{{ vm.target_node }}"
+  # iso = "ISO file name"
+  # or 
+  clone = "{{ vm.image_name }}"
+
+{% if vm.cores | default(false) %}
+  cores = {{ vm.cores | default('1') }}
+{% endif %}
+  sockets = 1
+
+{% if vm.tf_proxmox.memory | default(true) %}
+  memory = {{ vm.memory | default('2048') }}
+{% endif %}
+  # Qemu agent enabled
+  agent = 1
+
+  cpu = "host"
+  os_type = "cloud-init"
+  cipassword = "{{ vm.password | default('password') }}"
+  ssh_user = "{{ vm.username | default('devops') }}"
+  ssh_private_key = <<-EOF
+  ${file("{{ vm.private_key_path | default('~/.ssh/id_rsa') }}")}
+  EOF
+  sshkeys = <<-EOF
+  ${file("{{ vm.public_key_path | default('~/.ssh/id_rsa.pub') }}")}
+  EOF
+
+  ipconfig0 = "{{ vm.ipconfig | default('ip=dhcp') }}"
+
+  disk {
+    // This disk will become scsi0
+    type = "scsi"
+    storage = "local-lvm"
+    //storage_type = lvm
+    {% if vm.hdd_size | default(false) %}
+    size = "{{ vm.hdd_size | default('10G') }}"
+    {% endif %}
+  }
+
+  network {
+    tag = {{ vm.vlan }}
+    model = "virtio"
+    bridge = "vmbr0"
+  }
+
+  connection {
+    type = "ssh"
+    user = "${self.ssh_user}"
+    private_key = "${self.ssh_private_key}"
+    host = "${self.ssh_host}"
+    port = "${self.ssh_port}"
+  }
+
+{% if vm.init_config | default(false) %}
+  provisioner "remote-exec" {
+    inline = [
+      {% for line in vm.init_config.split('\n') | list -%}
+      "{{- line }}",
+      {% endfor -%} 
+    ]
+  }
+{% endif %}
+}

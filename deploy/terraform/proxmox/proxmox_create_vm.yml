@@ -1,0 +1,48 @@
+---
+- name: Provision ubuntu server
+  hosts: localhost
+  # when: op == "create"
+  tags: create
+  vars_files:
+    - terraform_proxmox_vars.yml
+    - terraform_proxmox_auth.yml
+  vars:
+    state: testing
+    group_to_build: proxmox
+  tasks:
+    - name: Provision debug
+      debug:
+        msg: |
+          Provision
+
+    # - name: run terraform
+    #   include_tasks: terraform_server_proxmox.yml
+    #   vars:
+    #     state: "present"
+    - name: Build machines using terraform
+      include_tasks: terraform_tasks.yml
+      vars:
+        state: "present"
+        vm: "{{
+          hostvars[item].tf_proxmox | combine(
+            {
+              'name': hostvars[item].ansible_host,
+              'api_url': hostvars[item].tf_proxmox_url,
+              'target_node': hostvars[item].tf_proxmox_target_node,
+              'tls_insecure': hostvars[item].tf_proxmox_tls_insecure,
+            }
+          )
+          }}"
+        tf_proxmox_project_dir: "{{ tf_project_dir_template }}"
+        # tf_project_dir: "{{ playbook_dir }}/project_{{ item }}"
+        tf_proxmox_auth: "{{ proxmox_auth }}"
+      loop: "{{ groups[group_to_build] }}"
+      register: tf_result
+      loop_control:
+        label: "Create {{ item }} on the proxmox server using terraform"
+
+    - name: Show terraform result for creating machines
+      debug:
+        msg: |
+          Result:
+          {{ tf_result | to_nice_yaml }}

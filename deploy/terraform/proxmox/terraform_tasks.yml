@@ -1,0 +1,129 @@
+# - name: set project
+#   set_fact:
+#     tf_proxmox_project_dir: "./project/"
+#     tf_proxmox_auth:
+#       username: root
+#       password: password
+
+- name: show vars
+  debug:
+    msg: |
+      {{ playbook_dir }}
+      {{ tf_proxmox_project_dir }}
+      {{ vm.api_url }}
+
+      {{ vm | to_nice_yaml }}
+#       {{ tf_proxmox_auth }}
+#       {{ vm }}
+#       {{ state }}
+
+
+- name: Make Terraform Directory '{{ vm.name | default(item) }}'
+  ansible.builtin.file:
+    path: "{{ tf_proxmox_project_dir }}"
+    state: directory
+
+- name: Make Terraform Script '{{ vm.name | default(item) }}'
+  ansible.builtin.template:
+    src: main.tf.j2
+    dest: "{{ tf_proxmox_project_dir }}/main.tf"
+
+- name: Init terraform '{{ vm.name | default(item) }}'
+  ansible.builtin.shell:
+    cmd: |
+      cd {{ tf_proxmox_project_dir }}
+      terraform init -no-color
+    creates: ".terraform"
+
+- name: Terraform apply '{{ vm.name | default(item) }}'
+  ansible.builtin.shell: |
+    # terraform apply
+    cd {{ tf_proxmox_project_dir }}
+    terraform apply -auto-approve -no-color
+    # -var "username={{ tf_proxmox_auth.username }}" -var "password={{ tf_proxmox_auth.password }}"
+  environment:
+    TF_VAR_username: "{{ tf_proxmox_auth.username }}"
+    TF_VAR_password: "{{ tf_proxmox_auth.password }}"
+  when: state == 'present'
+  register: tmp_tf_create
+
+- name: Terraform destroy '{{ vm.name | default(item) }}'
+  ansible.builtin.shell: |
+    # terraform apply
+    cd {{ tf_proxmox_project_dir }}
+    terraform destroy -auto-approve -no-color
+    # -var "username={{ tf_proxmox_auth.username }}" -var "password={{ tf_proxmox_auth.password }}"
+  environment:
+    TF_VAR_username: "{{ tf_proxmox_auth.username }}"
+    TF_VAR_password: "{{ tf_proxmox_auth.password }}"
+  when: state == 'absent'
+  register: tmp_tf_remove
+
+- name: Terraform status '{{ vm.name | default(item) }}'
+  ansible.builtin.shell: |
+    # terraform apply
+    cd {{ tf_proxmox_project_dir }}
+    # export TF_VAR_username={{ tf_proxmox_auth.username }}
+    # export TF_VAR_password={{ tf_proxmox_auth.password }}
+    terraform output -json 
+    #-var "username={{ tf_proxmox_auth.username }}" -var "password={{ tf_proxmox_auth.password }}" -json
+  when: state == 'present'
+  register: tmp_tf_out
+    
+- name: Parse output to tmp
+  ansible.builtin.set_fact:
+    tmp: '{{ tmp_tf_out.stdout }}'
+  when: state == 'present'
+  
+- name: parse tmp into final facts
+  ansible.builtin.set_fact:
+    tf_result: >-
+      {{ tmp_tf_out | combine( { "outputs": tmp } ) }}
+    tmp: null
+  when: state == 'present'
+
+
+# - name: show output
+#   ansible.builtin.debug:
+#     var: tmp_tf_create
+# - name: show output
+#   ansible.builtin.debug:
+#     var: tmp_tf_remove
+# - name: show output
+#   ansible.builtin.debug:
+#     var: tf_result
+
+- name: add ssh config block '{{ vm.name | default(item) }}'
+  ansible.builtin.blockinfile:
+    path: "~/.ssh/config"
+    block: |
+      host {{ vm.name | default(item) }}
+        hostname {{tf_result.outputs.vm_ip.value}}
+        user {{tf_result.outputs.vm_username.value}}
+        stricthostkeychecking no
+        userknownhostsfile=/dev/null
+      host {{tf_result.outputs.vm_ip.value}}
+        hostname {{tf_result.outputs.vm_ip.value}}
+        user {{tf_result.outputs.vm_username.value}}
+        stricthostkeychecking no
+        userknownhostsfile=/dev/null
+    marker: "# {mark} ansible managed block for tester {{ vm.name | default(item) }}"
+    create: yes
+  when: state == "present"
+
+- name: remove ssh config block '{{ vm.name | default(item) }}'
+  ansible.builtin.blockinfile:
+    path: "~/.ssh/config"
+    marker: "# {mark} ansible managed block for tester {{ vm.name | default(item) }}"
+    state: absent
+  when: state == "absent"
+
+- name: show ssh cmd
+  ansible.builtin.debug:
+    msg: |
+      make config addition
+      ssh ubuntu@{{ tf_result.outputs.vm_ip.value }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+      # OR
+      ssh {{vm.name | default(item) }}
+      ssh {{tf_result.outputs.vm_name.value}}
+  when: state == "present"

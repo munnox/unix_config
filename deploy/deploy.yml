@@ -31,19 +31,19 @@
 
     - name: Uncomment the en_GB language for localegen but if not don't panic
       become: yes
-      include_tasks: ../tasks/set_gb_lang.yaml
+      include_tasks: "{{ (playbook_dir, '/tasks/set_gb_lang.yaml') | path_join | realpath }}"
       when: set_language
 
     # Install Neovim Appimage
     - name: Run neovim install tasks
-      include_tasks: ../tasks/install_neovim.yaml
+      include_tasks: "{{ (playbook_dir, '/tasks/install_neovim.yaml') | path_join | realpath }}"
       when: install_neovim
       tags: install_neovim
 
 
     # Install NodeJS
     - name: Run nodejs install tasks
-      include_tasks: ../tasks/install_nodejs.yaml
+      include_tasks: "{{ (playbook_dir, '/tasks/install_nodejs.yaml') | path_join | realpath }}"
       when: install_nodejs
       tags: install_nodejs
 

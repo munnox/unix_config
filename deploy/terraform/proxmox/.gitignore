@@ -1,0 +1,4 @@
+*auth.yml
+inv.yml
+group_vars/proxmox.yml
+project_*

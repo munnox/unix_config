@@ -1,0 +1,3 @@
+# Group varible for proxmox
+tf_proxmox_target_node: "node"
+tf_proxmox_url: https://localhost:8006/api2/json
