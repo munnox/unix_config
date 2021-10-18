@@ -20,30 +20,30 @@
     #     var: repo_config_path
 
     - name: Detect distro
-      include_tasks: ../tasks/detect_distro.yaml
+      include_tasks: "{{ (playbook_dir, 'tasks/detect_distro.yaml') | path_join | realpath }}"
 
     - name: summary
       ansible.builtin.debug:
         msg: |
-          {{ ubuntu_family }}
+          {{ debian_family }}
           {{ rhel_family }}
           {{ systemd_present }}
 
     - name: Uncomment the en_GB language for localegen but if not don't panic
-      become: yes
-      include_tasks: "{{ (playbook_dir, '/tasks/set_gb_lang.yaml') | path_join | realpath }}"
+      # become: yes
+      include_tasks: "{{ (playbook_dir, 'tasks/set_gb_lang.yaml') | path_join | realpath }}"
       when: set_language
 
     # Install Neovim Appimage
     - name: Run neovim install tasks
-      include_tasks: "{{ (playbook_dir, '/tasks/install_neovim.yaml') | path_join | realpath }}"
+      include_tasks: "{{ (playbook_dir, 'tasks/install_neovim.yaml') | path_join | realpath }}"
       when: install_neovim
       tags: install_neovim
 
 
     # Install NodeJS
     - name: Run nodejs install tasks
-      include_tasks: "{{ (playbook_dir, '/tasks/install_nodejs.yaml') | path_join | realpath }}"
+      include_tasks: "{{ (playbook_dir, 'tasks/install_nodejs.yaml') | path_join | realpath }}"
       when: install_nodejs
       tags: install_nodejs
 
@@ -216,12 +216,13 @@
           source {{ '~/.vimrc' | expanduser }}
         create: yes
       when: neovim_present
-    - name: repor
+
+    - name: Report
       debug:
         msg: |
           install nodejs: {{install_nodejs}}
           install neovim: {{install_neovim}}
-          install neovim as appimage: {{install_neovim_appimage}}
+          install neovim as appimage: {{neovim.install_appimage | default('no neovim')}}
           vim present?: {{vim_present}}
           git present?: {{git_present}}
           neovim present?: {{neovim_present}}
