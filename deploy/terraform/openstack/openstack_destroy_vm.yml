@@ -1,0 +1,53 @@
+---
+- name: Destroy ubuntu server
+  hosts: localhost
+  # when: op == "destroy"
+  tags: destroy
+  vars_files:
+    - terraform_proxmox_vars.yml
+    - terraform_proxmox_auth.yml
+  tasks:
+    - name: Destroy debug
+      debug:
+        msg: Destroy
+    # - name: run terraform
+    #   include_tasks: terraform_server_proxmox.yml
+    #   vars:
+    #     state: "absent"
+    - name: Destroy machine using terraform
+      include_tasks: terraform_tasks.yml
+      vars:
+        state: "absent"
+        vm: "{{
+          hostvars[item].tf_proxmox | combine(
+            {
+              'name': hostvars[item].ansible_host,
+              'api_url': hostvars[item].tf_proxmox_url,
+              'target_node': hostvars[item].tf_proxmox_target_node,
+              'tls_insecure': hostvars[item].tf_proxmox_tls_insecure,
+            }
+          )
+          }}"
+        tf_proxmox_project_dir: "{{ tf_project_dir_template }}"
+        # tf_project_dir: "{{ playbook_dir }}/project_{{ item }}"
+        tf_proxmox_auth: "{{ proxmox_auth }}"
+      loop: "{{ groups['proxmox'] }}"
+      register: tf_result
+      loop_control:
+        label: "Destroy {{ item }} on the proxmox server using terraform"
+
+    - name: Show terraform result for destroying machines
+      debug:
+        msg: |
+          Result:
+          {{ tf_result | to_nice_yaml }}
+
+        # {{ groups['proxmox'] | map('extract', hostvars) }}
+    
+    - name: remove terraform directories
+      file:
+        path:  "{{ tf_project_dir_template }}"
+        state: "absent"
+      loop: "{{ groups['proxmox'] }}"
+      loop_control:
+        label: "Destroy {{ item }} on the proxmox server using terraform"

@@ -1,0 +1,3 @@
+openstack_auth:
+    username: root@pam
+    password: supersecretpassword

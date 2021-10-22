@@ -1,0 +1,1 @@
+tf_project_dir_template: "{{ (playbook_dir, 'project_' + (item | default('')) ) | path_join }}"

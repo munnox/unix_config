@@ -1,0 +1,140 @@
+
+# Clone a Machine using proxmox and run a setup script on it.
+# Author Robert Munnoch
+# # Set secrets via environment variables
+# export TF_VAR_username=(the username)
+# export TF_VAR_password=(the password)
+# export PM_USER="root@pam"
+# export PM_PASS="password"
+
+{% set variable_name = vm.tf_vm_var | default('default_vm') | replace('-', '_') %}
+
+# Define required providers
+terraform {
+required_version = ">= 0.14.0"
+  required_providers {
+    openstack = {
+      source  = "terraform-provider-openstack/openstack"
+      version = "~> 1.35.0"
+    }
+  }
+}
+
+variable "username" {
+  description = "The username for the proxmox master user"
+  type        = string
+}
+variable "password" {
+  description = "The password for the proxmox master user"
+  type        = string
+  sensitive = true
+}
+
+# Configure the OpenStack Provider
+provider "openstack" {
+  # Commented out to use the admin-openrc.sh file and enviroment variables
+  # OS_USERNAME
+  user_name   = var.username
+  # tenant_name = "admin"
+  # OS_PASSWORD
+  password    = var.password
+  # OS_AUTH_URL
+  auth_url    =  "{{ vm.api_url | default('https://localhost:5000/v2.0') }}"
+  # OS_REGION_NAME
+  # region      = "RegionOne"
+}
+
+output "vm_ip" {
+  value = proxmox_vm_qemu.{{ variable_name }}.ssh_host
+  //sensitive = true
+}
+
+output "vm_name" {
+  value = proxmox_vm_qemu.{{ variable_name }}.name
+  //sensitive = true
+}
+
+output "vm_username" {
+  value = proxmox_vm_qemu.{{ variable_name }}.ssh_user
+  //sensitive = true
+}
+
+# Create a web server
+resource "openstack_blockstorage_volume_v2" "myvol" {
+  name = "myvol"
+  size = 1
+}
+
+resource "openstack_compute_instance_v2" "{{ variable_name }}" {
+  name = "{{ vm.name | mandatory }}"
+  # image_id = "a368ac07-0926-47e6-be02-6706623e85de" # OVHCloud Ubuntu 20.04 image
+  image_name = "{{ vm.image_name }}"
+  flavor_name     = "{{ vm.flavor_name }}"
+  key_pair        = "{{ vm.key_pair_name }}"
+  security_groups = {{ vm.security_groups | default(['default']) }}
+
+  # user_data       = "#cloud-config\nhostname: instance_1.example.com\nfqdn: instance_1.example.com"
+  # user_data       = "#!/bin/sh\necho \"hello world\""
+  user_data       = <<-EOF
+#!/bin/sh
+echo "hello world"
+apt update
+echo "updated"
+apt upgrade -y
+echo "Upgraded packages"
+apt install -y docker.io
+echo "install docker.io"
+usermod -aG docker ubuntu
+docker run -d --name nr -p 1880:1880 -v node_red_data:/data --name mynodered nodered/node-red:latest
+EOF
+
+  # cpu = "host"
+  # os_type = "cloud-init"
+  # cipassword = "{{ vm.password | default('password') }}"
+  # ssh_user = "{{ vm.username | default('devops') }}"
+  # ssh_private_key = <<-EOF
+  # ${file("{{ vm.private_key_path | default('~/.ssh/id_rsa') }}")}
+  # EOF
+  # sshkeys = <<-EOF
+  # ${file("{{ vm.public_key_path | default('~/.ssh/id_rsa.pub') }}")}
+  # EOF
+
+  # ipconfig0 = "{{ vm.ipconfig | default('ip=dhcp') }}"
+
+  disk {
+    // This disk will become scsi0
+    type = "scsi"
+    storage = "local-lvm"
+    //storage_type = lvm
+    {% if vm.hdd_size | default(false) %}
+    size = "{{ vm.hdd_size | default('10G') }}"
+    {% endif %}
+  }
+
+  network {
+    name = "Ext-Net"
+  }
+
+  # connection {
+  #   type = "ssh"
+  #   user = "${self.ssh_user}"
+  #   private_key = "${self.ssh_private_key}"
+  #   host = "${self.ssh_host}"
+  #   port = "${self.ssh_port}"
+  # }
+
+# {% if vm.init_config | default(false) %}
+#   provisioner "remote-exec" {
+#     inline = [
+#       {% for line in vm.init_config.split('\n') | list -%}
+#       "{{- line }}",
+#       {% endfor -%} 
+#     ]
+#   }
+# {% endif %}
+
+  resource "openstack_compute_volume_attach_v2" "attached" {
+    instance_id = "${openstack_compute_instance_v2.{{ variable_name }}.id}"
+    volume_id   = "${openstack_blockstorage_volume_v2.myvol.id}"
+  }
+}

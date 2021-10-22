@@ -1,0 +1,15 @@
+---
+# Run a playbook on the proxmox vm's
+- name: Provision ubuntu server
+  hosts: proxmox
+  gather_facts: true
+  tags: status
+  tasks:
+    - name: Provision debug
+      debug:
+        msg: |
+          Status and Facts for {{ inventory_hostname }}:
+
+          {{ ansible_facts }}
+    - name: ping
+      ping:
