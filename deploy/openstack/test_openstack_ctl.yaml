@@ -1,0 +1,59 @@
+---
+# Auth is locked via OVH key
+# ansible-playbook test_openstack_ctl.yaml -e "op=rm"
+# ansible-playbook test_openstack_ctl.yaml -e "op=build"
+
+- name: run machine
+  hosts: all
+  vars_files:
+    auth.yml
+  tasks:
+    - name: debug
+      ansible.builtin.debug:
+        msg: |
+          Running openstack cli to find images and flavors
+          {{ openstack_auth | to_nice_json }}
+          {{ openstack_environment | to_nice_json }}
+
+    - name: test openstack cli
+      ansible.builtin.shell: |
+        # {{ inventory_hostname }}
+        openstack quota show
+      environment: "{{ openstack_environment }}"
+      register: os_server
+    - name: view server instances
+      debug:
+        msg: |
+          {{ os_server | to_nice_yaml }}
+
+    - name: openstack cli image ubuntu
+      ansible.builtin.shell: |
+        # {{ inventory_hostname }}
+        openstack image list | grep -i ubuntu
+      environment: "{{ openstack_environment }}"
+      register: os_image_ubuntu
+    - name: view server images
+      debug:
+        msg: |
+          {{ os_image_ubuntu | to_nice_yaml }}
+
+    - name: openstack cli image centos
+      ansible.builtin.shell: |
+        # {{ inventory_hostname }}
+        openstack image list | grep -i centos
+      environment: "{{ openstack_environment }}"
+      register: os_image_centos
+    - name: view server images
+      debug:
+        msg: |
+          {{ os_image_centos | to_nice_yaml }}
+
+    - name: openstack cli flavor search
+      ansible.builtin.shell: |
+        openstack flavor list | grep -i d2
+      environment: "{{ openstack_environment }}"
+      register: os_flavor
+    - name: view server flavors
+      debug:
+        msg: |
+          {{ os_flavor | to_nice_yaml }}
