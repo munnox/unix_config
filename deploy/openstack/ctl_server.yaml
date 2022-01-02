@@ -1,0 +1,137 @@
+---
+# Auth is locked via OVH key
+# ansible-playbook ctl_server.yaml -e "op=build"
+
+- name: launch a compute instance
+  hosts: localhost
+  vars:
+    op: rm
+    servers:
+      - name: test
+        # Ubuntu 20.04
+        image: 8fd8c52f-d710-4bb1-a7ad-791d8a87e653
+        # image: "Ubuntu 20.04"
+        # # Centos 8
+        # image: c40ff237-3e08-4795-a6c0-6bd693744b0a
+        # image: "Centos 8"
+        # # Rocky 8
+        # image: 28385c86-0b02-4c54-972d-1d1576afade2
+        # image: "Rocky Linux 8"
+        key_name: "OVHCloud-cli"
+        flavor: "d2-2"
+        username: ubuntu
+        state: absent
+        state_hdd: absent
+        extra_hdd: 40
+        extra_hdd_name: myvol
+        userdata: |
+          #!/bin/sh
+          echo "hello world"
+          apt update
+          echo "updated"
+          apt upgrade -y
+          echo "Upgraded packages"
+          apt install -y docker.io
+          echo "installed docker.io"
+          mkdir /mnt/myvol
+          mkfs -t xfs /dev/sdb
+          mount /dev/sdb /mnt/myvol/
+          echo "Created and mount the myvol volume"
+          usermod -aG docker ubuntu
+          docker run -d --name nr -p 1880:1880 -v node_red_data:/data --name mynodered nodered/node-red:latest
+  vars_files:
+    auth.yml
+  tasks:
+    - name: present servers
+      debug:
+        msg: "{{ servers | selectattr('state', 'equalto', 'present')}}"
+    - name: launch an ubuntu instance
+      # when: op == 'build'
+      tags: create
+      openstack.cloud.server:
+        auth: "{{ openstack_auth }}"
+        name: "{{ item.name }}"
+        image: "{{ item.image }}"
+        key_name: "{{ item.key_name }}"
+        timeout: 200
+        flavor: "{{ item.flavor }}"
+        # nics: "net-id=4cb08b20-62fe-11e5-9d70-feff819cdc9f,net-id=542f0430-62fe-11e5-9d70-feff819cdc9f..."
+        userdata: "{{ item.userdata }}"
+        state: "{{ item.state }}"        
+      register: result_build
+      loop: "{{ servers | selectattr('state', 'equalto', 'present') }}"
+
+    # - name: create extra volume
+    #   openstack.cloud.volume:
+    #     auth: "{{ openstack_auth }}"
+    #     state: "{{ item.state_hdd }}"
+    #     # availability_zone: az2
+    #     size: "{{ item.extra_hdd }}"
+    #     # volume:  "{{ item.extra_hdd_name }}"
+    #     display_name: "{{ item.extra_hdd_name }}"
+    #   loop: "{{ servers }}"
+
+    # - name: attach volume to host
+    #   openstack.cloud.server_volume:
+    #     auth: "{{ openstack_auth }}"
+    #     state: "{{ item.state_hdd }}"
+    #     server: "{{ item.name }}"
+    #     volume: "{{ item.extra_hdd_name }}"
+    #     device: /dev/vdb
+    #   loop: "{{ servers | selectattr('state', 'equalto', 'present') }}"
+    
+    - name: rm an instance with a string
+      # when: op == 'rm'
+      tags: destroy
+      openstack.cloud.server:
+        auth: "{{ openstack_auth }}"
+        name: "{{ item.name }}"
+        state: "{{ item.state }}"        
+      register: result_rm
+      loop: "{{ servers  | selectattr('state', 'equalto', 'absent') }}"
+    
+    - name: result
+      tags: create
+      ansible.builtin.debug:
+        var: result_build
+
+    - name: result
+      tags: destroy
+      ansible.builtin.debug:
+        var: result_rm
+
+    - name: add ssh config block
+      ansible.builtin.blockinfile:
+        path: "~/.ssh/config"
+        block: |
+          host {{ item.item.name }}
+            hostname {{item.server.public_v4}}
+            user {{ item.item.username }}
+            stricthostkeychecking no
+            userknownhostsfile=/dev/null
+        # host {{tf_result.outputs.vm_ip.value}}
+        #   hostname {{tf_result.outputs.vm_ip.value}}
+        #   user {{tf_result.outputs.vm_username.value}}
+        #   stricthostkeychecking no
+        #   userknownhostsfile=/dev/null
+        marker: "# {mark} ansible managed block for openstack {{ item.item.name }}"
+        create: yes
+      when: item.item.state == "present"
+      loop: "{{ result_build.results }}"
+
+    - name: remove ssh config block
+      ansible.builtin.blockinfile:
+        path: "~/.ssh/config"
+        marker: "# {mark} ansible managed block for openstack {{ item.item.name }}"
+      when: item.item.state == "absent"
+      loop: "{{ result_rm.results }}"
+
+    - name: show ssh cmd
+      ansible.builtin.debug:
+        msg: |
+          make config addition
+          ssh ubuntu@{{ item.server.public_v4 }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+        # # OR
+        # ssh {{vm.name | default(item) }}
+        # ssh {{tf_result.outputs.vm_name.value}}
+      loop: "{{ result_build.results }}"
