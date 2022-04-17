@@ -11,31 +11,41 @@ export RAM_ORG_PATH=${RAM_ORG_PATH:-$PATH}
 
 # Array of localscripts
 LOCALSCRIPTS=(
-../bash/bash_alias.sh
-../bash/bash_display.sh
-../bash/bash_terminal.sh
-../bash/bash_env.sh
-../bash/bash_prompt.sh
-../bash/bash_lscolours.sh
-../bash/bash_setup.sh
-../bash/bash_kubernetes.sh
-../bash/bash_tmux.sh
-../bash/bash_terminal.sh
+./bash_alias.sh
+./bash_display.sh
+./bash_terminal.sh
+./bash_env.sh
+./bash_prompt.sh
+./bash_lscolours.sh
+./bash_setup.sh
+./bash_kubernetes.sh
+./bash_tmux.sh
+./bash_terminal.sh
 )
 
+# Dealing with other shells only bash will continue
+if [ $SHELL != 'bash' ]; then
+  echo "NOT BASH!!"
+  return 1
+fi
+
 # Gets the current path of this source file
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-DIR="$DIR"
+BASH_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+BASH_DIR="$BASH_DIR"
+
+CONFIG_DIR=$(cd "$BASH_DIR/.." && pwd)
+# Left for debugging paths
+# echo "Configdir='${CONFIG_DIR}' configbash='${BASH_DIR}' bashsource='${BASH_SOURCE[0]}'"
 
 export PATH="./:$RAM_ORG_PATH"
 
 # Source all file defined above
 for p in ${LOCALSCRIPTS[@]}; do
-    if [ -s "$DIR/$p" ]; then
+    if [ -s "$BASH_DIR/$p" ]; then
         # echo "sourcing --> $p"
-        source "$DIR/$p"
+        source "$BASH_DIR/$p"
     else
-        echo "Error: $DIR/$p cannot be found"
+        echo "Error: $BASH_DIR/$p cannot be found"
     fi
 done
 
