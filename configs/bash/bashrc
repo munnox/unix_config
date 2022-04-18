@@ -24,8 +24,8 @@ LOCALSCRIPTS=(
 )
 
 # Dealing with other shells only bash will continue
-if [ $SHELL != 'bash' ]; then
-  echo "NOT BASH!!"
+if [ $SHELL != '/bin/bash' ]; then
+  # echo "NOT BASH!!"
   return 1
 fi
 
