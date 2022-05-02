@@ -1,0 +1,3 @@
+- name: Get all facts with no side effects
+  hosts: all,!disabled
+  gather_facts: yes

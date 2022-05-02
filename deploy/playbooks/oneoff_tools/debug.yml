@@ -1,0 +1,12 @@
+- hosts: testing
+  tasks:
+    - name: Ping Machines
+      # become: yes
+      ping:
+    - name: Debug variables
+      # become: yes
+      debug:
+        msg: |
+          Debuging variable:
+            {{ debug_variable }}
+            {{ tags }}

@@ -1,0 +1,4 @@
+- hosts: all,!disabled
+  tasks:
+    - name: ping hosts
+      ping:

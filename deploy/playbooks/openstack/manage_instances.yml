@@ -1,0 +1,90 @@
+# Create a new instance in Openstack 
+# automatically assigns a floating IP
+# ansible-playbook playbooks/openstack/manage_instances.yml
+# ansible-playbook playbooks/openstack/manage_instances.yml --extra-vars "{instances: [{name: openstack_test_default, state: absent}]}"
+- name: launch a compute instance
+  hosts: localhost
+  # vars:
+  #   ansible_python_interpreter: /home/robert/.cache/pypoetry/virtualenvs/home-5Vd7lvN--py3.9/bin/python
+  vars_files:
+    # Auth in yaml file in the style of cloud.yaml
+    # https://docs.openstack.org/python-openstackclient/pike/configuration/index.html
+    - "../../clouds.yaml"
+  vars:
+    flavors:
+      cheap: d2-4
+      # Rough list of costs
+      # d2-2 - 2 Core 2GB 25GB - £0.00818 per hour £4.53 Month
+      # d2-4 - 2 Core 4GB 50GB - £0.01636 per hour £9.06 Month flavor: 4d4fd037-9493-4f2b-9afe-b542b5248eac
+      # d2-8 - 2 Core 8GB 50GB - £0.02947 per hour £16.32 Month
+      # b2-7 - 2 Core 7GB 50GB - £0.0589 per hour £21.09 Month
+      # b2-15 - 4 Core 15GB 100GB - £0.1119 per hour £40.19 Month
+      # b2-30 - 8 Core 30GB 200GB - £0.2259 per hour £81.19 Month
+      # b2-60 - 16 Core 60GB 400GB - £0.4379 per hour £157.59 Month
+    images:
+      # Rocky Linux 8 - image: 9e3dd45d-b95e-49b0-938d-7440badaa0b8
+      rocky: "Rocky Linux 8" 
+      # Ubuntu 20.04 - image: 35564baf-593c-431f-b4ae-25f0f8810ea5
+      ubuntu: "Ubuntu 20.04"
+    instances: 
+    - name: 'openstack_test_default'
+      image: 'Rocky Linux 8'
+      flavor: 'd2-4'
+      tags: {}
+      state: 'present'
+    loop_control:
+      label: "Start/Update state: {{item.state}} an instance called: {{ item.name }} with tags: {{ item.tags | default({}) }}"
+    when: item.state
+  tasks:
+  - name: Print instances
+    debug:
+      msg: |
+        {{ instances | to_yaml }}
+  - name: Launch or Update instances
+    loop: "{{ instances }}"
+    loop_control:
+      label: "Start/Update state: {{item.state}} an instance called: {{ item.name }} with tags: {{ item.tags | default({}) }}"
+    when: item.state != 'absent'
+    openstack.cloud.server:
+      state: "{{ item.state }}"
+      auth:
+        auth_url: "{{ clouds.os.auth.auth_url }}"
+        username: "{{ clouds.os.auth.username }}"
+        password: "{{ clouds.os.auth.password }}"
+        project_name: "{{ clouds.os.auth.project_name }}"
+        domain_name: "{{ clouds.os.auth.domain_name }}"
+        project_domain_name: "{{ clouds.os.auth.project_domain_name }}"
+      name: "{{ item.name }}"
+      region_name: UK1
+      # availability_zone: UK1
+
+      image: "{{ item.image }}"
+
+      # key_name: 6039238
+      key_name: "OVHmain"
+      # timeout: 200
+      flavor: "{{ item.flavor }}"
+
+      security_groups: default
+      # auto_ip: yes
+      meta: "{{ item.tags }}"
+  - name: Remove instances
+    loop: "{{ instances | default([
+        {
+          'name': 'openstack_test_default',
+          'state': 'absent'
+        }
+      ])}}"
+    loop_control:
+      label: "Stop state: {{item.state}} an instance called: {{ item.name }}"
+    when: item.state == 'absent'
+    openstack.cloud.server:
+      state: "{{ item.state }}"
+      auth:
+        auth_url: "{{ clouds.os.auth.auth_url }}"
+        username: "{{ clouds.os.auth.username }}"
+        password: "{{ clouds.os.auth.password }}"
+        project_name: "{{ clouds.os.auth.project_name }}"
+        domain_name: "{{ clouds.os.auth.domain_name }}"
+        project_domain_name: "{{ clouds.os.auth.project_domain_name }}"
+      name: "{{ item.name }}"

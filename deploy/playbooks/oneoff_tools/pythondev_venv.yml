@@ -1,0 +1,31 @@
+- hosts: pythondev, !disabled
+  tasks:
+    - name: Install python with venv on Redhat, CentOS or Rocky
+      when: ansible_os_family == 'RedHat'
+      block:
+        - name: install python packages
+          become: yes
+          ansible.builtin.package:
+            name:
+              - python3.9
+              - python3-devel
+              - python3-libselinux
+              - python3-pip
+            state: present
+        - name: Install poetry and pipenv
+          become: yes
+          ansible.builtin.pip:
+            name:
+              - poetry
+              # - pipenv
+            # executable: pip3
+
+            # shell: |
+            #   dnf install -y python3.9 python3-devel python3-libselinux
+            #   python3.9 -m pip install poetry
+    - name: Install poetry Debian or Ubuntu
+      become: yes
+      shell: |
+        apt install python3.9
+        python3.9 -m pip install poetry
+      when: ansible_os_family == 'Debian'

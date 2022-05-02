@@ -54,6 +54,7 @@ authors = ["Your Name <you@example.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 ansible = "^5.7.0"
+openstacksdk = "^0.61.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"

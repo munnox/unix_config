@@ -1,0 +1,14 @@
+- hosts: noswap,!disabled
+  tasks:
+    - name: sed to remove swap
+      become: yes
+      shell: |
+        sed -i 's/^[#]*\(.*swap.*\)/#\1/' /etc/fstab
+        swapoff -a
+      when: ansible_os_family == 'RedHat'
+    - name: sed to change sudoers Debian
+      become: yes
+      shell: |
+        sed -i 's/^[#]*\(.*swap.*\)/#\1/' /etc/fstab
+        swapoff -a
+      when: ansible_os_family == 'Debian'

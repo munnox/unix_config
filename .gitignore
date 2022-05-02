@@ -6,3 +6,4 @@ pyvenv
 *.egg-info/
 *openrc.sh
 *auth.yml
+deploy/clouds.yaml
