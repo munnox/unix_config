@@ -1,4 +1,5 @@
-- hosts: pythondev, !disabled
+- name: Install python 3.9 and poetry to allow venvs
+  hosts: "{{ playbook_groups | default('pythondev') }},!disabled"
   tasks:
     - name: Install python with venv on Redhat, CentOS or Rocky
       when: ansible_os_family == 'RedHat'

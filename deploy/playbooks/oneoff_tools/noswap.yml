@@ -1,4 +1,5 @@
-- hosts: noswap,!disabled
+- name: Remove the swap file from a host
+  hosts: "{{ playbook_groups | default('noswap') }},!disabled"
   tasks:
     - name: sed to remove swap
       become: yes

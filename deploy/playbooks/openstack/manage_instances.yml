@@ -28,10 +28,15 @@
       ubuntu: "Ubuntu 20.04"
     instances: 
     - name: 'openstack_test_default'
+      state: 'present'
       image: 'Rocky Linux 8'
       flavor: 'd2-4'
-      tags: {}
-      state: 'present'
+      tags:
+        role: testing
+        user: rocky
+      key_name: "OVHmain"
+      security_groups:
+      - "default"
     loop_control:
       label: "Start/Update state: {{item.state}} an instance called: {{ item.name }} with tags: {{ item.tags | default({}) }}"
     when: item.state
@@ -46,7 +51,6 @@
       label: "Start/Update state: {{item.state}} an instance called: {{ item.name }} with tags: {{ item.tags | default({}) }}"
     when: item.state != 'absent'
     openstack.cloud.server:
-      state: "{{ item.state }}"
       auth:
         auth_url: "{{ clouds.os.auth.auth_url }}"
         username: "{{ clouds.os.auth.username }}"
@@ -54,18 +58,15 @@
         project_name: "{{ clouds.os.auth.project_name }}"
         domain_name: "{{ clouds.os.auth.domain_name }}"
         project_domain_name: "{{ clouds.os.auth.project_domain_name }}"
+      state: "{{ item.state }}"
       name: "{{ item.name }}"
-      region_name: UK1
-      # availability_zone: UK1
-
+      region_name: "{{ item.region | default('UK1') }}"
+      # availability_zone: UK0
       image: "{{ item.image }}"
-
-      # key_name: 6039238
-      key_name: "OVHmain"
+      key_name: "{{ item.key_name }}"
       # timeout: 200
       flavor: "{{ item.flavor }}"
-
-      security_groups: default
+      security_groups: "{{ item.security_groups | default('default') }}"
       # auto_ip: yes
       meta: "{{ item.tags }}"
   - name: Remove instances

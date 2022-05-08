@@ -1,7 +1,7 @@
 ---
 
 - name: config debug
-  hosts: all
+  hosts: "{{ playbook_groups | default('all') }},!disabled"
   # gather_facts: yes
   # Enable the line below to pull just the minimum facts
   # gather_subset: "all"
