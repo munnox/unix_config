@@ -1,7 +1,11 @@
 # Create a new instance in Openstack 
 # automatically assigns a floating IP
-# ansible-playbook playbooks/openstack/manage_instances.yml
-# ansible-playbook playbooks/openstack/manage_instances.yml --extra-vars "{instances: [{name: openstack_test_default, state: absent}]}"
+
+# Create instance
+# ansible-playbook playbooks/clouds/openstack/manage_instances.yml
+# Destroy instance
+# ansible-playbook playbooks/clouds/openstack/manage_instances.yml \
+#   --extra-vars "{destroy_instances: [{name: openstack_test_default, state: absent}]}"
 - name: launch a compute instance
   hosts: localhost
   # vars:
@@ -12,7 +16,7 @@
     - "../../clouds.yaml"
   vars:
     flavors:
-      cheap: d2-4
+      cheap: d2-2
       # Rough list of costs
       # d2-2 - 2 Core 2GB 25GB - £0.00818 per hour £4.53 Month
       # d2-4 - 2 Core 4GB 50GB - £0.01636 per hour £9.06 Month flavor: 4d4fd037-9493-4f2b-9afe-b542b5248eac
@@ -21,35 +25,51 @@
       # b2-15 - 4 Core 15GB 100GB - £0.1119 per hour £40.19 Month
       # b2-30 - 8 Core 30GB 200GB - £0.2259 per hour £81.19 Month
       # b2-60 - 16 Core 60GB 400GB - £0.4379 per hour £157.59 Month
-    images:
+    template:
       # Rocky Linux 8 - image: 9e3dd45d-b95e-49b0-938d-7440badaa0b8
-      rocky: "Rocky Linux 8" 
+      rocky:
+        image: "Rocky Linux 8" 
+        user: rocky
       # Ubuntu 20.04 - image: 35564baf-593c-431f-b4ae-25f0f8810ea5
-      ubuntu: "Ubuntu 20.04"
-    instances: 
+      ubuntu:
+        image: "Ubuntu 20.04"
+        user: ubuntu
+      alma:
+        image: "AlmaLinux 8"
+        user: almalinux
+    # Simple example instance to create
+    create_instances: 
     - name: 'openstack_test_default'
       state: 'present'
       image: 'Rocky Linux 8'
-      flavor: 'd2-4'
+      flavor: 'd2-2'
       tags:
         role: testing
         user: rocky
       key_name: "OVHmain"
       security_groups:
       - "default"
-    loop_control:
-      label: "Start/Update state: {{item.state}} an instance called: {{ item.name }} with tags: {{ item.tags | default({}) }}"
-    when: item.state
+    # Simple example instance template to destory
+    # Just rename this
+    destroy_instances_template: 
+    - name: 'openstack_test_default'
+      state: 'absent'
+    # This now has a switch to use a different variable is provided
+    # So by default it will create a VM but if given a
+    # destroy_instances variable it can change behaviour
+    instances: "{{ destroy_instances | default(create_instances) }}"
   tasks:
   - name: Print instances
     debug:
       msg: |
         {{ instances | to_yaml }}
+
   - name: Launch or Update instances
     loop: "{{ instances }}"
     loop_control:
-      label: "Start/Update state: {{item.state}} an instance called: {{ item.name }} with tags: {{ item.tags | default({}) }}"
-    when: item.state != 'absent'
+      label: "Start/Update state: {{server.state}} an instance called: {{ server.name }} with tags: {{ item.tags | default({}) }}"
+      loop_var: server
+    when: server.state != 'absent'
     openstack.cloud.server:
       auth:
         auth_url: "{{ clouds.os.auth.auth_url }}"
@@ -58,17 +78,19 @@
         project_name: "{{ clouds.os.auth.project_name }}"
         domain_name: "{{ clouds.os.auth.domain_name }}"
         project_domain_name: "{{ clouds.os.auth.project_domain_name }}"
-      state: "{{ item.state }}"
-      name: "{{ item.name }}"
-      region_name: "{{ item.region | default('UK1') }}"
-      # availability_zone: UK0
-      image: "{{ item.image }}"
-      key_name: "{{ item.key_name }}"
+      state: "{{ server.state }}"
+      name: "{{ server.name }}"
+      region_name: "{{ server.region | default('UK1') }}"
+      # availability_zone: UK1
+      image: "{{ server.image }}"
+      key_name: "{{ server.key_name }}"
       # timeout: 200
-      flavor: "{{ item.flavor }}"
-      security_groups: "{{ item.security_groups | default('default') }}"
+      flavor: "{{ server.flavor }}"
+      security_groups: "{{ server.security_groups | default('default') }}"
       # auto_ip: yes
-      meta: "{{ item.tags }}"
+      meta: "{{ server.tags }}"
+    register: server_creation
+
   - name: Remove instances
     loop: "{{ instances | default([
         {
@@ -77,10 +99,10 @@
         }
       ])}}"
     loop_control:
-      label: "Stop state: {{item.state}} an instance called: {{ item.name }}"
-    when: item.state == 'absent'
+      label: "Stop state: {{server.state}} an instance called: {{ server.name }}"
+      loop_var: server
+    when: server.state == 'absent'
     openstack.cloud.server:
-      state: "{{ item.state }}"
       auth:
         auth_url: "{{ clouds.os.auth.auth_url }}"
         username: "{{ clouds.os.auth.username }}"
@@ -88,4 +110,52 @@
         project_name: "{{ clouds.os.auth.project_name }}"
         domain_name: "{{ clouds.os.auth.domain_name }}"
         project_domain_name: "{{ clouds.os.auth.project_domain_name }}"
-      name: "{{ item.name }}"
+      state: "{{ server.state }}"
+      name: "{{ server.name }}"
+    register: server_removal
+
+  # - name: debug results
+  #   debug:
+  #     msg: |
+  #       Creation:
+  #       {{ server_creation | default('skipped') | to_yaml }}
+  #       Removal:
+  #       {{ server_removal | default('skipped') | to_yaml }}
+
+  - name: add ssh config block
+    ansible.builtin.blockinfile:
+      path: "~/.ssh/config"
+      # path: "./config"
+      block: |
+        host {{ item.server.name }}
+          hostname {{ item.openstack.accessIPv4 }}
+          user {{ item.openstack.metadata.user }}
+          stricthostkeychecking no
+          userknownhostsfile=/dev/null
+      marker: "# {mark} ansible managed block for openstack {{ item.server.name }}"
+      create: yes
+    delegate_to: localhost
+    when: item.server.state == "present"
+    loop: "{{ server_creation.results }}"
+    no_log: yes
+
+  - name: remove ssh config block
+    ansible.builtin.blockinfile:
+      path: "~/.ssh/config"
+      marker: "# {mark} ansible managed block for openstack {{ item.server.name }}"
+    when: item.server.state == "absent" and item.result == 'deleted'
+    loop: "{{ server_removal.results }}"
+    delegate_to: localhost
+    no_log: yes
+
+  - name: Wait 10 seconds then check for port 22 to become open for all the servers
+    wait_for:
+      host: "{{ item.openstack.accessIPv4 }}" 
+      port: 22
+      delay: 5
+      sleep: 2
+      timeout: 300
+    when: item.server.state == "present"
+    loop: "{{ server_creation.results }}"
+    no_log: yes
+    
