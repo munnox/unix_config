@@ -4,22 +4,25 @@ function rocky() {
   # set -x
   echo "bootstraping python and ansible for rocky linux"
   # sudo dnf install python38-devel python38-pip libffi-dev gcc libssl-dev git curl tmux
-  sudo dnf install -y git curl tmux \
-      python38-devel python38-pip
+  sudo dnf install -y git curl tmux
+      # python38-devel python38-pip
 
-  install_pipx
-  install_pipx_envs
+  # install_pipx
+  # install_pipx_envs
+  install_pip_envs
 }
 
 function ubuntu() {
   echo "bootstraping python and ansible for ubuntu linux"
-  sudo apt install -y git curl tmux \
-      python3.8-dev python3.8-venv \
-      python3-pip python3-venv libffi-dev \
-      gcc libssl-dev
+  sudo apt install -y git curl tmux
+      # \
+      # python3.8-dev python3.8-venv \
+      # python3-pip python3-venv libffi-dev \
+      # gcc libssl-dev
 
-  install_pipx
-  install_pipx_envs
+  # install_pipx
+  # install_pipx_envs
+  install_pip_envs
 }
 
 function mac() {
@@ -47,6 +50,7 @@ function install_pipx_envs {
 }
 
 function install_pip_envs {
+  # python3 get-pip.py
   python3 -m pip install --user --upgrade pip
   python3 -m pip install --user --upgrade poetry
 }
