@@ -14,7 +14,7 @@ function rocky() {
 
 function ubuntu() {
   echo "bootstraping python and ansible for ubuntu linux"
-  sudo apt install -y git curl tmux
+  sudo apt install -y git curl tmux python3-dev
       # \
       # python3.8-dev python3.8-venv \
       # python3-pip python3-venv libffi-dev \
