@@ -1,0 +1,15 @@
+- name: Mount NFS share
+  hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+  tasks:
+    - name: update package manager
+      import_role:
+        name: munnox.bootstrap.common
+        tasks_from: utility_nfs_mount.yml
+      vars:
+        nfs_server: 10.20.30.20
+        nfs_share_uri: /volume1/kube/test
+        nfs_share_path: /mnt/test
+        nfs_state: present
+        # nfs_state: absent
+        nfs_user: "{{ ansible_user }}"
+        nfs_group: "{{ ansible_user }}"

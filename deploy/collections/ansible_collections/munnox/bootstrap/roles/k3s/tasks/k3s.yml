@@ -1,0 +1,99 @@
+
+- name: Update repositories cache and Update all packages to their latest version from the Common Role
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: utility_update_package_manager.yml
+
+- name: Download k3s install file with check (sha256)
+  become: yes
+  ansible.builtin.get_url:
+    # https://computingforgeeks.com/how-to-install-ansible-awx-on-ubuntu-linux/
+    url: https://get.k3s.io
+    dest: "/root/k3s_install.sh"
+    checksum: sha256:704f918bc8bc56329dce985ee7964cceff3f53d3580beff99ee85d8e7da94638.
+
+- name: Run k3s install and setup
+  become: yes
+  shell: |
+    bash /root/k3s_install.sh
+  args:
+    creates: /etc/rancher/k3s/k3s.yaml
+
+- name: Set the Permission on the current Kube config file
+  # (TODO: Security warning - ok for temporary systems)
+  become: yes
+  ansible.builtin.file:
+    path: "/etc/rancher/k3s/k3s.yaml"
+    state: file
+    mode: '644'
+
+- name: Add kubeconfig permission to the service config
+  become: yes
+  blockinfile:
+    path: "/etc/systemd/system/k3s.service.env"
+    block: |
+      K3S_KUBECONFIG_MODE="644"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK k3s service"
+
+# - name: restart k3s
+#   become: yes
+#   ansible.builtin.service: 
+#     state: restarted
+#     name: k3s
+
+# Add and manipulate the kube config for the user running this
+
+# - name: Build kube config directory for {{ansible_user}}
+#   ansible.builtin.file:
+#     path: "{{ ansible_user_dir }}/.kube"
+#     state: directory
+#     recurse: yes
+#     owner: "{{ ansible_user }}"
+#     group: "{{ ansible_user }}"
+#     # mode: '0755'
+
+# - name: Move the Kubeneters config to the user path
+#   become: yes
+#   ansible.builtin.copy:
+#     remote_src: yes
+#     src: "/etc/rancher/k3s/k3s.yaml"
+#     dest: "{{ ansible_user_dir }}/.kube/config"
+#     owner: "{{ ansible_user }}"
+#     group: "{{ ansible_user }}"
+
+# - name: Add KUBECONFIG ENV var to .bashrc
+#   blockinfile:
+#     path: "{{ansible_user_dir}}/.bashrc"
+#     block: |
+#       export KUBECONFIG=~/.kube/config
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK k3s service"
+
+# - name: Setup permissions for K3S for {{ansible_user }} on path {{ ansible_user_dir }}
+#   become: yes
+#   shell: |
+#     chmod 644 /etc/rancher/k3s/k3s.yaml
+#     echo K3S_KUBECNFIG_MODE=\"644\" >> /etc/systemd/system/k3s.service.env
+#     systemctl restart k3s
+
+#     # mkdir {{ ansible_user_dir }}/.kube
+#     # scp /etc/rancher/k3s/k3s.yaml {{ ansible_user_dir }}/.kube/config
+#     # chown $USER:{{ ansible_user}} -R ~/.kube && chmod 600 {{ ansible_user_dir }}/.kube/config
+#     echo "export KUBECONFIG=~/.kube/config" >> {{ ansible_user_dir }}/.bashrc
+#   args:
+#     creates: "{{ ansible_user_dir }}/.kube/config"
+
+# - name: Ensure permissions
+#   ansible.builtin.file:
+#     path: "{{ ansible_user_dir }}/.kube"
+#     state: directory
+#     recurse: yes
+#     owner: "{{ ansible_user }}"
+#     group: "{{ ansible_user }}"
+
+# - name: Add auto completion for kubectl for system
+#   become: yes
+#   ansble.buildin.command: kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
+# - name: Add auto completion for kubectl for user
+#   ansble.buildin.lineinfile:
+#     path: $HOME/.bashrc
+#     line: source <(kubectl completion bash)

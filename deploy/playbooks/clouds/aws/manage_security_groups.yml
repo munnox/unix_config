@@ -1,0 +1,38 @@
+- hosts: "{{ playbook_groups | default('localhost') }}"
+  # become: yes
+  gather_subset: min
+  # connection: local
+  vars_files:
+    - "../../../credentials/clouds.yml"
+  vars:
+    ip_addresses:
+      - 1.2.3.4/32
+      - 2.3.4.5/32
+    # Example record list
+    groups:
+    - name: automate
+      state: present
+      description: Ansible Automated
+      vpc_id: vpc-xxxxxxxx
+      rules: 
+        - proto: tcp
+          ports:
+          - 80
+          cidr_ip: 0.0.0.0/0
+          rule_desc: allow all on port 80
+      
+  tasks:
+  - name: print filter result
+    debug:
+      msg: "{{ ip_addresses | process_ips('123', 'tcp') }}"
+  # - name: Add IPs to a secutity group
+  #   loop: "{{ groups }}"
+  #   amazon.aws.ec2_group:
+  #     aws_access_key: "{{ aws.iam_key }}"
+  #     aws_secret_key : "{{ aws.iam_secret }}"
+  #     name: "{{ item.name }}"
+  #     description: "{{ item.description }}"
+  #     vpc_id: "{{ item.vpc_id }}"
+  #     # profile: "{{ aws_profile }}"
+  #     region: "{{ item.region | default('euwest') }}"
+  #     rules: "{{ item.rules }}"

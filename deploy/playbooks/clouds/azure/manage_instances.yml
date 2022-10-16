@@ -1,0 +1,122 @@
+# Create a new instance in Azure
+# https://docs.ansible.com/ansible/2.9/modules/list_of_cloud_modules.html#azure
+# automatically assigns a floating IP
+
+# Create instance
+# ansible-playbook playbooks/clouds/openstack/manage_instances.yml
+# Destroy instance
+# ansible-playbook playbooks/clouds/openstack/manage_instances.yml \
+#   --extra-vars "{destroy_instances: [{name: openstack_test_default, state: absent}]}"
+- name: launch a compute instance
+  hosts: localhost
+  # vars:
+  #   ansible_python_interpreter: /home/robert/.cache/pypoetry/virtualenvs/home-5Vd7lvN--py3.9/bin/python
+  vars_files:
+  #   # Auth in yaml file in the style of cloud.yaml
+  #   # https://docs.openstack.org/python-openstackclient/pike/configuration/index.html
+    - "../../../credentials/clouds.yml"
+  vars:
+    flavors:
+      cheap: d2-2
+      # Rough list of costs
+      # Standard_B1s - 1 Core 1GB 2GB - $0.01 per hour $8.61 Month
+      # Standard_DS1_v2 - 1 core 4GB - $0.09 per hour $64 Month
+    template:
+      # Rocky Linux 8 - image: 9e3dd45d-b95e-49b0-938d-7440badaa0b8
+      rocky:
+        image: "Rocky Linux 8" 
+        user: rocky
+      # Ubuntu 20.04 - image: 35564baf-593c-431f-b4ae-25f0f8810ea5
+      ubuntu:
+        image: 
+          offer: 0001-com-ubuntu-server-focal
+          publisher: Canonical
+          sku: '20_04-lts'
+          version: '20.04.202206150'
+        user: azureuser
+      alma:
+        image: "AlmaLinux 8"
+        user: almalinux
+    # Simple example instance to create
+    create_instances: 
+    - name: 'azure_test_default'
+      state: 'present'
+      image: '{{ template.ubuntu.image }}'
+      flavor: 'Standard_B1s'
+      resource_group: "azure_test_default_group"
+      resource_location: "uksouth"
+      tags:
+        role: testing
+        user: azureuser
+      key_data: "Azure"
+      # security_groups:
+      # - "default"
+    # Simple example instance template to destory
+    destroy_instances_template: 
+    - name: 'awx'
+      state: 'absent'
+      resource_group: "azure_test_default_group"
+    # This now has a switch to use a different variable is provided
+    # So by default it will create a VM but if given a
+    # destroy_instances variable it can change behaviour
+    # Comment or uncomment this line to remove test vm
+    # destroy_instances: "{{ destroy_instances_template }}"
+    instances: "{{ destroy_instances | default(create_instances) }}"
+    template_link: '{{ template_link }}'
+    # template_file: '{{ templates_dir }}/template.json'
+    # parameters_file: '{{ templates_dir }}/parameters.json'
+  tasks:
+  - name: Print instances
+    debug:
+      msg: |
+        {{ instances | to_yaml }}
+  
+  - name: Create VM on Azure
+    loop: "{{ instances }}"
+    loop_control:
+      label: "Start/Update state: {{server.state}} an instance called: {{ server.name }} with tags: {{ item.tags | default({}) }}"
+      loop_var: server
+    when: server.state != 'absent'
+    # include_tasks: "create_vm.yml"
+    include_tasks: "create_vm_cli.yml"
+    vars:
+      resource_group:  "{{ server.resource_group | default('test_group') }}"
+      resource_location:  "{{ server.resource_location | default('uksouth') }}"
+    register: creation
+    # block:
+    #   tasks:
+  - name: show result
+    debug:
+      # var: (azure.stdout | from_json)
+      var: creation
+
+  - name: Remove instances
+    loop: "{{ instances | default([
+        {
+          'name': 'azure_test_default',
+          'state': 'absent'
+        }
+      ])}}"
+    loop_control:
+      label: "Stop state: {{server.state}} an instance called: {{ server.name }}"
+      loop_var: server
+    when: server.state == 'absent'
+    include_tasks: "remove_vm_cli.yml"
+    vars:
+      resource_group:  "{{ server.resource_group | default('test_group') }}"
+      resource_location:  "{{ server.resource_location | default('uksouth') }}"
+    register: removal
+    # azure.azcollection.azure_rm_resourcegroup:
+    #   state: "{{ server.state }}"
+    #   name: "{{ server.name }}"
+    # register: server_removal
+    
+  # - name: debug results
+  #   debug:
+  #     msg: |
+  #       Creation:
+  #       {{ server_creation | default('skipped') | to_yaml }}
+  #       Removal:
+  #       {{ server_removal | default('skipped') | to_yaml }}
+  
+    

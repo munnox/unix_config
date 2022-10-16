@@ -1,0 +1,30 @@
+- hosts: "{{ playbook_groups | default('localhost') }}"
+  # become: yes
+  gather_subset: min
+  # connection: local
+  vars_files:
+    - "../../../credentials/clouds.yml"
+  vars:
+    # Example record list
+    records:
+    - state: present
+      zone: example.com
+      record: "dns.example.com"
+      type: A
+      value: 8.8.8.8
+      
+  tasks:
+  - name: manage records and wait until the changes have been replicated
+    community.aws.route53:
+      aws_access_key: "{{ aws.iam_key }}"
+      aws_secret_key : "{{ aws.iam_secret }}"
+      # state: present
+      state: "{{ item.state }}"
+      zone: "{{ item.zone }}"
+      record: "{{ item.record }}"
+      type: "{{ item.type | default('A') }}"
+      ttl: "{{ item.ttl | default(20) }}"
+      value: "{{ item.value }}"
+      wait: yes
+      overwrite: yes
+    loop: "{{ records }}"

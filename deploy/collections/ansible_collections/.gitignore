@@ -1,0 +1,12 @@
+# Ignore all
+#*
+/ansible/
+/awx/
+/azure/
+/community/
+/geerlingguy/
+/kubernetes/
+/openstack/
+# Track my collection and the git ignore file
+!.gitignore
+!munnox/**

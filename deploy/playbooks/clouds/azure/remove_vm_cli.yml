@@ -1,0 +1,31 @@
+# - name: launch a compute instance
+#   hosts: localhost
+#   vars_files:
+#   #   # Auth in yaml file in the style of cloud.yaml
+#   #   # https://docs.openstack.org/python-openstackclient/pike/configuration/index.html
+#     - "../../../credentials/clouds.yml"
+#   tasks:
+
+- name: Remove resource group
+  azure.azcollection.azure_rm_resourcegroup:
+    name:  "{{ resource_group }}"
+    # location: uksouth
+    # tags: "{{ server.tags }}"
+    state: absent
+    force_delete_nonempty: yes
+    # tags:
+    #     testing: testing
+  register: azure
+
+- name: Show azure results
+  debug:
+    var: azure
+
+- name: remove ssh config block
+  ansible.builtin.blockinfile:
+    path: "~/.ssh/config"
+    marker: "# {mark} ansible managed block for azure {{ server.name }}"
+  when: server.state == "absent"
+  # and item.resul == 'deleted'
+  delegate_to: localhost
+  no_log: yes

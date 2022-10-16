@@ -1,0 +1,27 @@
+collections:
+# - name: git@munnoxtech.com:ansible_collections/munnox_home.git
+#   type: git
+#   version: main
+
+# For the KVM provisioning
+- name: community.libvirt
+# Mount file systems posix
+- name: ansible.posix
+# Kubernetes
+- name: geerlingguy.k8s
+- name: kubernetes.core
+# Docker interfaces
+- name: community.docker
+# Cloud interfaces
+- name: openstack.cloud
+- name: azure.azcollection
+# AWX Collection
+- name: awx.awx
+# - name: git@munnoxtech.com:robert/home_collection
+#   scm: git
+#   version: master
+# - name: https://github.com/netbox-community/ansible_modules.git
+#   scm: git
+#   version: master
+roles:
+- name: geerlingguy.docker

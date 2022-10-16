@@ -1,0 +1,10 @@
+---
+# defaults file for common main.yml file
+state: default_state
+message: default_message
+
+nfs_server: 192.168.0.1
+nfs_share_uri: /export/awx
+nfs_share_path: /mnt/awx
+nfs_state: present
+# nfs_state: absent

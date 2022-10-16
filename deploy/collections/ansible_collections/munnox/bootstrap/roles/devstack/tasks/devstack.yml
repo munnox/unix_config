@@ -1,0 +1,79 @@
+# Install and setup AIO Devstack for playing
+
+# https://docs.openstack.org/devstack/latest/
+
+# - name: Update the machine and add git
+#   become: yes
+#   shell: |  
+#     #!/bin/sh
+#     DEBIAN_FRONTEND=noninteractive sudo apt-get -qqy update || sudo yum update -qy
+#     DEBIAN_FRONTEND=noninteractive sudo apt-get install -qqy git || sudo yum install -qy git
+
+- name: Update repositories cache and Update all packages to their latest version from the Common Role
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: utility_update_package_manager.yml
+
+- name: Install package dependancies
+  become: yes
+  apt:
+    name:
+      - git
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Install package dependancies
+  become: yes
+  dnf:
+    name:
+      - git
+  when: ansible_pkg_mgr == 'dnf'
+
+# - name: create user stack
+#   become: yes
+#   user:
+#     name: stack
+#     state: present
+- name: pull devstack git repo
+  git:
+    repo: 'https://opendev.org/openstack/devstack'
+    dest: "{{ devstack_dir }}"
+
+- name: Create local.conf
+  blockinfile:
+    block: |
+      [[local|localrc]]
+      ;PUBLIC_INTERFACE={{ public_interface }}
+      ;HOST_IP={{ host_ip }}
+      ;PUBLIC_NETWORK_GATEWAY={{ public_network_gateway }}
+      ;Q_FLOATING_ALLOCATION_POOL={{ q_floating_allocation_pool }}
+      ;FLOATING_RANGE={{ floating_range }}
+      ;FIXED_RANGE={{ fixed_range }}
+      ADMIN_PASSWORD={{ stack_password }}
+      DATABASE_PASSWORD={{ stack_password }}
+      RABBIT_PASSWORD={{ stack_password }}
+      SERVICE_PASSWORD={{ stack_password }}
+    path: "{{ devstack_dir }}/local.conf"
+    create: yes
+
+# - name: Run Devstack shell command
+#   shell: |  
+#     #!/bin/sh
+#     DEBIAN_FRONTEND=noninteractive sudo apt-get -qqy update || sudo yum update -qy
+#     DEBIAN_FRONTEND=noninteractive sudo apt-get install -qqy git || sudo yum install -qy git
+#     sudo chown stack:stack /home/stack
+#     cd /home/stack
+#     #git clone https://opendev.org/openstack/devstack
+#     #cd devstack
+#     echo '[[local|localrc]]' > local.conf
+#     echo ADMIN_PASSWORD=password >> local.conf
+#     echo DATABASE_PASSWORD=password >> local.conf
+#     echo RABBIT_PASSWORD=password >> local.conf
+#     echo SERVICE_PASSWORD=password >> local.conf
+#     ./stack.sh
+
+# - name: Run Devstack shell command
+#   shell: |  
+#     cd devstack/
+#     ./stack.sh
+#   async: 45
+#   poll: 10

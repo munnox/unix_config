@@ -1,0 +1,4 @@
+---
+# defaults file for awx
+awx_state: "present"
+awx_namespace: "awx"

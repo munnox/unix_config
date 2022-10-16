@@ -1,0 +1,5 @@
+---
+# tasks file for awx
+
+- name: Include awx.yml tasks file
+  include_tasks: awx.yml

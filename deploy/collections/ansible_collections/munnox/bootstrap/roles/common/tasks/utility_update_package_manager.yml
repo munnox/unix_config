@@ -1,0 +1,38 @@
+# Update the package manager for the os
+
+# Update packages by running a task file from the common role.
+# 
+# Example Playbook
+# 
+# ```
+# - name: Update packages on host
+#   hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+#   tasks:
+#     - name: update package manager
+#       import_role:
+#         name: munnox.bootstrap.common
+#         tasks_from: utility_update_package_manager.yml
+# ```
+
+# Update packages on Debian
+- name: Update the packagemanager on Debian/Ubuntu
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: full
+    # name: git
+    # state: latest
+  when: ansible_pkg_mgr == 'apt'
+  become: yes
+# Update packages on RHEL DNF
+- name: Upgrade all packages
+  when: ansible_pkg_mgr == 'dnf'
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+# Update packages on RHEL YUM
+- name: Update the package manager on RHEL/CentOS/fedora
+  ansible.builtin.yum:
+    name: '*'
+    state: latest
+  when: ansible_pkg_mgr == 'yum'
+  become: yes

@@ -1,0 +1,34 @@
+- name: Install and setup pip on python
+  hosts: "{{ playbook_groups | default('k3s') }},!disabled"
+  vars:
+    python_bin: python3.10
+    pip_packages:
+      - kubernetes
+  tasks:
+    - name: Update repositories cache and Update all packages to their latest version
+      become: yes
+      when: ansible_os_family == 'Debian'
+      apt:
+        name: "*"
+        update_cache: yes
+        state: latest
+
+    - name: Download get-pip.py file with check (sha256)
+      become: yes
+      ansible.builtin.get_url:
+        url: https://bootstrap.pypa.io/get-pip.py
+        dest: "/root/get-pip.py"
+        checksum: sha256:36c6f6214694ef64cc70f4127ac0ccec668408a93825359d998fb31d24968d67.
+
+    - name: Get and run get-pip
+      # creates: /etc/rancher/k3s/k3s.yaml
+      become: yes
+      shell: |
+        {{python_bin}} ~/get-pip.py
+      # args:
+      #   creates: ~/get-pip.py
+
+    - name: Install pip packages
+      ansible.builtin.pip:
+        name: "{{ pip_packages }}"
+        state: present

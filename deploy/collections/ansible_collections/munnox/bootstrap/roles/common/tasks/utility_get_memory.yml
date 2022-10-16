@@ -1,0 +1,33 @@
+---
+# A Sijmple study in the setup module along with summarising the memmory on the device.
+# https://docs.ansible.com/ansible/latest/modules/setup_module.html
+#
+# Example Playbook
+# 
+# ```
+# - name: run the get memory utility
+#   hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+#   tasks:
+#     - name: get memory
+#       import_role:
+#         name: munnox.bootstap.common
+#         tasks_from: utility_get_memory.yml
+# ```
+
+- name: Get info memory
+  setup:
+    gather_subset:
+      - '!all'
+      - '!any'
+      # - 'min'
+      - 'hardware'
+    # filter: ansible_*_mb
+    filter: '*_mb'
+- name: Print free memory
+  debug:
+    msg: |-
+      vars:
+        {{ hostvars[inventory_hostname] | to_nice_json }}
+      memory Facts:
+      {{ ansible_facts.memory_mb.real.free }} mb / {{ ansible_facts.memory_mb.real.total }} mb
+

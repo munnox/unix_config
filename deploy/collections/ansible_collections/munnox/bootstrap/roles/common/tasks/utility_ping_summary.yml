@@ -1,0 +1,34 @@
+# Short task file to ping hosts and print a small summary of the machines information.
+# Non destructivly ping hosts in the inventory and print a simple summary using the machines information.
+# This is done by run the tasks below.
+# 
+# Example Playbook
+# 
+# ```
+# - name: Ping hosts and display info summary
+#   hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+#   tasks:
+#     - name: update package manager
+#       import_role:
+#         name: munnox.bootstrap.common
+#         tasks_from: utility_ping_summary.yml
+# ```
+
+- name: ping hosts
+  ping:
+
+- name: Print python
+  debug:
+    msg: |
+      Linux version {{ ansible_distribution }} - {{ ansible_distribution_file_variety | default("No variety file found") }} - {{ ansible_distribution_version }} ({{ ansible_distribution_release }})
+      Package manager: {{ ansible_pkg_mgr }}
+      FQDN: {{ ansible_fqdn }}
+      Kernel version number: {{ ansible_kernel }}
+      Memory
+        Free: {{ ansible_memfree_mb }} MB
+        Total: {{ ansible_memtotal_mb }} MB
+        Used: {{ "%.2f" | format((ansible_memfree_mb/ansible_memtotal_mb) * 100.0) }}%
+      Python information discovered by ansible: {{ discovered_interpreter_python | default('discovered_interpreter_python not present') }}
+      Python version: {{ ansible_python_version }}
+      Gathered: {{ ansible_python.executable }} - {{ ansible_python.version }}
+      IPv4 addresses: {{ ansible_all_ipv4_addresses }}

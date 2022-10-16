@@ -1,5 +1,0 @@
-- name: Ping hosts with no sideaffects
-  hosts: "{{ playbook_groups | default('all') }},!disabled"
-  tasks:
-    - name: ping hosts
-      ping:

@@ -1,0 +1,15 @@
+---
+# defaults file for devstack
+
+# Where to place the devstack directory on the remote computer
+devstack_dir: "{{ ansible_user_dir }}/devstack"
+# Unused to present
+devstack_state: present
+
+public_interface: enp1s0
+host_ip: 192.168.0.2
+floating_range: 192.168.0.64/31
+public_network_gateway: 192.168.0.1
+q_floating_allocation_pool: start=192.168.0.250,end=192.168.0.254
+fixed_range: 192.168.0.92/31
+stack_password: password

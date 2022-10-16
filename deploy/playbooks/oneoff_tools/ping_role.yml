@@ -1,0 +1,7 @@
+- name: Ping hosts and display info summary
+  hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+  tasks:
+    - name: update package manager
+      import_role:
+        name: munnox.bootstrap.common
+        tasks_from: utility_ping_summary.yml

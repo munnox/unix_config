@@ -1,0 +1,133 @@
+
+# Implement the kubernetes dashboard
+
+- name: Download Dashboard Deployment
+  # become: yes
+  shell: |
+    GITHUB_URL=https://github.com/kubernetes/dashboard/releases
+    VERSION_KUBE_DASHBOARD=$(curl -w '%{url_effective}' -I -L -s -S ${GITHUB_URL}/latest -o /dev/null | sed -e 's|.*/||')
+    echo $VERSION_KUBE_DASHBOARD
+  register: version_kube_dashboard
+  #   curl https://raw.githubusercontent.com/kubernetes/dashboard/${VERSION_KUBE_DASHBOARD}/aio/deploy/recommended.yaml -o ~/dashboard_deploy.yml
+  #   # curl https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml -o ~/dashboard_deploy.yml
+  # args:
+  #   creates: ~/dashboard_deploy.yml
+
+- name: Download dashboard deployment file {{ version_kube_dashboard.stdout }} with check (sha256)
+  # become: yes
+  ansible.builtin.get_url:
+    # https://computingforgeeks.com/how-to-install-ansible-awx-on-ubuntu-linux/
+    url: https://raw.githubusercontent.com/kubernetes/dashboard/{{ version_kube_dashboard.stdout }}/aio/deploy/recommended.yaml
+    dest: "{{ ansible_user_dir }}/dashboard_deploy.yml"
+    checksum: sha256:943ae40251f1ba64ef012c53271bf6766d1883dd024093e854567b56443764b8
+
+- name: Apply Dashboard Deployment
+  become: yes
+  shell: |
+    # . ~/.bashrc
+    # echo $KUBECONFIG
+    kubectl apply -f {{ ansible_user_dir }}/dashboard_deploy.yml
+
+- name: Define dashboard admin user
+  # creates: awx_deploy.yml
+  copy:
+    dest: "{{ ansible_user_dir }}/dashboard_admin.yml"
+    content: |
+      ---
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: admin-user
+        namespace: kubernetes-dashboard
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: admin-user
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: cluster-admin
+      subjects:
+      - kind: ServiceAccount
+        name: admin-user
+        namespace: kubernetes-dashboard
+
+- name: Apply the dashboard user
+  shell: |
+    kubectl apply -f {{ ansible_user_dir }}/dashboard_admin.yml
+
+- name: Define dashboard admin user
+  # creates: awx_deploy.yml
+  copy:
+    dest: "{{ ansible_user_dir }}/dashboard_service.yml"
+    content: |
+      apiVersion: v1
+      kind: Service
+      metadata:
+        labels:
+          k8s-app: kubernetes-dashboard
+        name: kubernetes-dashboard
+        namespace: kubernetes-dashboard
+      spec:
+        ports:
+          - port: 443
+            targetPort: 8443
+            nodePort: 30001
+        selector:
+          k8s-app: kubernetes-dashboard
+        type: NodePort
+
+- name: Apply the dashboard service
+  shell: |
+    kubectl apply -f {{ ansible_user_dir }}/dashboard_service.yml
+
+# - name: Get dashboard service
+#   kubernetes.core.k8s:
+#     state: present
+#     definition:
+#       apiVersion: v1
+#       kind: Service
+#       metadata:
+#         name: web
+#         namespace: testing
+#         labels:
+#           # app: galaxy
+#           # service: web
+#           k8s-app: kubernetes-dashboard
+#         name: kubernetes-dashboard
+#         namespace: kubernetes-dashboard
+#       spec:
+#         selector:
+#           k8s-app: kubernetes-dashboard
+#           # app: galaxy
+#           # service: web
+#         ports:
+#         - protocol: TCP
+#           targetPort: 8443
+#           name: port-8443-tcp
+#           port: 443
+#           nodePort: 30001
+#         type: NodePort
+#   register: service 
+
+# - name: show run info
+#   debug:
+#     var: service
+
+# kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+- name: Make dashboard users token
+  shell: |
+    kubectl -n kubernetes-dashboard create token admin-user > ~/token_pass
+  args:
+    creates: ~/token_pass
+
+- name: Get the dashboard users token
+  shell: |
+    cat ~/token_pass
+  changed_when: false
+  register: result
+
+- name: Print token
+  debug:
+    var: result.stdout

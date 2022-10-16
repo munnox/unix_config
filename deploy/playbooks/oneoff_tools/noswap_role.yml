@@ -1,0 +1,7 @@
+- name: Turn off swap on Hosts
+  hosts: "{{ playbook_groups | default('noswap') }},!disabled"
+  tasks:
+    - name: Turn off swap on a host
+      import_role:
+        name: munnox.bootstrap.common
+        tasks_from: utility_noswap.yml

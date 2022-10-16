@@ -1,0 +1,329 @@
+# - name: launch a compute instance
+#   hosts: localhost
+#   # vars:
+#   #   ansible_python_interpreter: /home/robert/.cache/pypoetry/virtualenvs/home-5Vd7lvN--py3.9/bin/python
+#   vars_files:
+#   #   # Auth in yaml file in the style of cloud.yaml
+#   #   # https://docs.openstack.org/python-openstackclient/pike/configuration/index.html
+#     - "../../../credentials/clouds.yml"
+#   tasks:
+# - name: Bring a variable yaml file into a fact called test
+#   set_fact:
+#       parameters_f: "{{ lookup('file', parameters_file) | from_json }}"
+#       template_f: "{{ lookup('file', template_file) | from_json }}"
+# - name: debug
+#   debug:
+#     msg : |
+#       {{ parameters_file }}
+#       {{ parameters_f | to_yaml }}
+#       {{ template_file }}
+#       {{ template_f | to_yaml }}
+
+- name: Create resource group
+  azure.azcollection.azure_rm_resourcegroup:
+    name:  "{{ resource_group }}"
+    location: "{{ resource_location }}"
+    tags: "{{ server.tags }}"
+    # tags:
+    #     testing: testing
+
+- name: Deploy in a resource group
+  azure.azcollection.azure_rm_deployment:
+    resource_group:  "{{ resource_group }}"
+    name: "{{ server.name }}"
+    location: "{{ resource_location }}"
+    # template_link: '{{ template_link }}'
+    # parameters_link: '{{ parameters_link }}'
+    # template_link: '{{ template_file }}'
+    # template: "{{ template_f }}"
+    # parameters_link: '{{ parameters_file }}'
+    # template_file: '{{ template_file }}'
+    # parameters_file: '{{ parameters_file }}'
+    # parameters:
+    #   virtualMachineRG: "{{ resource_group }}"
+    #    jtentVersion: 1.0.0.0
+    parameters:
+      # rgName: { value: "{{ resource_group }}"}
+      # rgLocation: { value: "{{ resource_location }}"}
+      # tags: {value: {}}
+      addressPrefixes:
+        value: [10.0.0.0/16]
+      adminPublicKey: {value: "{{ key_data | default(lookup('file', '~/.ssh/Azure.pub')) }}"}
+      adminUsername: {value: azureuser}
+      location: {value: "{{ resource_location }}"}
+      networkInterfaceName: {value: "{{ server.name }}-net"}
+      networkSecurityGroupName: {value: "{{ server.name }}-nsg"}
+      networkSecurityGroupRules:
+        value:
+        - name: SSH
+          properties: {access: Allow, destinationAddressPrefix: '*', destinationPortRange: '22',
+            direction: Inbound, priority: 300, protocol: TCP, sourceAddressPrefix: '*',
+            sourcePortRange: '*'}
+        - name: HTTP
+          properties: {access: Allow, destinationAddressPrefix: '*', destinationPortRange: '80',
+            direction: Inbound, priority: 320, protocol: TCP, sourceAddressPrefix: '*',
+            sourcePortRange: '*'}
+        - name: HTTPS
+          properties: {access: Allow, destinationAddressPrefix: '*', destinationPortRange: '443',
+            direction: Inbound, priority: 340, protocol: TCP, sourceAddressPrefix: '*',
+            sourcePortRange: '*'}
+      nicDeleteOption: {value: Detach}
+      osDiskDeleteOption: {value: Delete}
+      osDiskType: {value: Premium_LRS}
+      pipDeleteOption: {value: Detach}
+      publicIpAddressName: {value: "{{ server.name }}-ip"}
+      publicIpAddressSku: {value: Standard}
+      publicIpAddressType: {value: Static}
+      subnetName: {value: default}
+      subnets:
+        value:
+        - name: default
+          properties: {addressPrefix: 10.0.0.0/24}
+      virtualMachineComputerName: {value: "{{ server.name.split('_') | join('-') }}"}
+      virtualMachineName: {value: "{{ server.name }}"}
+      virtualMachineRG: {value: "{{ resource_group }}"}
+      virtualMachineSize: {value: "{{ server.flavor }}"}
+      virtualNetworkName: {value: "{{ resource_group }}-vnet"}
+    # tags:
+    #     testing: testing
+    template:
+      $schema: http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#
+      contentVersion: 1.0.0.0
+      outputs:
+        adminUsername: {type: string, value: '[parameters(''adminUsername'')]'}
+      parameters:
+        addressPrefixes: {type: array}
+        adminPublicKey: {type: secureString}
+        adminUsername: {type: string}
+        location: {type: string}
+        networkInterfaceName: {type: string}
+        networkSecurityGroupName: {type: string}
+        networkSecurityGroupRules: {type: array}
+        nicDeleteOption: {type: string}
+        osDiskDeleteOption: {type: string}
+        osDiskType: {type: string}
+        pipDeleteOption: {type: string}
+        publicIpAddressName: {type: string}
+        publicIpAddressSku: {type: string}
+        publicIpAddressType: {type: string}
+        subnetName: {type: string}
+        subnets: {type: array}
+        virtualMachineComputerName: {type: string}
+        virtualMachineName: {type: string}
+        virtualMachineRG: {type: string}
+        virtualMachineSize: {type: string}
+        virtualNetworkName: {type: string}
+      variables: {nsgId: '[resourceId(resourceGroup().name, ''Microsoft.Network/networkSecurityGroups'',
+          parameters(''networkSecurityGroupName''))]', subnetRef: '[concat(variables(''vnetId''),
+          ''/subnets/'', parameters(''subnetName''))]', vnetId: '[resourceId(resourceGroup().name,''Microsoft.Network/virtualNetworks'',
+          parameters(''virtualNetworkName''))]', vnetName: '[parameters(''virtualNetworkName'')]'}
+      resources:
+      - type: Microsoft.Network/networkInterfaces
+        apiVersion: '2021-03-01'
+        name: '[parameters(''networkInterfaceName'')]'
+        dependsOn: [
+          '[concat(''Microsoft.Network/networkSecurityGroups/'', parameters(''networkSecurityGroupName''))]',
+          '[concat(''Microsoft.Network/virtualNetworks/'', parameters(''virtualNetworkName''))]',
+          '[concat(''Microsoft.Network/publicIpAddresses/'', parameters(''publicIpAddressName''))]'
+        ]
+        location: '[parameters(''location'')]'
+        properties:
+          ipConfigurations:
+          - name: ipconfig1
+            properties:
+              privateIPAllocationMethod: Dynamic
+              publicIpAddress:
+                id: '[resourceId(resourceGroup().name, ''Microsoft.Network/publicIpAddresses'', parameters(''publicIpAddressName''))]'
+                properties: {deleteOption: '[parameters(''pipDeleteOption'')]'}
+              subnet: {id: '[variables(''subnetRef'')]'}
+          networkSecurityGroup: {id: '[variables(''nsgId'')]'}
+      - type: Microsoft.Network/networkSecurityGroups
+        apiVersion: '2019-02-01'
+        name: '[parameters(''networkSecurityGroupName'')]'
+        location: '[parameters(''location'')]'
+        properties: {securityRules: '[parameters(''networkSecurityGroupRules'')]'}
+      - type: Microsoft.Network/virtualNetworks
+        apiVersion: '2020-11-01'
+        name: '[parameters(''virtualNetworkName'')]'
+        location: '[parameters(''location'')]'
+        properties:
+          addressSpace: {addressPrefixes: '[parameters(''addressPrefixes'')]'}
+          subnets: '[parameters(''subnets'')]'
+      - type: Microsoft.Network/publicIpAddresses
+        apiVersion: '2020-08-01'
+        name: '[parameters(''publicIpAddressName'')]'
+        location: '[parameters(''location'')]'
+        properties: {publicIpAllocationMethod: '[parameters(''publicIpAddressType'')]'}
+        sku: {name: '[parameters(''publicIpAddressSku'')]'}
+      - type: Microsoft.Compute/virtualMachines
+        name: '[parameters(''virtualMachineName'')]'
+        apiVersion: '2022-03-01'
+        dependsOn: ['[concat(''Microsoft.Network/networkInterfaces/'', parameters(''networkInterfaceName''))]']
+        location: '[parameters(''location'')]'
+        properties:
+          diagnosticsProfile:
+            bootDiagnostics: {enabled: true}
+          hardwareProfile: {vmSize: '[parameters(''virtualMachineSize'')]'}
+          networkProfile:
+            networkInterfaces:
+            - id: '[resourceId(''Microsoft.Network/networkInterfaces'', parameters(''networkInterfaceName''))]'
+              properties: {deleteOption: '[parameters(''nicDeleteOption'')]'}
+          osProfile:
+            adminUsername: '[parameters(''adminUsername'')]'
+            computerName: '[parameters(''virtualMachineComputerName'')]'
+            linuxConfiguration:
+              disablePasswordAuthentication: true
+              ssh:
+                publicKeys:
+                - {keyData: '[parameters(''adminPublicKey'')]', path: '[concat(''/home/'',
+                    parameters(''adminUsername''), ''/.ssh/authorized_keys'')]'}
+          storageProfile:
+            imageReference: {offer: 0001-com-ubuntu-server-focal, publisher: canonical,
+              sku: 20_04-lts-gen2, version: latest}
+            osDisk:
+              createOption: fromImage
+              deleteOption: '[parameters(''osDiskDeleteOption'')]'
+              diskSizeGB: 30
+              managedDisk: {storageAccountType: '[parameters(''osDiskType'')]'}
+  register: azure
+- name: Add new instance to host group
+  add_host:
+    hostname: "{{ item['ips'][0].public_ip }}"
+    groups:
+    - azure_vms
+    ansible_user: "{{ server.tags.user }}"
+  loop: "{{ azure.deployment.instances }}"  
+
+- name: ensure an "A" record set with multiple records
+  azure_rm_dnsrecordset:
+    resource_group: domains
+    relative_name: "{{ server.name.split('_') | join('-') }}"
+    zone_name: iegear.com
+    record_type: A
+    time_to_live: 30
+    records:
+      - entry: "{{ item['ips'][0].public_ip }}"
+  loop: "{{ azure.deployment.instances }}"  
+    
+- name: Add SSH config block
+  ansible.builtin.blockinfile:
+    path: "~/.ssh/config"
+    # path: "./config"
+    block: |
+      host {{ server.name }}
+        hostname {{ item['ips'][0].public_ip }}
+        user {{ server.tags.user }}
+        stricthostkeychecking no
+        userknownhostsfile=/dev/null
+    marker: "# {mark} ansible managed block for azure {{ server.name }}"
+    create: yes
+  delegate_to: localhost
+  when: server.state == "present"
+  loop: "{{ azure.deployment.instances }}"  
+  # loop_control:
+  #   loop_var: server
+  # no_log: yes
+
+- name: Wait 10 seconds then check for port 22 to become open for all the servers
+  wait_for:
+    host: "{{ item['ips'][0].public_ip }}" 
+    port: 22
+    delay: 5
+    sleep: 2
+    timeout: 300
+  when: server.state == "present"
+  loop: "{{ azure.deployment.instances }}"  
+  no_log: yes
+
+# - name: Deploy in a RG form Template
+#   shell: |
+#     az deployment group create \
+#       --name "{{ server.name }}_dep" \
+#       --resource-group {{ server.resource_group | default('test_group') }} \
+#       --template-uri "{{ template_link }}" \
+#       --parameters "{{ parameters_link }}"
+#   failed_when: azure.rc != 0
+#   # vars:
+#   #   template_link: 'https://munnox.blob.core.windows.net/test/awx_vm/template.json?sp=r&st=2022-08-02T08:44:15Z&se=2022-09-04T16:44:15Z&spr=https&sv=2021-06-08&sr=b&sig=Bt6vaFEi5rpXYlU6QvTank%2BWMysaobSIlVepakLky48%3D'
+#   #   parameters_link: 'https://munnox.blob.core.windows.net/test/awx_vm/parameters.json?sp=r&st=2022-08-02T08:45:27Z&se=2022-09-04T16:45:27Z&spr=https&sv=2021-06-08&sr=b&sig=rsmJXatVN%2FjJ9JEaksVLAHtsQdSnn%2FxobqWzvsYZnB0%3D'
+#   register: azure
+# - name: show result
+#   debug:
+#     # var: (azure.stdout | from_json)
+#     var: azure
+
+
+# - name: Create a virtual network
+#   azure.azcollection.azure_rm_virtualnetwork:
+#     resource_group: "{{ server.resource_group | default('test_group') }}"
+#     name: "{{ server.name }}_net"
+#     address_prefixes_cidr:
+#         - "10.0.0.0/16"
+
+# - name: Add subnet
+#   azure.azcollection.azure_rm_subnet:
+#     resource_group: "{{ server.resource_group | default('test_group') }}"
+#     name: "{{ server.name }}_subnet"
+#     address_prefix: "10.0.1.0/24"
+#     virtual_network: "{{ server.name }}_net"
+# - name: Create public IP address
+#   azure.azcollection.azure_rm_publicipaddress:
+#     resource_group: "{{ server.resource_group | default('test_group') }}"
+#     allocation_method: Static
+#     name: "{{ server.name }}_public_ip"
+#   register: output_ip_address
+# - name: Public IP of VM
+#   debug:
+#     msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+# - name: Create Network Security Group that allows SSH
+#   azure.azcollection.azure_rm_securitygroup:
+#     resource_group: "{{ server.resource_group | default('test_group') }}"
+#     name: "{{ server.name }}_nsg"
+#     rules:
+#       - name: SSH
+#         protocol: Tcp
+#         destination_port_range: 22
+#         access: Allow
+#         priority: 1001
+#         direction: Inbound
+# - name: Create virtual network interface card
+#   azure.azcollection.azure_rm_networkinterface:
+#     resource_group: "{{ server.resource_group | default('test_group') }}"
+#     name: "{{ server.name }}_nic"
+#     virtual_network: "{{ server.name }}_net"
+#     subnet: "{{ server.name }}_subnet"
+#     public_ip_name: "{{ server.name }}_public_ip"
+#     security_group: "{{ server.name }}_nsg"
+
+# - name: Launch or Update instances
+#   azure.azcollection.azure_rm_virtualmachine:
+#     resource_group: "{{ server.resource_group | default('test_group') }}"
+#     name: "{{ server.name }}"
+#     vm_size: "{{ server.flavor | default('Standard_B1s') }}"
+#     admin_username: "{{ username | default('azureuser') }}"
+#     # admin_password: "{{ password }}"
+#     ssh_public_keys:
+#       - path: /home/{{ username | default('azureuser') }}/.ssh/authorized_keys
+#         key_data: "{{ public_key }}"
+#     image: "{{ server.image }}"
+#     tags: "{{ server.tags }}"
+    
+#     # storage_account: testaccount001
+#     network_interfaces: "{{ server.name }}_nic"
+#     # image:
+#     #   offer: CentOS
+#     #   publisher: OpenLogic
+#     #   sku: '7.5'
+#     #   version: latest
+
+#     # state: "{{ server.state }}"
+#     # name: "{{ server.name }}"
+#     # region_name: "{{ server.region | default('UK1') }}"
+#     # # availability_zone: UK1
+#     # image: "{{ server.image }}"
+#     # key_name: "{{ server.key_name }}"
+#     # # timeout: 200
+#     # flavor: "{{ server.flavor }}"
+#     # security_groups: "{{ server.security_groups | default('default') }}"
+#     # # auto_ip: yes
+#   register: server_creation

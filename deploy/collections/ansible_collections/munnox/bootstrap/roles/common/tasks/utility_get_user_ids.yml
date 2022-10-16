@@ -1,0 +1,66 @@
+# Get the uid and gid code for the username
+# returns 1000 is user_uid or user_gid not defined
+
+- name: "Get '{{ username }}' user id"
+  command:
+    cmd: "id {{ username }} -u"
+  register: user_uid_result
+  ignore_errors: yes
+  changed_when: no
+
+- name: "Get '{{ username }}' group id"
+  command:
+    cmd: "id {{ username }} -g"
+  register: user_gid_result
+  ignore_errors: yes
+  changed_when: no
+
+- name: "Process uid for '{{ username }}'"
+  set_fact:
+    user_uid: >
+      {% if user_uid_result.rc == 0 -%}
+          {{ user_uid_result.stdout }}
+      {%- else -%}
+          {%- if user_uid is defined -%}
+              {{ user_uid }}
+          {%- else -%}
+              1000
+          {%- endif -%}
+      {%- endif %}
+    user_gid: >
+      {% if user_gid_result.rc == 0 -%}
+          {{ user_gid_result.stdout }}
+      {%- else -%}
+          {%- if user_gid is defined -%}
+              {{ user_gid }}
+          {%- else -%}
+              1000
+          {%- endif -%}
+      {%- endif %}
+
+# - name: Print user uid and gid
+#   debug:
+#     msg: |-
+#       User {{ username }}
+#       {% if user_uid is defined -%}
+#       UID: {{ user_uid }}
+#       {%- endif %}
+
+#       User id result:
+#       {{ user_uid_result }}
+
+#       Group
+#       {% if user_gid is defined -%}
+#       GID: {{ user_gid }}
+#       {%- endif %}
+
+#       Group id result:
+#       {{ user_gid_result }}"
+#   tags: "debug_user"
+
+# # https://docs.ansible.com/ansible/latest/modules/assert_module.html
+# - name: Break the tasks
+#   assert:
+#     that:
+#       - 1 == 0
+#   tags: "debug_user"

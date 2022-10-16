@@ -1,0 +1,82 @@
+- name: Create resource group
+  azure.azcollection.azure_rm_resourcegroup:
+    name:  "{{ server.resource_group | default('test_group') }}"
+    location: uksouth
+    tags: "{{ server.tags }}"
+    # tags:
+    #     testing: testing
+
+- name: Create a virtual network
+  azure.azcollection.azure_rm_virtualnetwork:
+    resource_group: "{{ server.resource_group | default('test_group') }}"
+    name: "{{ server.name }}_net"
+    address_prefixes_cidr:
+        - "10.0.0.0/16"
+
+- name: Add subnet
+  azure.azcollection.azure_rm_subnet:
+    resource_group: "{{ server.resource_group | default('test_group') }}"
+    name: "{{ server.name }}_subnet"
+    address_prefix: "10.0.1.0/24"
+    virtual_network: "{{ server.name }}_net"
+- name: Create public IP address
+  azure.azcollection.azure_rm_publicipaddress:
+    resource_group: "{{ server.resource_group | default('test_group') }}"
+    allocation_method: Static
+    name: "{{ server.name }}_public_ip"
+  register: output_ip_address
+- name: Public IP of VM
+  debug:
+    msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+- name: Create Network Security Group that allows SSH
+  azure.azcollection.azure_rm_securitygroup:
+    resource_group: "{{ server.resource_group | default('test_group') }}"
+    name: "{{ server.name }}_nsg"
+    rules:
+      - name: SSH
+        protocol: Tcp
+        destination_port_range: 22
+        access: Allow
+        priority: 1001
+        direction: Inbound
+- name: Create virtual network interface card
+  azure.azcollection.azure_rm_networkinterface:
+    resource_group: "{{ server.resource_group | default('test_group') }}"
+    name: "{{ server.name }}_nic"
+    virtual_network: "{{ server.name }}_net"
+    subnet: "{{ server.name }}_subnet"
+    public_ip_name: "{{ server.name }}_public_ip"
+    security_group: "{{ server.name }}_nsg"
+
+- name: Launch or Update instances
+  azure.azcollection.azure_rm_virtualmachine:
+    resource_group: "{{ server.resource_group | default('test_group') }}"
+    name: "{{ server.name }}"
+    vm_size: "{{ server.flavor | default('Standard_B1s') }}"
+    admin_username: "{{ username | default('azureuser') }}"
+    # admin_password: "{{ password }}"
+    ssh_public_keys:
+      - path: /home/{{ username | default('azureuser') }}/.ssh/authorized_keys
+        key_data: "{{ public_key }}"
+    image: "{{ server.image }}"
+    tags: "{{ server.tags }}"
+    
+    # storage_account: testaccount001
+    network_interfaces: "{{ server.name }}_nic"
+    # image:
+    #   offer: CentOS
+    #   publisher: OpenLogic
+    #   sku: '7.5'
+    #   version: latest
+
+    # state: "{{ server.state }}"
+    # name: "{{ server.name }}"
+    # region_name: "{{ server.region | default('UK1') }}"
+    # # availability_zone: UK1
+    # image: "{{ server.image }}"
+    # key_name: "{{ server.key_name }}"
+    # # timeout: 200
+    # flavor: "{{ server.flavor }}"
+    # security_groups: "{{ server.security_groups | default('default') }}"
+    # # auto_ip: yes
+  register: server_creation
