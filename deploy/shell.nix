@@ -94,7 +94,7 @@ let
     runplay
     runplayhost
   ];
-in pkgs.mkShell {               # mkShell is a helper function
+in pkgs.mkShell {       # mkShell is a helper function
   name="deploy_ctl";    # that requires a name
   buildInputs = if pkgs.stdenv.isDarwin then basepkgs ++ scripthelpers else basepkgs ++ [
       pkgs.azure-cli
@@ -102,9 +102,9 @@ in pkgs.mkShell {               # mkShell is a helper function
     ] ++ scripthelpers;
 
   shellHook = ''
-    # bash to run when you enter the shell     
-    echo "Start developing...system = '${pkgs.system}'"                                          
+    # bash to run when you enter the shell
+    echo "Start developing...system = '${pkgs.system}'"                                        
     # poetry install
     # poetry shell
-  '';               
+  '';
 }
