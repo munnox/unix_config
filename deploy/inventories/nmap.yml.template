@@ -1,4 +1,5 @@
 # inventory.config file in YAML format
 plugin: community.general.nmap
 strict: False
+# Uncomment and correct line below and remove the .template to use the nmap inventory
 # address: 192.168.0.0/24
