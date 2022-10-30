@@ -1,0 +1,176 @@
+---
+- name: run
+  # hosts: "{{ playbook_groups | default('kvm_hosts') }},!disabled"
+  hosts: "desk-rob"
+  vars:
+    virt_uri: qemu:///system
+    ssh_pub_key: "{{ lookup('ansible.builtin.file', '~/.ssh/id_ed25519.pub') }}"
+    image_dir: /var/lib/libvirt/images
+    image_name: jammy-server-cloudimg-amd64.img
+    new_name: u2204
+    disk_ext: qcow2
+    new_memory: 2048
+    new_memory_ki: "{{ new_memory * 1024 }}"
+    storage_size: 10G
+    machines:
+      - name: testing
+        restart_needed: no
+        # snapshot_backup_name: "test1"
+        snapshot_backup_name: no
+        # snapshot_restore_name: "test1"
+        snapshot_restore_name: no
+    image_path: "{{ ansible_user_dir }}/{{ image_name }}"
+    main_disk_path:  "{{ (image_dir, new_name) | path_join }}.{{ disk_ext }}"
+    seed_path: "{{ image_dir }}/{{ new_name }}-seed.img"
+    cloud_config_path:  "{{ansible_user_dir }}/cloud_init.cfg"
+    network_config_path: "{{ ansible_user_dir }}/network_config_static.cfg"
+
+  tasks:
+    - name: Ensure cloud utils
+      become: yes
+      apt:
+        name: cloud-image-utils
+        state: latest
+    # - name: Ensure libvirt
+    #   pip:
+    #     name: libvirt-python
+    # - name:
+    #   block:
+    #     tasks:
+    #       - name: test machine
+    #         shell:
+    #           cmd:
+    # - name: Set Stop and restart needed?
+    #   set_facts:
+    #     restart_needed: snapshot_backup_name and snapshot_restore_name
+    - name: Download Ubuntu 22.04 cloud image with check (sha256)
+      # https://cloud-images.ubuntu.com/jammy/
+      ansible.builtin.get_url:
+        url: http://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
+        dest: "{{ (ansible_user_dir, 'jammy-server-cloudimg-amd64.img') | path_join }}"
+        checksum:  "sha256:2f35b57775ab2e28f50fa09a18d6ccc10ece5e72c30242a73291b9a0eec1f592"
+      register: ubuntucloud
+    - name: remove image {{ ssh_pub_key }}
+      become: yes
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ main_disk_path }}"
+        - "{{ seed_path }}"
+    - name: create 10G image
+      become: yes
+      shell: |
+        qemu-img create -b  "{{ image_path }}" -f qcow2 -F qcow2  "{{ main_disk_path }}" {{ storage_size }}
+    # - name: Copy image
+    #   become: yes
+    #   ansible.builtin.copy:
+    #     remote_src: yes
+    #     src: "{{ ansible_user_dir }}/{{ image_name }}"
+    #     dest: "{{ main_disk_path }}"
+    
+    - name: create cloud.cfg
+      ansible.builtin.copy:
+        dest: "{{ cloud_config_path }}"
+        content: |
+          #cloud-config
+          hostname: {{ new_name }}
+          fqdn: {{ new_name }}.example.com
+          manage_etc_hosts: true
+          users:
+            - name: ubuntu
+              sudo: ALL=(ALL) NOPASSWD:ALL
+              groups: users, admin
+              home: /home/ubuntu
+              shell: /bin/bash
+              lock_passwd: false
+              ssh-authorized-keys:
+                - {{ ssh_pub_key }}
+          # only cert auth via ssh (console access can still login)
+          # ssh_pwauth: false
+          disable_root: false
+          chpasswd:
+            list: |
+              ubuntu:linux
+            expire: False
+
+          package_update: true
+          packages:
+            - qemu-guest-agent
+          # written to /var/log/cloud-init-output.log
+          final_message: "The system is finally up, after $UPTIME seconds"
+
+    - name: create image network
+      ansible.builtin.copy:
+        dest: "{{ network_config_path }}"
+        content: |
+          version: 2
+          ethernets:
+            enp1s0:
+              dhcp4: true
+              # # default libvirt network
+              # addresses: [ 192.168.122.158/24 ]
+              # gateway4: 192.168.122.1
+              # nameservers:
+              #   addresses: [ 192.168.122.1,8.8.8.8 ]
+              # search: [ example.com ]
+
+    - name: create seed image
+      become: yes
+      shell: |
+        cloud-localds -v --network-config="{{ network_config_path }}" "{{ seed_path }}" "{{ cloud_config_path }}"
+    - name: Define Machine
+      shell: |
+        virt-install --connect {{ virt_uri }} --name {{ new_name }} \
+          --virt-type kvm --memory {{ new_memory }} --vcpus 2 \
+          --boot hd,menu=on \
+          --disk path={{ seed_path }},device=cdrom \
+          --disk path={{ main_disk_path }},device=disk \
+          --graphics vnc \
+          --os-type Linux --os-variant ubuntu20.04 \
+          --network network:default \
+          --console pty,target_type=serial
+
+    # - name: Define machine command line
+    #   ansible.builtin.copy:
+    #     dest: "{{ansible_user_dir }}/machine.xml"
+    #     content: |
+# testing
+      # <domain type='kvm'>
+      #   <name>hvf-demo</name>
+      #   <!--<uuid>4dea24b3-1d52-d8f3-2516-782e98a23fa0</uuid>-->
+      #   <memory>2048</memory>
+      #   <vcpu>2</vcpu>
+      #   <os>
+      #     <type arch="x86_64">hvm</type>
+      #   </os>
+      #   <features>
+      #     <acpi/>
+      #   </features>
+      #   <clock sync="localtime"/>
+      #   <devices>
+      #     <emulator>/usr/local/bin/qemu-system-x86_64</emulator>
+      #     <controller type='scsi' index='0' model='virtio-scsi'/>
+      #     <disk type='volume' device='disk'>
+      #       <driver name='qemu' type='qcow2'/>
+      #       <source pool='default' volume='myos'/>
+      #       <target bus='scsi' dev='sda'/>
+      #     </disk>
+      #     <interface type='user'>
+      #       <mac address='24:42:53:21:52:45'/>
+      #       <model type='virtio'/>
+      #     </interface>
+      #     <graphics type='vnc' port='-1'/>
+      #   </devices>
+      # </domain>
+    # - name: define vm
+    #   community.libvirt.virt:
+    #     command: define
+    #     xml: "{{ lookup('template', 'vm_template.xml.j2') }}"
+    #     # xml: 
+    #     # uri: 'lxc:///'
+    - name: start vm
+      community.libvirt.virt:
+        name: "{{ new_name }}"
+        state: running
+        # uri: 'lxc:///'
