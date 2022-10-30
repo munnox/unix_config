@@ -25,7 +25,8 @@ let
 
   # Collecting all the inventories
   # all_inventories="-i inventories/inventory.yml ${openstack_inventory} ${aws_inventory} ${vault_openstack} ${vault_aws}";
-  all_inventories="-i inventories/inventory.yml";
+  # all_inventories="-i inventories/inventory.yml";
+  all_inventories=""; #-i inventories/";
 
   # Graph and list the inventory
   invgraph = pkgs.writeScriptBin "inv_graph" ''
