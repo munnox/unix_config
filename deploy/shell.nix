@@ -44,6 +44,7 @@ let
   '';
   # Ping all machines found in the inventory
   ping_all = pkgs.writeScriptBin "ping_all" ''
+    echo "Pinging all detected machines"
     ${ansible_playbook} ${all_inventories} playbooks/ping.yml
   '';
 
@@ -102,7 +103,7 @@ in pkgs.mkShell {               # mkShell is a helper function
 
   shellHook = ''
     # bash to run when you enter the shell     
-    echo "Start developing..."                                          
+    echo "Start developing...system = '${pkgs.system}'"                                          
     # poetry install
     # poetry shell
   '';               
