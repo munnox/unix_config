@@ -83,6 +83,8 @@ let
     pkgs.poetry
     pkgs.ansible
     pkgs.nmap
+    pkgs.git
+    pkgs.helix
   ];
   scripthelpers = [
     invgraph
