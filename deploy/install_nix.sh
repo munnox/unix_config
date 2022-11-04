@@ -1,10 +1,14 @@
 #!/bin/bash
 
+if  [[ -f ~/.config/nix ]]; then
+    echo "~/.config/nix needs creating"
+    mkdir ~/.config/nix
+fi
 cat <<EOF > ~/.config/nix.conf
 experimental-features = nix-command flakes
 EOF
 
-if [ -f nix ]; then
+if [ -x "$(command -v nix)" ]; then
     echo "Nix installed"
 else
     echo "Nix not installed"
