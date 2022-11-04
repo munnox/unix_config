@@ -136,14 +136,15 @@
       when: tmux_present
 
     # Setup alacritty symlink
-    - name: test alacritty
-      command: which alacritty
-      register: result
-      ignore_errors: yes
-      changed_when: false
-    - name: Is alacritty present
+    # - name: test alacritty
+    #   command: which alacritty
+    #   register: result
+    #   ignore_errors: yes
+    #   changed_when: false
+    - name: Is alacritty present force yes
       ansible.builtin.set_fact:
-        alacritty_present: "{{ result.rc == 0 }}"
+        # alacritty_present: "{{ result.rc == 0 }}"
+        alacritty_present: yes
     - name: Create a directory if it does not exist
       ansible.builtin.file:
         path: "{{ '~/.config/alacritty/' | expanduser }}"
@@ -158,6 +159,31 @@
         # group: foo
         state: link
       when: alacritty_present
+
+    # Setup helix copy
+    # - name: test Helix
+    #   command: which hx
+    #   register: result
+    #   ignore_errors: yes
+    #   changed_when: false
+    - name: Is Helix present forced yes
+      ansible.builtin.set_fact:
+        # helix_present: "{{ result.rc == 0 }}"
+        helix_present: yes
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ '~/.config/helix/' | expanduser }}"
+        state: directory
+        mode: '0755'
+      when: helix_present
+    - name: Create a symbolic link helix config
+      ansible.builtin.copy:
+        src: "{{repo_config_path}}/helix/config.toml"
+        dest: "{{ '~/.config/helix/config.toml' | expanduser }}"
+        # # owner: foo
+        # # group: foo
+        # state: link
+      when: helix_present
 
     # Setup zsh
     - name: test zsh
@@ -234,4 +260,6 @@
           i3 present?: {{i3_present}}
           tmux present?: {{tmux_present}}
           bash present?: {{bash_present}}
+          alacritty present?: {{alacritty_present}}
+          helix present?: {{helix_present}}
           zsh present?: {{zsh_present}}
