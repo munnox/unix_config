@@ -52,6 +52,7 @@
   };
   programs.zellij.enable = true;
   programs.tmux.enable = true;
+  programs.gitui.enable = true;
   # programs.
 #   programs.emacs = {                            
 #     enable = true;
