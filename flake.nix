@@ -45,9 +45,9 @@
             ''
               mkdir $out
               mkdir $out/bin
-              # ls ${self.homeConfigurations.aarch64-darwin.robert.activationPackage}
+              # ls ${self.homeConfigurations.${system}.robert.activationPackage}
               # exit 1
-              cp -r ${self.homeConfigurations.aarch64-darwin.robert.activationPackage}/* $out/
+              cp -r ${self.homeConfigurations.${system}.robert.activationPackage}/* $out/
               cp $out/activate $out/bin/applyhome
             '';
           apps.applyhome = flake-utils.lib.mkApp { drv = local_pkgs.applyhome; };
