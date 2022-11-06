@@ -7,3 +7,5 @@ pyvenv
 *openrc.sh
 *auth.yml
 deploy/clouds.yaml
+home.nix
+result
