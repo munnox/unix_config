@@ -1,14 +1,22 @@
 {
   description = "A very basic flake";
+  
+  # Input dependancies
+  ## Simply flake build
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.unix_config.url = "github:munnox/unix_config";
-  inputs.helix.url = "github:helix-editor/helix";
+  ## Import the Home Manger derivations
   inputs.home-manager = {
     url = "github:nix-community/home-manager";
     inputs.nixpkgs.follows = "nixpkgs";
   };
+  ## Import the helix derivations
+  inputs.helix.url = "github:helix-editor/helix";
+  ## Optional Link to my config repo
 
-  outputs = { self, nixpkgs, flake-utils, unix_config, helix, home-manager }:
+  # inputs.unix_config.url = "gitlab:munnox/unix_config";
+
+
+  outputs = { self, nixpkgs, flake-utils, helix, home-manager }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
@@ -18,16 +26,17 @@
         in
         {
           packages.hello = pkgs.hello;
-          packages.unix_config = unix_config;
+          # packages.unix_config = unix_config;
           # WIP vscode.... 
           # packages.mycode = pkgs.vscodium;
           # nix run .#nelix
-          packages.helix =  helix.packages.${system}.helix;
+          packages.helix = helix.packages.${system}.helix;
           # nix run .#nvim
-          packages.nvim =  pkgs.neovim;
+          packages.nvim = pkgs.neovim;
           packages.deployshell = import ./deploy/shell.nix { inherit pkgs; inherit self; };
           packages.default = local_pkgs.deployshell;
           devShells.default = local_pkgs.deployshell;
+
           formatter = pkgs.nixpkgs-fmt;
           homeConfigurations.robert = home-manager.lib.homeManagerConfiguration {
             inherit pkgs;

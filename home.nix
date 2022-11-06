@@ -10,6 +10,8 @@
   home.packages = [                            
     #pkgs.htop
     pkgs.ansible
+    pkgs.rnix-lsp
+    pkgs.tmux
     #pkgs.python310
     #pkgs.poetry
     #pkgs.docker

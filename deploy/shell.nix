@@ -1,12 +1,12 @@
-{
-  pkgs ? import <nixpkgs> {}, # here we import the nixpkgs package set
-  self ? {packages.aarch64-darwin.unix_config={__toString= self: "self_unix_config";};}
+{ pkgs ? import <nixpkgs> { }
+, # here we import the nixpkgs package set
+  self ? { packages.aarch64-darwin.unix_config = { __toString = self: "self_unix_config"; }; }
 }:
 let
   python_run = "";
   ansible_playbook = "${python_run} ansible-playbook";
   ansible_inventory = "${python_run} ansible-inventory";
-  
+
   # # OVH Openstack inventory
   # openstack_inventory = " -i inventories/openstack.yml -i inventories/extra_openstack.yml";
   # ans_openstack_playbook = "${ansible_playbook} ${openstack_inventory}";
@@ -28,7 +28,7 @@ let
   # Collecting all the inventories
   # all_inventories="-i inventories/inventory.yml ${openstack_inventory} ${aws_inventory} ${vault_openstack} ${vault_aws}";
   # all_inventories="-i inventories/inventory.yml";
-  all_inventories=""; #-i inventories/";
+  all_inventories = ""; #-i inventories/";
 
   switchhome = pkgs.writeScriptBin "switchhome" ''
     #echo "Switch to ${./.}"
@@ -52,10 +52,10 @@ let
   '';
 
   protect = pkgs.writeScriptBin "secrets_protect" ''
-	  ${ansible_playbook} playbooks/local_protect_credentials.yml --tag encrypt
+    	  ${ansible_playbook} playbooks/local_protect_credentials.yml --tag encrypt
   '';
   unprotect = pkgs.writeScriptBin "secrets_unprotect" ''
-	  ${ansible_playbook} playbooks/local_protect_credentials.yml --tag decrypt
+    	  ${ansible_playbook} playbooks/local_protect_credentials.yml --tag decrypt
   '';
 
   ansible_galaxy_install = pkgs.writeScriptBin "ansible_requirements" ''
@@ -101,24 +101,26 @@ let
     runplayhost
     runplayhostpass
   ];
-  debug= x: pkgs.lib.traceSeq x x;
+  debug = x: pkgs.lib.traceSeq x x;
   # config = ./config/bash;
   # configpath = builtins.toString ./.;
-in pkgs.mkShell {       # mkShell is a helper function
-  name="deploy_ctl";    # that requires a name
+in
+pkgs.mkShell {
+  # mkShell is a helper function
+  name = "deploy_ctl"; # that requires a name
   # And a list of build inputs
-  buildInputs = if pkgs.stdenv.isDarwin then 
+  buildInputs =
+    if pkgs.stdenv.isDarwin then
       basepkgs ++ scripthelpers
-    else 
-        basepkgs ++ [
+    else
+      basepkgs ++ [
         pkgs.azure-cli
         pkgs.awscli
       ] ++ scripthelpers;
   # Then will run this script before give the user the shell
   shellHook = ''
 
-    # echo "${self.packages.${pkgs.system}.unix_config}/configs/bash/bashrc"
-    # echo "${../.}/configs/bash/bashrc"
+    echo "${../.}/configs/bash/bashrc"
     source "${../.}/configs/bash/bashrc"
     # source ${../.}/configs/bash/bash_base_colors.sh
     # source ${../.}/configs/bash/bash_alias.sh
