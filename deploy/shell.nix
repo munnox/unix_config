@@ -33,7 +33,7 @@ let
   switchhome = pkgs.writeScriptBin "switchhome" ''
     #echo "Switch to ${./.}"
     #cd ${./.}
-    nix build ".#homeConfigurations.aarch64-darwin.robert.activationPackage"
+    nix build ".#homeconfigurations.aarch64-darwin.robert.activationpackage"
     ./result/activate
   '';
 

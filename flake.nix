@@ -41,6 +41,16 @@
             # Optionally use extraSpecialArgs
             # to pass through arguments to home.nix
           };
+          packages.applyhome = pkgs.runCommand "applyhome" { buildInputs = [ ]; }
+            ''
+              mkdir $out
+              mkdir $out/bin
+              # ls ${self.homeConfigurations.aarch64-darwin.robert.activationPackage}
+              # exit 1
+              cp -r ${self.homeConfigurations.aarch64-darwin.robert.activationPackage}/* $out/
+              cp $out/activate $out/bin/applyhome
+            '';
+          apps.applyhome = flake-utils.lib.mkApp { drv = local_pkgs.applyhome; };
         }
       );
   # outputs = { self, nixpkgs }: {
