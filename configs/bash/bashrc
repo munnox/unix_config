@@ -25,6 +25,7 @@ LOCALSCRIPTS=(
 ./bash_lscolours.sh
 ./bash_alias.sh
 ./bash_tmux.sh
+./bash_prompt.sh
 )
 
 # Gets the current path of this source file

@@ -119,9 +119,10 @@ in pkgs.mkShell {       # mkShell is a helper function
 
     # echo "${self.packages.${pkgs.system}.unix_config}/configs/bash/bashrc"
     # echo "${../.}/configs/bash/bashrc"
-    source ${../.}/configs/bash/bash_base_colors.sh
-    source ${../.}/configs/bash/bash_alias.sh
-    source ${../.}/configs/bash/bash_prompt.sh
+    source "${../.}/configs/bash/bashrc"
+    # source ${../.}/configs/bash/bash_base_colors.sh
+    # source ${../.}/configs/bash/bash_alias.sh
+    # source ${../.}/configs/bash/bash_prompt.sh
 
     # bash to run when you enter the shell
     #PROMPT=$bldgrn"NIX-\u@\h ["$bldpur"\w"$bldgrn"]"$txtrst'$(BRANCH=`git rev-parse --abbrev-ref HEAD 2> /dev/null`; if [ -n "$BRANCH" ]; then DIRTY=`git status --porcelain 2> /dev/null`; if [ -n "$DIRTY" ]; then echo "'$txtylw' ($BRANCH) '$txtrst'"; else echo "'$txtgrn' ($BRANCH) '$txtrst'"; fi fi;)'$txtcyn"\n\$ "$txtrst
