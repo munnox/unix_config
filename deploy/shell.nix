@@ -31,6 +31,8 @@ let
   all_inventories=""; #-i inventories/";
 
   switchhome = pkgs.writeScriptBin "switchhome" ''
+    #echo "Switch to ${./.}"
+    #cd ${./.}
     nix build ".#homeConfigurations.aarch64-darwin.robert.activationPackage"
     ./result/activate
   '';
@@ -42,13 +44,7 @@ let
   invlist = pkgs.writeScriptBin "inv_list" ''
     ${ansible_inventory} ${all_inventories} --list
   '';
-  # Graph and list the nmap inventory
-  invnmapgraph = pkgs.writeScriptBin "inv_nmap_graph" ''
-	  ${ansible_inventory} -i inventories/nmap.yml --graph -y
-  '';
-  invnmaplist = pkgs.writeScriptBin "inv_nmap_list" ''
-	  ${ansible_inventory} -i inventories/nmap.yml --list -y
-  '';
+
   # Ping all machines found in the inventory
   ping_all = pkgs.writeScriptBin "ping_all" ''
     echo "Pinging all detected machines"
@@ -66,16 +62,14 @@ let
     echo "Running playbook: $1"
     ansible-galaxy collection install -r requirements.yml
   '';
+
   runpasswordlesshost = pkgs.writeScriptBin "runpasswordlessonly" ''
     echo "Running playbook: $1"
     ${ansible_playbook} ${all_inventories} --extra-vars "playbook_groups=$1" playbooks/oneoff_tools/password_less_sudo_role.yml -K
   '';
-  runplayonly = pkgs.writeScriptBin "runplayonly" ''
-    echo "Running playbook: $1"
-    ${ansible_playbook} ${all_inventories} $1
-  '';
+
   runplay = pkgs.writeScriptBin "runplay" ''
-    echo "Running playbook: $@"
+    echo "Running playbook with args: $@"
     ${ansible_playbook} ${all_inventories} $@
   '';
   runplayhost = pkgs.writeScriptBin "runplayhost" ''
@@ -92,18 +86,17 @@ let
     pkgs.nmap
     pkgs.git
     pkgs.helix
+    pkgs.tmux
   ];
   scripthelpers = [
+    switchhome
     invgraph
     invlist
-    invnmapgraph
-    invnmaplist
     ansible_galaxy_install
     ping_all
     protect
     unprotect
     runpasswordlesshost
-    runplayonly
     runplay
     runplayhost
     runplayhostpass

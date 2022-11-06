@@ -6,22 +6,11 @@
 export LANG=en_GB.UTF-8
 export TZ=Europe/London
 
-# unset RAM_ORG_PATH
-export RAM_ORG_PATH=${RAM_ORG_PATH:-$PATH}
+export VISUAL=code
+export EDITOR=vim
 
-# Array of localscripts
-LOCALSCRIPTS=(
-./bash_alias.sh
-./bash_display.sh
-./bash_terminal.sh
-./bash_env.sh
-./bash_prompt.sh
-./bash_lscolours.sh
-./bash_setup.sh
-./bash_kubernetes.sh
-./bash_tmux.sh
-./bash_terminal.sh
-)
+# unset RAM_ORG_PATH
+# export RAM_ORG_PATH=${RAM_ORG_PATH:-$PATH}
 
 # Dealing with other shells only bash will continue
 CHECK="^.*bin/bash$"
@@ -30,15 +19,23 @@ if ! [[ $SHELL =~ $CHECK ]]; then
   return 1
 fi
 
+# Array of localscripts
+LOCALSCRIPTS=(
+./bash_base_colors.sh
+./bash_lscolours.sh
+./bash_alias.sh
+./bash_tmux.sh
+)
+
 # Gets the current path of this source file
 BASH_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 BASH_DIR="$BASH_DIR"
 
-CONFIG_DIR=$(cd "$BASH_DIR/.." && pwd)
+# CONFIG_DIR=$(cd "$BASH_DIR/.." && pwd)
 # Left for debugging paths
 # echo "Configdir='${CONFIG_DIR}' configbash='${BASH_DIR}' bashsource='${BASH_SOURCE[0]}'"
 
-export PATH="./:$RAM_ORG_PATH"
+# export PATH="./:$RAM_ORG_PATH"
 
 # Source all file defined above
 for p in ${LOCALSCRIPTS[@]}; do
@@ -50,21 +47,26 @@ for p in ${LOCALSCRIPTS[@]}; do
     fi
 done
 
-# If the cargo directry exists source it
-# This loads cargo for a rust environment
-[ -s "~/.cargo/env" ] && \. "~/.cargo/env"
+# # If the cargo directry exists source it
+# # This loads cargo for a rust environment
+# [ -s "~/.cargo/env" ] && \. "~/.cargo/env"
 
-# Node NVM setup and config first checking if the directory exists
-export NVM_DIR="$HOME/.ramnvm"
-# This loads nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-# This loads nvm bash_completion
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# # Node NVM setup and config first checking if the directory exists
+# export NVM_DIR="$HOME/.ramnvm"
+# # This loads nvm
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# # This loads nvm bash_completion
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # # git branch autocompletion
 # if [ -f ~/dotfiles/.git-completion.bash ]; then
 #   . ~/dotfiles/.git-completion.bash
 # fi
+
+# git branch autocompletion
+if [ -f ~/dotfiles/.git-completion.bash ]; then
+  . ~/dotfiles/.git-completion.bash
+fi
 
 # disable the ctrl-s
 stty -ixon

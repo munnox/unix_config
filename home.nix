@@ -8,8 +8,11 @@
 
   # Packages that should be installed to the user profile.
   home.packages = [                            
-    pkgs.htop
+    #pkgs.htop
     pkgs.ansible
+    #pkgs.python310
+    #pkgs.poetry
+    #pkgs.docker
   ];
 
   # This value determines the Home Manager release that your

@@ -43,5 +43,3 @@ Host dev
 EOF
 }
 
-alias pybuildenv="python3 -m venv pyvenv"
-alias pyactivateenv="source pyvenv/bin/activate"
