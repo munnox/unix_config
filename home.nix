@@ -11,7 +11,8 @@
     #pkgs.htop
     pkgs.ansible
     pkgs.rnix-lsp
-    pkgs.tmux
+    # pkgs.tmux
+    # pkgs.zellij
     #pkgs.python310
     #pkgs.poetry
     #pkgs.docker
@@ -37,13 +38,21 @@
         space.space = "file_picker";
         space.w = ":w";
         space.q = ":q";
+        "{" = ["goto_prev_paragraph" "collapse_selection"];
+        "}" = ["goto_next_paragraph" "collapse_selection"];
     };
     keys.insert = {
         j.j = "normal_mode";
         "C-c" = "normal_mode";
     };
+    keys.select = {
+      "{" = ["goto_prev_paragraph" "collapse_selection"];
+      "}" = ["goto_next_paragraph" "collapse_selection"];
+    };
   };
-#   programs.
+  programs.zellij.enable = true;
+  programs.tmux.enable = true;
+  # programs.
 #   programs.emacs = {                            
 #     enable = true;
 #     extraPackages = epkgs: [

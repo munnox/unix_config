@@ -23,7 +23,7 @@
 #
 
 [core]
-  editor = vim
+  editor = hx
   # editor = code --wait
   # editor = sublime -n -w
 [user]
