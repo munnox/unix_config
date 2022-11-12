@@ -30,6 +30,35 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+  
+  programs.fish.enable = true;
+  programs.fish.interactiveShellInit = ''
+
+    if status is-interactive
+        # Commands to run in interactive sessions can go here
+    end
+
+    function fish_prompt --description 'Informative prompt'
+        #Save the return status of the previous command
+        set -l last_pipestatus $pipestatus
+        set -lx __fish_last_status $status # Export for __fish_print_pipestatus.
+
+        if functions -q fish_is_root_user; and fish_is_root_user
+            printf '%s@%s %s%s%s# ' $USER (prompt_hostname) (set -q fish_color_cwd_root
+                                                             and set_color $fish_color_cwd_root
+                                                             or set_color $fish_color_cwd) \
+                                    (prompt_pwd) (set_color normal)
+        else
+            set -l status_color (set_color $fish_color_status)
+            set -l statusb_color (set_color --bold $fish_color_status)
+            set -l pipestatus_string (__fish_print_pipestatus "[" "]" "|" "$status_color" "$statusb_color" $last_pipestatus)
+
+            printf '[%s] %s%s@%s %s%s %s%s%s \n> ' (date "+%H:%M:%S") (set_color brblue) \
+                $USER (prompt_hostname) (set_color $fish_color_cwd) $PWD $pipestatus_string \
+                (set_color normal)
+        end
+    end
+  '';
 
   programs.helix.enable = true;
   programs.helix.settings = {
@@ -53,6 +82,61 @@
   programs.zellij.enable = true;
   programs.tmux.enable = true;
   programs.gitui.enable = true;
+
+  programs.alacritty.enable = true;
+  programs.alacritty.settings = {
+    scrolling.history = 1000;
+    window.opacity = 1.0;
+    selection. save_to_clipboard = true;
+    live_config_reload = true;
+    shell.program = "${pkgs.bash}/bin/bash";
+    shell.args = ["--login"];
+    alt_send_esc = true;
+    debug.render_time = true;
+    # Log level None,Error,Warn,Info,Debug,Trace
+    # debug.log_level = "Warn";
+    debug.print_events = true;
+    font.normal.family = "Hack";
+    font.bold.family = "Hack";
+    font.italic.family = "Hack";
+    # font.size= 14.0;
+
+    key_bindings = [
+      { key = "F"; mods = "Alt"; chars = "\\x1bf"; }
+      { key = "B"; mods = "Alt"; chars = "\\x1bb"; }  
+      { key = "N"; mods = "Alt"; chars = "\\x1bn"; }  
+      { key = "H"; mods = "Alt"; chars = "\\x1bh"; }  
+      { key = "J"; mods = "Alt"; chars = "\\x1bj"; }  
+      { key = "K"; mods = "Alt"; chars = "\\x1bk"; }  
+      { key = "L"; mods = "Alt"; chars = "\\x1bl"; }  
+      # { key = "Left";  mods = "Shift";   chars = "\\x1b[1;2D";                   }
+      # { key = "Left";  mods = "Control"; chars = "\\x1b[1;5D";                   }
+      { key = "Left";  mods = "Alt";     chars = "\\x1b[1;3D";                   }
+      # { key = "Left";                    chars = "\\x1b[D"; mode = "~AppCursor"; }
+      # { key = "Left";                    chars = "\\x1bOD"; mode = "AppCursor" ; }
+      # { key = "Right"; mods = "Shift";   chars = "\\x1b[1;2C";                   }
+      # { key = "Right"; mods = "Control"; chars = "\\x1b[1;5C";                   }
+      { key = "Right"; mods = "Alt";     chars = "\\x1b[1;3C";                   }
+      # { key = "Right";                   chars = "\\x1b[C"; mode = "~AppCursor"; }
+      # { key = "Right";                   chars = "\\x1bOC"; mode = "AppCursor" ; }
+      # { key = "Up";    mods = "Shift";   chars = "\\x1b[1;2A";                   }
+      # { key = "Up";    mods = "Control"; chars = "\\x1b[1;5A";                   }
+      # { key = "Up";    mods = "Alt";     chars = "\\x1b[1;3A";                   }
+      # { key = "Up";                      chars = "\\x1b[A"; mode = "~AppCursor"; }
+      # { key = "Up";                      chars = "\\x1bOA"; mode = "AppCursor" ; }
+      # { key = "Down";  mods = "Shift";   chars = "\\x1b[1;2B";                   }
+      # { key = "Down";  mods = "Control"; chars = "\\x1b[1;5B";                   }
+      { key = "Down";  mods = "Alt";     chars = "\\x1b[1;3B";                   }
+      # { key = "Down";                    chars = "\\x1b[B"; mode = "~AppCursor"; }
+      { key = "Down";                    chars = "\\x1bOB"; mode = "AppCursor" ; }
+      # {
+      #   key = "K";
+      #   mods = "Control";
+      #   chars = "\\x0c";
+      # }
+    ];
+  };
+  
   # programs.
 #   programs.emacs = {                            
 #     enable = true;

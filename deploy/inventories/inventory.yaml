@@ -7,7 +7,7 @@ all:
       ansible_connection: local
     dev:
       awx_host_enable: no
-      ansible_user: robert
+      ansible_user: ubuntu
       ansible_host: dev.munnox.com
       # ansible_ssh_private_key_file: keyfilepath
 

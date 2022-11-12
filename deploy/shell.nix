@@ -1,12 +1,12 @@
-{ pkgs ? import <nixpkgs> { }
-, # here we import the nixpkgs package set
-  self ? { packages.aarch64-darwin.unix_config = { __toString = self: "self_unix_config"; }; }
+{
+  pkgs ? import <nixpkgs> {}, # here we import the nixpkgs package set
+  self ? {packages.aarch64-darwin.unix_config = {__toString= self: "self_unix_config";};}
 }:
 let
   python_run = "";
   ansible_playbook = "${python_run} ansible-playbook";
   ansible_inventory = "${python_run} ansible-inventory";
-
+  
   # # OVH Openstack inventory
   # openstack_inventory = " -i inventories/openstack.yml -i inventories/extra_openstack.yml";
   # ans_openstack_playbook = "${ansible_playbook} ${openstack_inventory}";
@@ -48,14 +48,14 @@ let
   # Ping all machines found in the inventory
   ping_all = pkgs.writeScriptBin "ping_all" ''
     echo "Pinging all detected machines"
-    ${ansible_playbook} ${all_inventories} playbooks/ping.yml
+    ${ansible_playbook} ${all_inventories} --extra-vars playbook_groups=all playbooks/oneoff_tools/ping_role.yml
   '';
 
   protect = pkgs.writeScriptBin "secrets_protect" ''
-    	  ${ansible_playbook} playbooks/local_protect_credentials.yml --tag encrypt
+	  ${ansible_playbook} playbooks/local_protect_credentials.yml --tag encrypt
   '';
   unprotect = pkgs.writeScriptBin "secrets_unprotect" ''
-    	  ${ansible_playbook} playbooks/local_protect_credentials.yml --tag decrypt
+	  ${ansible_playbook} playbooks/local_protect_credentials.yml --tag decrypt
   '';
 
   ansible_galaxy_install = pkgs.writeScriptBin "ansible_requirements" ''
@@ -63,23 +63,23 @@ let
     ansible-galaxy collection install -r requirements.yml
   '';
 
-  runpasswordlesshost = pkgs.writeScriptBin "runpasswordlessonly" ''
-    echo "Running playbook: $1"
-    ${ansible_playbook} ${all_inventories} --extra-vars "playbook_groups=$1" playbooks/oneoff_tools/password_less_sudo_role.yml -K
-  '';
+  # runpasswordlesshost = pkgs.writeScriptBin "runpasswordlessonly" ''
+  #   echo "Running playbook: $1"
+  #   ${ansible_playbook} ${all_inventories} --extra-vars "playbook_groups=$1" playbooks/oneoff_tools/password_less_sudo_role.yml -K
+  # '';
 
   runplay = pkgs.writeScriptBin "runplay" ''
     echo "Running playbook with args: $@"
     ${ansible_playbook} ${all_inventories} $@
   '';
   runplayhost = pkgs.writeScriptBin "runplayhost" ''
-    echo "Running playbook: $1 on $2"
-    ${ansible_playbook} ${all_inventories} --extra-vars "playbook_groups=$1" $2
+    echo "Running playbook: $1 on $2 further args \"''${@:3}\""
+    ${ansible_playbook} ${all_inventories} --extra-vars "playbook_groups=$1" $2 ''${@:3}
   '';
-  runplayhostpass = pkgs.writeScriptBin "runplayhostpass" ''
-    echo "Running playbook with become password: $1 on $2"
-    ${ansible_playbook} ${all_inventories} --extra-vars "playbook_groups=$1" $2 -K
-  '';
+  # runplayhostpass = pkgs.writeScriptBin "runplayhostpass" ''
+  #   echo "Running playbook with become password: $1 on $2"
+  #   ${ansible_playbook} ${all_inventories} --extra-vars "playbook_groups=$1" $2 -K
+  # '';
   basepkgs = [
     pkgs.poetry
     pkgs.ansible
@@ -96,35 +96,27 @@ let
     ping_all
     protect
     unprotect
-    runpasswordlesshost
+    # runpasswordlesshost
     runplay
     runplayhost
-    runplayhostpass
+    # runplayhostpass
   ];
   debug = x: pkgs.lib.traceSeq x x;
   # config = ./config/bash;
   # configpath = builtins.toString ./.;
-in
-pkgs.mkShell {
-  # mkShell is a helper function
-  name = "deploy_ctl"; # that requires a name
+in pkgs.mkShell {       # mkShell is a helper function
+  name="deploy_ctl";    # that requires a name
   # And a list of build inputs
-  buildInputs =
-    if pkgs.stdenv.isDarwin then
+  buildInputs = if pkgs.stdenv.isDarwin then 
       basepkgs ++ scripthelpers
-    else
-      basepkgs ++ [
+    else 
+        basepkgs ++ [
         pkgs.azure-cli
         pkgs.awscli
       ] ++ scripthelpers;
   # Then will run this script before give the user the shell
   shellHook = ''
-
-    echo "${../.}/configs/bash/bashrc"
     source "${../.}/configs/bash/bashrc"
-    # source ${../.}/configs/bash/bash_base_colors.sh
-    # source ${../.}/configs/bash/bash_alias.sh
-    # source ${../.}/configs/bash/bash_prompt.sh
 
     # bash to run when you enter the shell
     #PROMPT=$bldgrn"NIX-\u@\h ["$bldpur"\w"$bldgrn"]"$txtrst'$(BRANCH=`git rev-parse --abbrev-ref HEAD 2> /dev/null`; if [ -n "$BRANCH" ]; then DIRTY=`git status --porcelain 2> /dev/null`; if [ -n "$DIRTY" ]; then echo "'$txtylw' ($BRANCH) '$txtrst'"; else echo "'$txtgrn' ($BRANCH) '$txtrst'"; fi fi;)'$txtcyn"\n\$ "$txtrst
@@ -133,5 +125,6 @@ pkgs.mkShell {
     echo "Start developing...system = '${pkgs.system}'"                                        
     # poetry install
     # poetry shell
+    fish
   '';
 }
