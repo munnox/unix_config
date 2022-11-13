@@ -1,0 +1,97 @@
+- name: Run Test in target
+  hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+  # become: yes
+  # gather_facts: true
+  # gather_subset: min
+  # connection: local
+  vars:
+    ssh_keys: "{{ lookup('file', '~/.ssh/id_rsa.pub')"
+    local_ssh_dir: "/home/robert/.ssh/"
+    remote_ssh_dir: "~/.ssh/"
+    key_list:
+      - 'id_ed25519'
+      - 'id_ed25519.pub'
+    query_copy_list: "[].{
+      src: join('', ['{{ local_ssh_dir }}', @]),
+      dest: join('', ['{{ remote_ssh_dir }}', @])
+      }"
+    # This requires jmespath to be installed
+    key_copy_list: "{{
+      key_list
+      | community.general.json_query(query_copy_list)
+      | list
+      }}"
+    testing_json_str: |
+      {
+        "test": [
+          { "name": "foo", "value": "bar"}
+        ]
+      }
+  tasks:
+    - name: Ping Machine
+      ansible.builtin.ping:
+    - name: Test the filter from munnox.bootstrap
+      ansible.builtin.debug:
+        msg: |
+          Test:
+          {{ key_list | munnox.bootstrap.munnox_test_to_yaml }}
+
+          {{ key_list | munnox.bootstrap.munnox_test_show_environment( key_list, hostvars.keys() | list, ansible_facts.keys() | list ) | to_nice_yaml }}
+    - name: Try shell echo with Local environment variable for the shell command
+      # noqa jinja[spacing]
+      ansible.builtin.shell: |
+        export NEW_TEST="internal_${TESTING}"
+        echo "TESTING=${TESTING},${NEW_TEST}"
+      environment:
+        TESTING: "setting env var with templated vars={{new_var}}"
+      vars:
+        new_var: "extra var"
+      register: result_shell
+      changed_when: false
+    - name: Print shell result
+      ansible.builtin.debug:
+        var: result_shell
+    - name: Print JSON
+      ansible.builtin.debug:
+        var: testing_json_str | from_json
+
+    - name: Show the list of keys to copy
+      ansible.builtin.debug:
+        msg: |
+         {{ key_copy_list | to_yaml }}
+
+    # - name: add ssh config block
+    #   ansible.builtin.blockinfile:
+    #     path: "~/.ssh/config"
+    #     block: |
+    #       host {{ item.item.name }}
+    #         hostname {{item.server.public_v4}}
+    #         user {{ item.item.username }}
+    #         stricthostkeychecking no
+    #         userknownhostsfile=/dev/null
+    #     # host {{tf_result.outputs.vm_ip.value}}
+    #     #   hostname {{tf_result.outputs.vm_ip.value}}
+    #     #   user {{tf_result.outputs.vm_username.value}}
+    #     #   stricthostkeychecking no
+    #     #   userknownhostsfile=/dev/null
+    #     marker: "# {mark} ansible managed block for openstack {{ item.item.name }}"
+    #     create: yes
+    #   when: item.item.state == "present"
+    #   loop: "{{ result_build.results }}"
+
+    # - name: remove ssh config block
+    #   ansible.builtin.blockinfile:
+    #     path: "~/.ssh/config"
+    #     marker: "# {mark} ansible managed block for openstack {{ item.item.name }}"
+    #   when: item.item.state == "absent"
+    #   loop: "{{ result_rm.results }}"
+
+    # - name: show ssh cmd
+    #   ansible.builtin.debug:
+    #     msg: |
+    #       make config addition
+    #       ssh ubuntu@{{ item.server.public_v4 }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+    #     # # OR
+    #     # ssh {{vm.name | default(item) }}
+    #     # ssh {{tf_result.outputs.vm_name.value}}
+    #   loop: "{{ result_build.results }}"

@@ -1,0 +1,62 @@
+# Inferred from https://github.com/ansible/ansible/blob/devel/lib/ansible/plugins/filter/core.py
+
+from ansible.module_utils._text import to_bytes, to_native, to_text
+from ansible.errors import AnsibleError, AnsibleFilterError, AnsibleFilterTypeError
+from ansible.utils.display import Display
+from ansible.parsing.yaml.dumper import AnsibleDumper
+import yaml
+import uuid
+
+from jinja2.filters import pass_environment
+
+display = Display()
+
+# Almost the same just change a number
+UUID_NAMESPACE_ANSIBLE = uuid.UUID('461E6D51-FAEC-444A-9079-341386DA8E2E')
+
+# Simple filter basically does what to_yaml does from the
+# core to show the principles and import system.
+# This filter is used via the following playbook
+# - name: Run Test on target
+#   hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+#   vars:
+#     key_list:
+#       - 'id_ed25519'
+#       - 'id_ed25519.pub'
+#   tasks:
+#     - name: Test the filter from munnox.bootstrap
+#       ansible.builtin.debug:
+#         msg: |
+#           Test:
+#           {{ key_list | munnox.bootstrap.munnox_test_to_yaml }}
+def munnox_test_to_yaml(a, *args, **kw):
+    '''Make simple test filter'''
+    default_flow_style = kw.pop('default_flow_style', None)
+    try:
+        transformed = yaml.dump(a, Dumper=AnsibleDumper, allow_unicode=True, default_flow_style=default_flow_style, **kw)
+    except Exception as e:
+        raise AnsibleFilterError("to_yaml - %s" % to_native(e), orig_exc=e)
+    return to_text(transformed)
+
+#https://jinja.palletsprojects.com/en/3.0.x/api/#jinja2.Environment
+@pass_environment
+def munnox_test_show_environment(environment, a, *args, **kw):
+    '''Make simple test filter to show jinja environment'''
+    env = {
+        "env": list(dir(environment)),
+        'args': args,
+        'kw': kw,
+        'env.getitem([a,b], 0)': environment.getitem(['a','b'], 0)
+    }
+    return env
+
+class FilterModule(object):
+    ''' Ansible core jinja2 filters '''
+
+    def filters(self):
+        return {
+            'munnox_test_to_yaml': munnox_test_to_yaml,
+            'munnox_test_show_environment': munnox_test_show_environment,
+            # debug
+            'type_debug': lambda o: o.__class__.__name__,
+        }

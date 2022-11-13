@@ -2,6 +2,9 @@
 .vscode/
 .ipynb_checkpoints
 
+__pycache__
+*.pyc
+
 pyvenv
 *.egg-info/
 *openrc.sh
