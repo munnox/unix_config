@@ -1,4 +1,19 @@
 # Inferred from https://github.com/ansible/ansible/blob/devel/lib/ansible/plugins/filter/core.py
+# These filters can be used via the following playbook
+# - name: Run Test on target
+#   hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+#   vars:
+#     key_list:
+#       - 'id_ed25519'
+#       - 'id_ed25519.pub'
+#   tasks:
+#     - name: Test the filter from munnox.bootstrap
+#       ansible.builtin.debug:
+#         msg: |
+#           Test:
+#           {{ key_list | munnox.bootstrap.munnox_test_to_yaml }}
+#
+#           {{ key_list | munnox.bootstrap.munnox_test_show_environment( key_list, hostvars.keys() | list, ansible_facts.keys() | list ) | to_nice_yaml }}
 
 from ansible.module_utils._text import to_bytes, to_native, to_text
 from ansible.errors import AnsibleError, AnsibleFilterError, AnsibleFilterTypeError
@@ -16,19 +31,6 @@ UUID_NAMESPACE_ANSIBLE = uuid.UUID('CBB94019-031C-493F-A914-53872ECEA878')
 
 # Simple filter basically does what to_yaml does from the
 # core to show the principles and import system.
-# This filter is used via the following playbook
-# - name: Run Test on target
-#   hosts: "{{ playbook_groups | default('localhost') }},!disabled"
-#   vars:
-#     key_list:
-#       - 'id_ed25519'
-#       - 'id_ed25519.pub'
-#   tasks:
-#     - name: Test the filter from munnox.bootstrap
-#       ansible.builtin.debug:
-#         msg: |
-#           Test:
-#           {{ key_list | munnox.bootstrap.munnox_test_to_yaml }}
 def munnox_test_to_yaml(a, *args, **kw):
     '''Make simple test filter'''
     default_flow_style = kw.pop('default_flow_style', None)

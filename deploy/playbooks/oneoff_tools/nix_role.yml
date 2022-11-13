@@ -1,0 +1,6 @@
+- name: Install NIX on hosts
+  hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+  tasks:
+    - name: Install NIX
+      ansible.builtin.import_role:
+        name: munnox.bootstrap.nix
