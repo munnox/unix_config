@@ -11,8 +11,8 @@ from jinja2.filters import pass_environment
 
 display = Display()
 
-# Almost the same just change a number
-UUID_NAMESPACE_ANSIBLE = uuid.UUID('461E6D51-FAEC-444A-9079-341386DA8E2E')
+# Almost the same just changed via 'uuidgen'
+UUID_NAMESPACE_ANSIBLE = uuid.UUID('CBB94019-031C-493F-A914-53872ECEA878')
 
 # Simple filter basically does what to_yaml does from the
 # core to show the principles and import system.
