@@ -87,6 +87,13 @@ let
     pkgs.git
     pkgs.helix
     pkgs.tmux
+    pkgs.python310Packages.jmespath
+  ];
+  darwin_only = [];
+  linux_only = [
+    pkgs.openstackclient
+    pkgs.azure-cli
+    pkgs.awscli
   ];
   scripthelpers = [
     switchhome
@@ -108,12 +115,9 @@ in pkgs.mkShell {       # mkShell is a helper function
   name="deploy_ctl";    # that requires a name
   # And a list of build inputs
   buildInputs = if pkgs.stdenv.isDarwin then 
-      basepkgs ++ scripthelpers
-    else 
-        basepkgs ++ [
-        pkgs.azure-cli
-        pkgs.awscli
-      ] ++ scripthelpers;
+    basepkgs ++ darwin_only ++ scripthelpers
+  else 
+    basepkgs ++ linux_only ++ scripthelpers;
   # Then will run this script before give the user the shell
   shellHook = ''
     source "${../.}/configs/bash/bashrc"
