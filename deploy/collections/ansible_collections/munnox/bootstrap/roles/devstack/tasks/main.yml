@@ -1,5 +1,0 @@
----
-# tasks file for devstack
-
-- name: Include devstack.yml tasks file
-  include_tasks: devstack.yml

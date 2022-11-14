@@ -1,3 +1,0 @@
----
-# defaults file for k3s
-k3s_state: "{{ k3s_state | default('present') }}"

@@ -1,7 +1,0 @@
----
-# tasks file for k3s
-
-- name: Include k3s.yml tasks file
-  include_tasks: k3s.yml
-- name: Include dashboard.yml tasks file
-  include_tasks: dashboard.yml
