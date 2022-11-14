@@ -1,0 +1,8 @@
+- name: Install k3s on host
+  ansible.builtin.import_playbook: k3s_role.yml
+- name: Install AWX on Hosts
+  hosts: "{{ playbook_groups | default('awx') }},!disabled"
+  tasks:
+    - name: Install AWX on kubernets service
+      import_role:
+        name: munnox.bootstrap.awx
