@@ -1,0 +1,4 @@
+[submodule "deploy/collections/ansible_collections/munnox/bootstrap"]
+	path = deploy/collections/ansible_collections/munnox/bootstrap
+	url = git@gitlab.com:munnox/ansible-collection-bootstrap.git
+	branch = main
