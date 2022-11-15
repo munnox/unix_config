@@ -52,12 +52,12 @@
           };
           packages.applyhome = pkgs.runCommand "applyhome" { buildInputs = [ ]; }
             ''
-              mkdir $out
-              mkdir $out/bin
-              # ls ${self.homeConfigurations.${system}.robert.activationPackage}
-              # exit 1
-              cp -r ${self.homeConfigurations.${system}.robert.activationPackage}/* $out/
-              cp $out/activate $out/bin/applyhome
+              mkdir -p $out/bin
+              # Simplied due to conversation with Simon Walker the line at the bottom is all that is required so far
+              # TODO after testing removed the next two lines
+              # cp -r ${self.homeConfigurations.${system}.robert.activationPackage}/* $out/
+              # cp $out/activate $out/bin/applyhome
+              cp -r ${self.homeConfigurations.${system}.robert.activationPackage}/activate $out/bin/applyhome
             '';
           apps.applyhome = flake-utils.lib.mkApp { drv = local_pkgs.applyhome; };
         }
