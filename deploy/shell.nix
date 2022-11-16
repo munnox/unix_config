@@ -88,6 +88,7 @@ let
     pkgs.helix
     pkgs.tmux
     pkgs.python310Packages.jmespath
+    pkgs.fish
   ];
   darwin_only = [];
   linux_only = [
@@ -129,6 +130,5 @@ in pkgs.mkShell {       # mkShell is a helper function
     echo "Start developing...system = '${pkgs.system}'"                                        
     # poetry install
     # poetry shell
-    fish
-  '';
+   # '';
 }
