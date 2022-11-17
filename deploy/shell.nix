@@ -112,8 +112,8 @@ let
   debug = x: pkgs.lib.traceSeq x x;
   # config = ./config/bash;
   # configpath = builtins.toString ./.;
-in pkgs.mkShell {       # mkShell is a helper function
-  name="deploy_ctl";    # that requires a name
+in pkgs.mkShell rec {       # mkShell is a helper function
+  name="unix_config_deploy";    # that requires a name
   # And a list of build inputs
   buildInputs = if pkgs.stdenv.isDarwin then 
     basepkgs ++ darwin_only ++ scripthelpers
@@ -127,6 +127,7 @@ in pkgs.mkShell {       # mkShell is a helper function
     #PROMPT=$bldgrn"NIX-\u@\h ["$bldpur"\w"$bldgrn"]"$txtrst'$(BRANCH=`git rev-parse --abbrev-ref HEAD 2> /dev/null`; if [ -n "$BRANCH" ]; then DIRTY=`git status --porcelain 2> /dev/null`; if [ -n "$DIRTY" ]; then echo "'$txtylw' ($BRANCH) '$txtrst'"; else echo "'$txtgrn' ($BRANCH) '$txtrst'"; fi fi;)'$txtcyn"\n\$ "$txtrst
     #OLD_PS1=$PS1
     #export PS1=$PROMPT
+    export PS1=$txtred"NIX✅$txtrst-"$txtblu"${name}"$txtrst"\n$PS1"
     echo "Start developing...system = '${pkgs.system}'"                                        
     # poetry install
     # poetry shell
