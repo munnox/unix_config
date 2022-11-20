@@ -12,6 +12,7 @@
     pkgs.ansible
     pkgs.ansible-lint
     pkgs.rnix-lsp
+    pkgs.python310
     # pkgs.tmux
     # pkgs.zellij
     #pkgs.python310
