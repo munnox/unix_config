@@ -42,7 +42,7 @@ in
   programs.git = {
     # enable = true;
     userName = "Robert Munnoch";
-    userEmail = "robert@unix_config.git";
+    userEmail = "robert@munnox.com";
     # aliases =  git_alias_imported;
     # https://rycee.gitlab.io/home-manager/options.html#opt-programs.git.extraConfig
     extraConfig = {
