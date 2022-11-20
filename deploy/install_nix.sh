@@ -2,7 +2,7 @@
 # VERY opinionated install script and config setup for NIX
 # Author Robert Munnoch
 
-if [[ -f ~/.config/nix/ ]]; then
+if ! [[ -f ~/.config/nix/ ]]; then
     echo "~/.config/nix needs creating"
     mkdir -p ~/.config/nix
 else
