@@ -15,7 +15,7 @@ in
   home.packages = [                            
     #pkgs.htop
     # pkgs.ansible
-    # pkgs.ansible-lint
+    pkgs.ansible-lint
     pkgs.rnix-lsp
     pkgs.python310
     # pkgs.tmux
