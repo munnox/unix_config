@@ -1,0 +1,9 @@
+- name: Turn off swap
+  ansible.builtin.import_playbook: noswap_role.yml
+
+- name: Install microk8s on Hosts
+  hosts: "{{ playbook_groups | default('microk8s') }},!disabled"
+  tasks:
+    - name: Install microk8s on host with sudo and noswap
+      import_role:
+        name: munnox.bootstrap.microk8s
