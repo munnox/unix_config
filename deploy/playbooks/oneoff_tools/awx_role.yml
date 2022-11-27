@@ -6,3 +6,5 @@
     - name: Install AWX on kubernets service
       import_role:
         name: munnox.bootstrap.awx
+      vars:
+        awx_fqdn: awx.example.com
