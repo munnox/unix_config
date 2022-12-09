@@ -14,7 +14,7 @@ in
   # Packages that should be installed to the user profile.
   home.packages = [                            
     #pkgs.htop
-    # pkgs.ansible
+    pkgs.ansible
     pkgs.ansible-lint
     pkgs.rnix-lsp
     pkgs.python310
