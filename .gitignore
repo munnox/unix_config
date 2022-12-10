@@ -12,3 +12,4 @@ pyvenv
 deploy/clouds.yaml
 home.nix
 result
+deploy/context/
