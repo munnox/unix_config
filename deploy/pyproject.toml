@@ -52,9 +52,10 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 ansible = "^5.7.0"
 openstacksdk = "^0.61.0"
+ansible-builder = "^1.2.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
