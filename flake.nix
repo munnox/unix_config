@@ -34,6 +34,10 @@
           # nix run .#nvim
           packages.nvim = pkgs.neovim;
           packages.deployshell = import ./deploy/shell.nix { inherit pkgs; inherit self; };
+          # Build and run a poetry deployment shell
+          packages.deploypy = pkgs.poetry2nix.mkPoetryApplication {
+            projectDir = ./deploy/.;
+          };
           packages.default = local_pkgs.deployshell;
           devShells.default = local_pkgs.deployshell;
 
