@@ -23,11 +23,11 @@ if ! [[ -f "external_nix_install_script.sh" ]]; then
     curl -L https://releases.nixos.org/nix/nix-2.11.1/install --output external_nix_install_script.sh
 else
     echo "Script found"
-    if [[ $(sha256sum external_nix_install_script.sh) == "4569a01dc5f62056f29f3195673bc3242fc70bf2474927fb5d8549c4d997402d  external_nix_install_script.sh" ]]; then
-        echo "Hash matched"
-    else
-        echo "Hash unmached"
-    fi
+#     if [[ $(sha256sum external_nix_install_script.sh) == "4569a01dc5f62056f29f3195673bc3242fc70bf2474927fb5d8549c4d997402d  external_nix_install_script.sh" ]]; then
+#         echo "Hash matched"
+#     else
+#         echo "Hash unmached"
+#     fi
 fi
 
 TYPE=$1
@@ -43,12 +43,12 @@ else
     # Multiuser (recomended) Current version 2.11.1 @ 2022_11_16
     if [[ $TYPE -eq "multi" ]]; then
         # sh <(curl -L https://nixos.org/nix/install) --daemon
-        sh example_nix_install_script.sh --daemon
+        sh external_nix_install_script.sh --daemon
     fi
     # # Single non privigled user
     if [[ $TYPE -eq "single" ]]; then
         # sh <(curl -L https://nixos.org/nix/install) --no-daemon
-        sh example_nix_install_script.sh --no-daemon
+        sh external_nix_install_script.sh --no-daemon
     fi
 fi
 
