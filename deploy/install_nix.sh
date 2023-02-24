@@ -43,11 +43,13 @@ else
     # Multiuser (recomended) Current version 2.11.1 @ 2022_11_16
     if [[ $TYPE -eq "multi" ]]; then
         # sh <(curl -L https://nixos.org/nix/install) --daemon
+        echo "Multi install"
         sh external_nix_install_script.sh --daemon
     fi
     # # Single non privigled user
     if [[ $TYPE -eq "single" ]]; then
         # sh <(curl -L https://nixos.org/nix/install) --no-daemon
+        echo "Single install"
         sh external_nix_install_script.sh --no-daemon
     fi
 fi
