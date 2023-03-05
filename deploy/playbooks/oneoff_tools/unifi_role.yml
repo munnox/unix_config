@@ -1,0 +1,6 @@
+- name: Install Unifi on hosts
+  hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+  tasks:
+    - name: Install Unifi
+      ansible.builtin.import_role:
+        name: munnox.bootstrap.unifi
