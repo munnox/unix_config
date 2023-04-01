@@ -1,24 +1,24 @@
 ---
 # Further information https://docs.ansible.com/ansible/latest/plugins/inventory/yaml.html
 #
-x-ubuntu-vm: &ubuntuvm
-  name: dev
-  state: present
-  user: ubuntu
-  addresses: 192.168.0.2/24
-  cpus: 2
-  memory_gib: 4
-  network_connection: bridge=bridge_default
-  domain: example.com
-  disk_type_ext: qcow2
-  storage_size: 20G
-  restart_needed: false
-  # snapshot_backup_name: "test1"
-  snapshot_backup_name: false
-  # snapshot_restore_name: "test1"
-  snapshot_restore_name: false
-  image_name: jammy-server-cloudimg-amd64.img
-  ssh_pub_key: "{{ ssh_pub_key }}"
+# x-ubuntu-vm: &ubuntuvm
+#   name: dev
+#   state: present
+#   user: ubuntu
+#   addresses: 192.168.0.2/24
+#   cpus: 2
+#   memory_gib: 4
+#   network_connection: bridge=bridge_default
+#   domain: example.com
+#   disk_type_ext: qcow2
+#   storage_size: 20G
+#   restart_needed: false
+#   # snapshot_backup_name: "test1"
+#   snapshot_backup_name: false
+#   # snapshot_restore_name: "test1"
+#   snapshot_restore_name: false
+#   image_name: jammy-server-cloudimg-amd64.img
+#   ssh_pub_key: "{{ ssh_pub_key }}"
 all:
   hosts:
     localhost:
@@ -28,20 +28,32 @@ all:
       # ansible_ssh_private_key_file: keyfilepath
     testing:
       awx_host_enable: no
+      vm_info:
+          name: testing
+          # Define the imagine type if spelled wrong
+          # the filter will raise an error and show
+          # possiblities
+          vm_type: ubuntu2204
+          state: present
+          cpus: 2
+          memory_gib: 4
+          storage_size: 20G
+          addresses: 192.168.0.2/24
     rocky:
       awx_host_enable: no
     kvm_host:
       awx_host_enable: yes
       ansible_user: ubuntu
       ansible_host: kvm_host.example.com
-      vm_guests:
-        - name: testing
-          <<: *ubuntuvm
-          state: present
-          cpus: 2
-          memory_gib: 4
-          storage_size: 20G
-          addresses: 192.168.0.2/24
+      # vm_guests:
+      #   - name: testing
+      #     # <<: *ubuntuvm
+      #     vm_type: ubuntu2204
+      #     state: present
+      #     cpus: 2
+      #     memory_gib: 4
+      #     storage_size: 20G
+      #     addresses: 192.168.0.2/24
 
 disabled:
   hosts:
