@@ -1,0 +1,115 @@
+- name: Create opensearch
+  # hosts: "{{ playbook_groups | default('kvm_hosts') }},!disabled"
+  hosts: "kube"
+  # vars:
+  #   ssh_pub_key: "{{ lookup('ansible.builtin.file', '~/.ssh/id_ed25519.pub') }}"
+  #   machines: "{{ [hostvars['kube'].vm_info] }}"
+  tasks:
+
+    # - name: Install Opensearch Info
+    #   ansible.builtin.debug:
+    #     msg: |
+    #       install opensearch in {{ ansible_user_dir }}/opersearch/
+
+    - name: Set max_map_count
+      become: true
+      ansible.posix.sysctl:
+        name: vm.max_map_count
+        value: '262144'
+        sysctl_set: true
+        state: present
+        reload: true
+
+    # From repository
+    - name: Add stable chart repo
+      kubernetes.core.helm_repository:
+        name: opensearch_stable
+        repo_url: "https://opensearch-project.github.io/helm-charts/"
+
+    # - name: add helm chart
+    #   ansible.builtin.shell: |
+    #     microk8s helm3 repo add opensearch https://opensearch-project.github.io/helm-charts/
+    #     microk8s helm3 repo update
+    #   register: repo
+    #   changed_when: |
+    #     'Successfully got an update from the "opensearch" chart repository' not in repo.stdout
+
+    # - name: get values
+    #   ansible.builtin.shell: |
+    #     mkdir opensearch
+    #     cd opensearch
+    #     wget https://raw.githubusercontent.com/opensearch-project/helm-charts/main/charts/opensearch/values.yaml
+    #   args:
+    #     creates: "{{ ansible_user_dir }}/opensearch/values.yaml"
+
+    - name: Download value.yaml
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/opensearch-project/helm-charts/main/charts/opensearch/values.yaml
+        dest: "{{ ansible_user_dir }}/opensearch/values.yaml"
+        mode: '0660'
+
+    # - name: install opensearch
+    #   ansible.builtin.shell: |
+    #     cd opensearch
+    #     microk8s helm3 install --values values.yaml my-release opensearch/opensearch
+
+    - name: Deploy Opensearch
+      kubernetes.core.helm:
+        update_repo_cache: true
+        name: my-search
+        # chart_ref: opensearch/opensearch
+        chart_ref: opensearch_stable/opensearch
+        release_namespace: search
+        create_namespace: true
+        # values_files:
+        #   - "{{ ansible_user_dir }}/opensearch/values.yaml"
+        # state: absent
+        values:
+          replicas: 3
+          service:
+            type: NodePort
+            # ClusterIP
+            # The IP family and IP families options are to set the behaviour in a dual-stack environment
+            # Omitting these values will let the service fall back to whatever the CNI dictates the defaults
+            # should be
+            #
+            # ipFamilyPolicy: SingleStack
+            # ipFamilies:
+            # - IPv4
+            port: 5601
+            loadBalancerIP: ""
+            nodePort: "30100"
+            labels: {}
+            annotations: {}
+            loadBalancerSourceRanges: []
+            # 0.0.0.0/0
+            httpPortName: http
+          # Enabling this will publically expose your OpenSearch instance.
+          # Only enable this if you have security enabled on your cluster
+          # ingress:
+          #   enabled: true
+          #   # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
+          #   # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
+          #   ingressClassName: public
+
+          #   annotations: {}
+          #     # kubernetes.io/ingress.class: nginx
+          #     # kubernetes.io/tls-acme: "true"
+          #   path: /
+          #   hosts:
+          #     - search.munnox.com
+          #   # tls: []
+          # extraEnvs:
+          #   - name: DISABLE_INSTALL_DEMO_CONFIG
+          #     value: "true"
+
+              # - name: Get pods
+              #   ansible.builtin.shell:
+              #     cmd: |
+              #       # kubectl exec -it opensearch-cluster-master-0 -- /bin/bash
+              #       kubectl get pods --namespace=search -l app=opensearch-cluster-master
+
+# kubectl exec --namespace search -it opensearch-cluster-master-0 -- /bin/bash
+# kubectl get pods --namespace=search -l app.kubernetes.io/instance=my-search
+# kubectl logs --namespace search -l app.kubernetes.io/instance=my-search
+# kubectl delete pvc --namespace search -l app.kubernetes.io/instance=my-search

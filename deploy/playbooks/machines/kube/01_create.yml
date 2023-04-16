@@ -1,0 +1,14 @@
+- name: Create VM on KVM hypervisior
+  hosts: "{{ playbook_groups | default('kvm_hosts') }},!disabled"
+  vars:
+    ssh_pub_key: "{{ lookup('ansible.builtin.file', '~/.ssh/id_ed25519.pub') }}"
+    # machines: "{{ [hostvars['kube'].vm_info] }}"
+  tasks:
+    - name: Print the machine list
+      ansible.builtin.debug:
+        msg: |
+          {{ machines | to_nice_yaml }}
+    - name: Update package manager
+      ansible.builtin.import_role:
+        name: munnox.bootstrap.libvirt
+        tasks_from: main.yml

@@ -1,0 +1,77 @@
+- name: Create airflow
+  # hosts: "{{ playbook_groups | default('kvm_hosts') }},!disabled"
+  hosts: "kube"
+  # vars:
+  #   ssh_pub_key: "{{ lookup('ansible.builtin.file', '~/.ssh/id_ed25519.pub') }}"
+  #   machines: "{{ [hostvars['kube'].vm_info] }}"
+  tasks:
+
+    # - name: Install Opensearch Info
+    #   ansible.builtin.debug:
+    #     msg: |
+    #       install opensearch in {{ ansible_user_dir }}/opersearch/
+
+    # - name: Set max_map_count
+    #   become: true
+    #   ansible.posix.sysctl:
+    #     name: vm.max_map_count
+    #     value: '262144'
+    #     sysctl_set: true
+    #     state: present
+    #     reload: true
+
+    # From repository
+    - name: Add stable chart repo
+      kubernetes.core.helm_repository:
+        name: apache-airflow
+        repo_url: "https://airflow.apache.org"
+
+    # - name: add helm chart
+    #   ansible.builtin.shell: |
+    #     microk8s helm3 repo add opensearch https://opensearch-project.github.io/helm-charts/
+    #     microk8s helm3 repo update
+    #   register: repo
+    #   changed_when: |
+    #     'Successfully got an update from the "opensearch" chart repository' not in repo.stdout
+
+    # - name: get values
+    #   ansible.builtin.shell: |
+    #     mkdir opensearch
+    #     cd opensearch
+    #     wget https://raw.githubusercontent.com/opensearch-project/helm-charts/main/charts/opensearch/values.yaml
+    #   args:
+    #     creates: "{{ ansible_user_dir }}/opensearch/values.yaml"
+
+    # - name: Download value.yaml
+    #   ansible.builtin.get_url:
+    #     url: https://raw.githubusercontent.com/opensearch-project/helm-charts/main/charts/opensearch/values.yaml
+    #     dest: "{{ ansible_user_dir }}/opensearch/values.yaml"
+    #     mode: '0660'
+
+    # - name: install opensearch
+    #   ansible.builtin.shell: |
+    #     cd opensearch
+    #     microk8s helm3 install --values values.yaml my-release opensearch/opensearch
+
+    - name: Deploy Airflow
+      kubernetes.core.helm:
+        update_repo_cache: true
+        name: my-airflow
+        chart_ref: apache-airflow/airflow
+        release_namespace: flow
+        create_namespace: true
+        # values_files:
+        #   - "{{ ansible_user_dir }}/opensearch/values.yaml"
+        # state: absent
+        values:
+          config:
+            webserver:
+              expose_config: 'True'  # by default this is 'False'
+          webserver:
+            service:
+              type: NodePort
+    
+    # - name: get Info
+    #   shell:  |
+    #     kubectl get pods -A
+  

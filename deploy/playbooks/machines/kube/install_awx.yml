@@ -1,0 +1,10 @@
+- name: Install AWX on Hosts
+  hosts: "{{ playbook_groups | default('kube') }},!disabled"
+  # vars:
+  #   awx_tls_secret: testing
+  tasks:
+    - name: Install AWX on kubernets service
+      import_role:
+        name: munnox.bootstrap.awx
+      vars:
+        awx_fqdn: awx.munnox.com

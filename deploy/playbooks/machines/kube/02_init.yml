@@ -1,0 +1,46 @@
+- name: Turn off swap on Hosts
+  hosts: "{{ playbook_groups | default('kube') }},!disabled"
+  tasks:
+    - name: Turn off swap on a host
+      import_role:
+        name: munnox.bootstrap.common
+        tasks_from: utility_noswap.yml
+
+# - name: Install K3s on Hosts
+#   hosts: "{{ playbook_groups | default('kube') }},!disabled"
+#   # vars:
+#   #   user_kube_file: true
+#   tasks:
+#     - name: Install K3s on host with sudo and noswap
+#       import_role:
+#         name: munnox.bootstrap.k3s
+
+- name: Install Microk8s on Hosts
+  hosts: "{{ playbook_groups | default('kube') }},!disabled"
+  # vars:
+  #   user_kube_file: true
+  tasks:
+    - name: Install Microk8s on host with sudo and noswap
+      import_role:
+        name: munnox.bootstrap.microk8s
+
+    - name: Install helm on host
+      import_role:
+        name: munnox.bootstrap.common
+        tasks_from: utility_helm_install.yml
+  
+    - name: Install kubectl on host
+      import_role:
+        name: munnox.bootstrap.common
+        tasks_from: utility_kubectl_install.yml
+
+# - name: Install AWX on Hosts
+#   hosts: "{{ playbook_groups | default('kube') }},!disabled"
+#   # vars:
+#   #   awx_tls_secret: testing
+#   tasks:
+#     - name: Install AWX on kubernets service
+#       import_role:
+#         name: munnox.bootstrap.awx
+#       vars:
+#         awx_fqdn: awx.munnox.com
