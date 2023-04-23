@@ -70,7 +70,7 @@
             service:
               type: NodePort
     
-    # - name: get Info
-    #   shell:  |
-    #     kubectl get pods -A
+    - name: get Info
+      shell:  |
+        kubectl get pods -A
   
