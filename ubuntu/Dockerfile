@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 # App image without FUSE https://docs.appimage.org/user-guide/troubleshooting/fuse.html#setting-up-fuse-on-ubuntu-debian-and-their-derivatives
 ENV APPIMAGE_EXTRACT_AND_RUN=1

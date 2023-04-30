@@ -1,17 +1,31 @@
 #!/bin/sh
 
-IMAGE_NAME="u1804dev:1.0"
-CONTAINER_NAME="u1804dev"
-DOCKERFILE="${3:-"ubuntu"}/Dockerfile"
-LOCAL_CONTAINER_NAME=${2:-"$CONTAINER_NAME"}
+COMMAND=${1:-'NONE'}
+TYPE_FOLDER=${2:-'ubuntu'}
+DOCKERFILE="${TYPE_FOLDER}/Dockerfile"
+ENVFILE="${TYPE_FOLDER}/.env"
+CONTAINERD="${CONTAINERD:=docker}"
+[[ -e $ENVFILE ]] && source $ENVFILE && echo "ENV found and sourced from: '$ENVFILE'" || echo "ENV not found"
+
+IMAGE_NAME="${IMAGE_NAME:-u2204dev:1.0}"
+
+CONTAINER_NAME="${CONTAINER_NAME:-u2204dev}"
+LOCAL_CONTAINER_NAME=${3:-"$CONTAINER_NAME"}
+
+
+# -v "/etc/kolla:/etc/kolla" \
+# -v "/etc/hosts:/etc/hosts" \
+
+build () {
+  echo "Build Image name: ${IMAGE_NAME}"
+  $CONTAINERD build --force-rm --tag $IMAGE_NAME -f $DOCKERFILE .
+}
 
 run_as_daemon () {
     # run the image as a deamon with the terminal on
     echo "Running as demon $1"
     docker run -i -d \
       --network host \
-      -v "/etc/kolla:/etc/kolla" \
-      -v "/etc/hosts:/etc/hosts" \
       -v "$HOME/.ssh/:/home/base/.ssh/" \
       -v "$HOME/repo/:/home/base/repo/" \
       --name $1 \
@@ -21,7 +35,7 @@ run_as_daemon () {
 
 one_shot () {
     echo "Running as one shot"
-    docker run -it --rm \
+    $CONTAINERD run -it --rm \
       -v "/etc/kolla:/etc/kolla" \
       -v "/etc/hosts:/etc/hosts" \
       -v "$HOME/.ssh/:/home/base/.ssh/" \
@@ -33,20 +47,20 @@ one_shot () {
 
 attach () {
     echo "Attaching to container $1 bash"
-    docker exec -it $1 bash
+    $CONTAINERD exec -it $1 bash
 }
 
 clean () {
     echo "Clean the container $1 bash"
-    docker exec -it $1 bash
+    $CONTAINERD exec -it $1 bash
 }
 
-echo "command $1"
+echo "Command '$COMMAND' Container program '$CONTAINERD'"
 
-case $1 in
+case $COMMAND in
 
   build)
-    docker build --force-rm --tag $IMAGE_NAME -f $DOCKERFILE .
+    build
     ;;
   d)
     run_as_daemon $LOCAL_CONTAINER_NAME
