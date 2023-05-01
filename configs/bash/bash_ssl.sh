@@ -169,3 +169,13 @@ function ram-ssl-install-certificates-linux() {
   sudo cp $CERT_PATH $CERT_EXTRA_PATH
   sudo update-ca-certificates
 }
+
+function ram-ssl-install-certificates-pip() {
+  # Derived from https://superuser.com/questions/665069/can-i-get-around-using-pip-install-cert
+  CERT_PATH=${1:-./server.crt}
+  CERT_EXTRA_PATH=/usr/local/share/ca-certificates/extra
+  [[ ! -e $CERT_EXTRA_PATH ]] && sudo mkdir $CERT_EXTRA_PATH
+  sudo cp $CERT_PATH $CERT_EXTRA_PATH
+  python -m pip config set global.cert $CERT_EXTRA_PATH/$CERT_PATH
+
+}
