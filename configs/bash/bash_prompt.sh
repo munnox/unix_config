@@ -1,3 +1,4 @@
+#!/bin/bash
 
 BASH_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $BASH_DIR/bash_base_colors.sh

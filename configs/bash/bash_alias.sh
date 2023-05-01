@@ -13,9 +13,9 @@ alias lsn='ls -alGHh'
 
 # alias gitshow='git log --decorate=short --oneline --graph'
 
-alias ssh-ram-config='$EDITOR ~/.ssh/config'
+alias ram-ssh-config='$EDITOR ~/.ssh/config'
 
-function ssh-ram-helper-config {
+function ram-ssh-helper-config {
   cat << EOF >> ~/.ssh/config
 
 # Further info 'man ssh_config'
@@ -42,4 +42,3 @@ Host dev
   # VisualHostKey yes
 EOF
 }
-

@@ -26,6 +26,8 @@ LOCALSCRIPTS=(
 ./bash_alias.sh
 ./bash_tmux.sh
 ./bash_prompt.sh
+./bash_ssl.sh
+./bash_ssh_autocomplete.sh
 )
 
 # Gets the current path of this source file
