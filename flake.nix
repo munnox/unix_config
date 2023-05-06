@@ -33,8 +33,12 @@
           packages.helix = helix.packages.${system}.helix;
           # nix run .#nvim
           packages.nvim = pkgs.neovim;
+
+          # nix develop .#deploypy
           packages.deployshell = import ./deploy/shell.nix { inherit pkgs; inherit self; };
+
           # Build and run a poetry deployment shell
+          # nix develop .#deploypy
           packages.deploypy = pkgs.poetry2nix.mkPoetryApplication {
             projectDir = ./deploy/.;
           };
