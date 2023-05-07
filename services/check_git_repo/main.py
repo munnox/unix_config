@@ -28,9 +28,12 @@ def main(path, url, assess_only, push, pull):
     # Process the repos in order
     for repo in repos_to_process:
         if repo["git"]:
-            logs += check_git_repo.process_repo(
-                repo["root"], url, assess_only, push, pull
-            )
+            try:
+                logs += check_git_repo.process_repo(
+                    repo["root"], url, assess_only, push, pull
+                )
+            except Exception as error:
+                click.echo(f"Error found on {repo['root']} : {type(error)} - {error}")
     # Join the logs from the repo
     log_str = "\n".join(logs)
     click.echo(log_str)
