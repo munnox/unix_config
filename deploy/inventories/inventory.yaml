@@ -33,7 +33,7 @@ all:
           # Define the imagine type if spelled wrong
           # the filter will raise an error and show
           # possiblities
-          vm_type: ubuntu2204
+          vm_type: ubuntu_22.04
           state: present
           cpus: 2
           memory_gib: 4
@@ -48,12 +48,17 @@ all:
       # vm_guests:
       #   - name: testing
       #     # <<: *ubuntuvm
-      #     vm_type: ubuntu2204
+      #     vm_type: ubuntu_22.04
       #     state: present
       #     cpus: 2
       #     memory_gib: 4
       #     storage_size: 20G
       #     addresses: 192.168.0.2/24
+  vars:
+    awx_host_enable: no
+    ssh_key: "~/.ssh/id_rsa"
+    ssh_key_pub: "{{ lookup('ansible.builtin.file', '~/.ssh/id_rsa.pub') }}"
+    virt_vm_connection: 'bridge=default'
 
 disabled:
   hosts:
