@@ -7,6 +7,7 @@
         | default([])
         | munnox.bootstrap.vm_guest_definition(
             hostvars,
+            hostname=inventory_hostname,
             connection=virt_vm_connection | default('bridge=default'),
             ssh_key_pub=ssh_key_pub
           )

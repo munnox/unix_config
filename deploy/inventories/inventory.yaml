@@ -30,6 +30,9 @@ all:
       awx_host_enable: no
       vm_info:
           name: testing
+          # this field is check and this vm will only be
+          # included if this machine the hostname
+          hypervisor_hostname: kvm_host
           # Define the imagine type if spelled wrong
           # the filter will raise an error and show
           # possiblities
@@ -48,6 +51,7 @@ all:
       # vm_guests:
       #   - name: testing
       #     # <<: *ubuntuvm
+      #     hypervisor_hostname: kvm_host
       #     vm_type: ubuntu_22.04
       #     state: present
       #     cpus: 2
