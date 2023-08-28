@@ -1,0 +1,18 @@
+---
+# 
+- name: Set a fact in a eariler playbook
+  hosts: localhost
+  vars:
+    first_var: foobarr
+  tasks:
+    - set_fact:
+        first: "{{ first_var }}_fact"
+
+- name: Import the example playbook from munnox.bootstrap
+  ansible.builtin.import_playbook: munnox.bootstrap.examples.test_playbook.yml
+  vars:
+    testing: "{{ first }}"
+  # with_items:
+  #   - one
+  #   - two
+  #   - three
