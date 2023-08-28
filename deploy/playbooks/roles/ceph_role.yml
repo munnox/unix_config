@@ -1,0 +1,2 @@
+- name: Install Ceph on hosts
+  ansible.builtin.import_playbook: munnox.bootstrap.services.ceph

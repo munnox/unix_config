@@ -1,0 +1,4 @@
+- name: Install k3s on host
+  ansible.builtin.import_playbook: munnox.bootstrap.services.k3s_role
+  vars:
+    awx_fqdn: awx.example.com

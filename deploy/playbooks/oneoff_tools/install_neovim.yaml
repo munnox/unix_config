@@ -6,4 +6,4 @@
   #   install_neovim_appimage: False
   tasks:
     - name: Run neovim install tasks
-      include_tasks: ../tasks/install_neovim.yaml
+      ansible.builtin.include_tasks: ../../tasks/install_neovim.yaml

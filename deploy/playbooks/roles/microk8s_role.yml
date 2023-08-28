@@ -1,0 +1,2 @@
+- name: Install microk8s on Hosts
+  ansible.builtin.import_playbook: munnox.bootstrap.services.microk8s_role.yml

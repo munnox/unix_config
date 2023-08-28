@@ -1,9 +1,0 @@
-- name: Turn off swap
-  ansible.builtin.import_playbook: noswap_role.yml
-
-- name: Install K3s on Hosts
-  hosts: "{{ playbook_groups | default('k3s') }},!disabled"
-  tasks:
-    - name: Install K3s on host with sudo and noswap
-      import_role:
-        name: munnox.bootstrap.k3s

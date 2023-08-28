@@ -1,6 +1,6 @@
 ---
 
-- name: config debug
+- name: Print Facts for Hosts
   hosts: "{{ playbook_groups | default('all') }},!disabled"
   # gather_facts: yes
   # Enable the line below to pull just the minimum facts
@@ -8,7 +8,7 @@
   # vars:
   #   ansible_distribution: "testing"
   tasks:
-    - name: testing connection with ping
+    - name: Testing connection with ping
       ping:
     # - name: setup and gather information on networks
     #   setup:
@@ -72,5 +72,5 @@
       # {{ ansible_facts.keys()  | to_nice_json }}
       # {{ hostvars[inventory_hostname]vim /etc/.split('\n') | to_nice_json}}
       # when: item != 'localhost' and item != '127.0.0.1'
-      with_items:
-        - "{{ groups.all | list }}"
+      # with_items:
+      #   - "{{ groups.all | list }}"

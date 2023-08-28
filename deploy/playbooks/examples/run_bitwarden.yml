@@ -1,0 +1,30 @@
+- name: Run playbook to export debug facts to file
+  hosts: "{{ playbook_groups | default('localhost') }},!disabled"
+  # environment:
+  #   BW_SESSION: "Doesn't Work"
+  vars:
+    test: "{{ lookup('community.general.bitwarden', 'test', search='id') }}"
+  tasks:
+  - name: "Get full Bitwarden named records"
+    ansible.builtin.debug:
+      msg: |
+        # {{ lookup('ansible.builtin.pipe', 'echo $BW_SESSION') }}
+    # environment:
+    #   BW_SESSION: "Doesn't work :("
+  - name: Run a program
+    shell:
+      cmd: |
+        echo $testing
+    register: result
+  - name: Print program result
+    debug:
+      msg: |
+        {{ result }}
+  - name: Running testing module
+    munnox.bootstrap.my_test:
+      name: 'hello'
+      new: true
+    register: testout
+  - name: dump test output
+    debug:
+      msg: '{{ testout }}'

@@ -1,0 +1,2 @@
+- name: Import the example playbook from munnox.bootstrap
+  ansible.builtin.import_playbook: munnox.bootstrap.examples.testing_collection_examples

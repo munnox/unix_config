@@ -1,0 +1,3 @@
+---
+- name: Update the hosts
+  ansible.builtin.import_playbook: munnox.bootstrap.services.update_machine.yml

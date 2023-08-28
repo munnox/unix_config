@@ -1,11 +1,11 @@
 ---
-- name: config deploy
+- name: Install NodeJS
   hosts: localhost
   vars:
     # nodejs_version: "v14.17.5"
     # nodejs_install: False
     nodejs:
-      install_flag: no
+      install_flag: false
   tasks:
     - name: Run nodejs install tasks
-      include_tasks: ../tasks/install_nodejs.yaml
+      ansible.builtin.include_tasks: ../../tasks/install_nodejs.yaml

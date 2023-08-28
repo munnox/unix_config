@@ -1,0 +1,2 @@
+- name: Install Unifi on hosts
+  ansible.builtin.import_playbook: munnox.bootstrap.services.unifi_role.yml

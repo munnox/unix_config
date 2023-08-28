@@ -1,0 +1,2 @@
+- name: Run the postgresql role (Runs main.yml tasks)
+  ansible.builtin.import_playbook: munnox.bootstrap.services.ping_role.yml

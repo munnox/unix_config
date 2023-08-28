@@ -1,6 +1,0 @@
-- name: Install Ceph on hosts
-  hosts: "{{ playbook_groups | default('localhost') }},!disabled"
-  tasks:
-    - name: Install Ceph
-      ansible.builtin.import_role:
-        name: munnox.bootstrap.ceph

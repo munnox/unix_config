@@ -1,0 +1,14 @@
+---
+# Provision setup and build infrastructure to based on the inventory layout
+
+- name: Update machines
+  # import_playbook: oneoff_roles/update_machine.yml
+  ansible.builtin.import_playbook: munnox.bootstrap.services.update_machine.yml
+
+- name: KVM builder
+  # import_playbook: oneoff_roles/kvm_manage_machine.yml
+  ansible.builtin.import_playbook: munnox.bootstrap.services.kvm_manage_machine.yml
+
+- name: Install microk8s
+  # import_playbook: oneoff_roles/microk8s_role.yml
+  ansible.builtin.import_playbook: munnox.bootstrap.services.microk8s_role.yml
