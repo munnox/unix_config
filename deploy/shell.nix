@@ -68,11 +68,11 @@ let
   #   ${ansible_playbook} ${all_inventories} --extra-vars "playbook_groups=$1" playbooks/oneoff_tools/password_less_sudo_role.yml -K
   # '';
 
-  runplay = pkgs.writeScriptBin "runplay" ''
+  run_play = pkgs.writeScriptBin "run_play" ''
     echo "Running playbook with args: $@"
     ${ansible_playbook} ${all_inventories} $@
   '';
-  runplayhost = pkgs.writeScriptBin "runplayhost" ''
+  run_play_host = pkgs.writeScriptBin "run_play_host" ''
     echo "Running playbook: $1 on $2 further args \"''${@:3}\""
     ${ansible_playbook} ${all_inventories} --extra-vars "playbook_groups=$1" $2 ''${@:3}
   '';
@@ -105,8 +105,8 @@ let
     protect
     unprotect
     # runpasswordlesshost
-    runplay
-    runplayhost
+    run_play
+    run_play_host
     # runplayhostpass
   ];
   debug = x: pkgs.lib.traceSeq x x;
