@@ -4,7 +4,7 @@ This can allow the setting to moving to other computers
 
 Right now use:
 
-```
+```bash
 wget https://gitlab.com/munnox/unix_config/-/raw/main/deploy/install_nix.sh
 bash install_nix.sh
 

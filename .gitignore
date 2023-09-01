@@ -13,3 +13,4 @@ deploy/clouds.yaml
 home.nix
 result
 deploy/context/
+deploy/collections/ansible_collections/
