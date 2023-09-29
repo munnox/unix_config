@@ -1,4 +1,4 @@
-import check_git_repo
+from check_git_repo import check_remote_url, get_git_list
 import pytest
 import yaml
 
@@ -13,12 +13,12 @@ testdata = [
 
 @pytest.mark.parametrize("remote_url,test_url,result", testdata)
 def test_remote_url(remote_url: str, test_url: str, result: bool):
-    assert check_git_repo.check_remote_url(remote_url, test_url) == result
+    assert check_remote_url(remote_url, test_url) == result
 
 
 # Simple test to look in the local directory
 def test_git_list(snapshot):
     snapshot.snapshot_dir = "test_snapshots"
     snapshot.assert_match(
-        yaml.dump(check_git_repo.get_git_list("./")), "get_git_list.yaml"
+        yaml.dump(get_git_list("../")), "get_git_list.yaml"
     )

@@ -4,6 +4,8 @@
   # Input dependancies
   ## Simply flake build
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  # ## Pin and direct the nixpkgs
+  # inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   ## Import the Home Manger derivations
   inputs.home-manager = {
     url = "github:nix-community/home-manager";
