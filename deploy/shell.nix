@@ -89,6 +89,7 @@ let
     pkgs.tmux
     pkgs.python310Packages.jmespath
     pkgs.fish
+    pkgs.git-filter-repo
   ];
   darwin_only = [];
   linux_only = [
